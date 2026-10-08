@@ -91,5 +91,6 @@ $("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("add").onclic
 $("save").onclick=()=>{apply();localStorage.setItem("pls-model",JSON.stringify(M));status("Model saved on this device.","ok")};
 $("load").onclick=()=>{let x=localStorage.getItem("pls-model");if(!x)return status("No saved model.","warn");M=JSON.parse(x);render();status("Model loaded.","ok")};
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
-window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});\nif("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=4").catch(()=>{});
+window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=4").catch(()=>{});
 </script></body></html>
