@@ -49,8 +49,10 @@ const DEF={arrival:7.5,horizon:8,reps:100,seed:0,machines:[
 {id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mtbf:180,mttr:20,buffer:10,scrap:0,ideal:10},
 {id:"M2",name:"Assembly",dist:"Gamma",p:{shape:4,scale:2},mtbf:210,mttr:18,buffer:5,scrap:0,ideal:8},
 {id:"M3",name:"Inspection",dist:"Triangular",p:{min:7,mode:9,max:13},mtbf:300,mttr:15,buffer:8,scrap:3,ideal:9}]};
+const copy=x=>JSON.parse(JSON.stringify(x));
+const $=id=>document.getElementById(id);
+const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
 let M=copy(DEF),rand=Math.random,busy=false;
-const copy=x=>JSON.parse(JSON.stringify(x)), $=id=>document.getElementById(id), n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
 function status(s,c=""){ $("status").className="status "+c;$("status").textContent=s }
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]))}
 function render(){
