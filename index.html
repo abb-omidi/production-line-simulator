@@ -363,7 +363,7 @@ function sim(s,includeTrace=true){
    const slice=failure?st.upRemaining:duration;
    if(slice<=eps){beginRepair(i,t,p.id);return true;}
    st.processing=true;st.sliceStart=t;
-   emit(t,"serviceStart",{id:p.id,station:i,remaining:duration,segment:slice});
+   p.state="processing";emit(t,"serviceStart",{id:p.id,station:i,remaining:duration,segment:slice});
    push({time:t+slice,type:failure?"failure":"serviceComplete",station:i,id:p.id});
    stationState(i,t);changed=true;
   }else if(changed)stationState(i,t);
@@ -433,8 +433,9 @@ function sim(s,includeTrace=true){
  let nextArrival=-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
  if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
  let processedEvents=0;
- while(heap.length&&processedEvents++<5000000){
-  const e=pop();now=e.time;
+ // A shift ends at H: do not execute arrivals, processing completions, or repairs after the horizon.
+ while(heap.length&&heap[0].time<=H+eps&&processedEvents<5000000){
+  const e=pop();processedEvents++;now=e.time;
   if(e.type==="arrival"){
    arrivalCount++;
    const p={id:partId++,arrivalTime:e.time,serviceRemaining:null,station:-1,state:"input"};
@@ -470,7 +471,7 @@ function sim(s,includeTrace=true){
    st.busy+=overlap(st.sliceStart,e.time);
    p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
    st.upRemaining=Math.max(0,st.upRemaining-worked);
-   st.processing=false;
+   st.processing=false;p.state="repair";
    beginRepair(i,e.time,p.serviceRemaining>eps?p.id:null);
    stationState(i,e.time);drain(e.time);
   }else if(e.type==="serviceComplete"){
@@ -478,7 +479,7 @@ function sim(s,includeTrace=true){
   }else if(e.type==="repairDone"){
    const st=states[e.station],m=M.machines[e.station];
    if(st.repairUntil>e.time+eps)continue;
-   st.repairUntil=0;st.upRemaining=m.mttf;
+   st.repairUntil=0;st.upRemaining=m.mttf;if(st.active)st.active.state="waiting";
    emit(e.time,"repairDone",{station:e.station,id:st.active&&st.active.serviceRemaining>eps?st.active.id:null});
    stationState(e.station,e.time);drain(e.time);
   }else if(e.type==="outputArrive"){
@@ -491,7 +492,7 @@ function sim(s,includeTrace=true){
    parts.delete(e.id);
   }
  }
- if(heap.length)arrivalLimitReached=true;
+ if(processedEvents>=5000000&&heap.length&&heap[0].time<=H+eps)arrivalLimitReached=true;
  for(let i=0;i<machineCount;i++){
   const st=states[i];
   if(st.blocked&&st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,H);
@@ -505,7 +506,8 @@ function sim(s,includeTrace=true){
   return {id:m.id,name:m.name,dist:m.dist,mean:mean(m),av:availability,u:utilization,b:blocked,q:quality,good:st.good,scrap:st.scrap};
  });
  const b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
- return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,events:includeTrace?trace:[]};
+ const endState={inputQueue:inputQueue.length,inTransit:Array.from(parts.values()).filter(p=>p.state==="moving").length,processing:states.filter(st=>st.processing).length,active:states.filter(st=>st.active!==null).length,buffered:states.reduce((a,st)=>a+st.queue.length,0),blocked:states.filter(st=>st.blocked).length,partsAtEnd:parts.size};
+ return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,events:includeTrace?trace:[]};
 }
 function srand(s){return seed(s)}function srand(s){return seed(s)}
 function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
@@ -516,7 +518,7 @@ async function run(){
  try{
   const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);
   show(r);loadFlowTrace(r);
-  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: event/arrival safety limit reached; result may be truncated.":""));
+  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nArrivals during shift: "+r.arrivalCount+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min\n\nPER-STATION DIAGNOSTICS\n"+r.rows.map((row,i)=>row.id+" "+row.name+": completed service="+r.stationJobs[i]+", passed="+r.stationGood[i]+", rejected="+r.stationScrap[i]+", blocked="+(row.b*100).toFixed(1)+"%").join("\n")+"\n\nWIP AT SHIFT END\n"+Object.entries(r.endState).map(([k,v])=>k+": "+v).join("\n")+(r.arrivalLimitReached?"\nWARNING: event safety limit reached; result may be truncated.":""));
   startFlowAnimation();
   status(r.arrivalLimitReached?"Simulation completed with a safety-limit warning; replay started.":"Simulation complete. Replaying its event trace.",r.arrivalLimitReached?"warn":"ok");
  }catch(e){status("Error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.stack||""))}
