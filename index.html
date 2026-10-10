@@ -77,7 +77,7 @@ function mean(m){let p=m.p;if(m.dist==="Normal"||m.dist==="Exponential")return p
 function sim(s){rand=M.seed?srand(s):Math.random;let H=M.horizon*60,N=Math.max(1,Math.floor(M.arrival*M.horizon)),stats=M.machines.map(()=>({end:0,busy:0,down:0,jobs:0,good:0,scrap:0})),good=0,ct=0,t0=0;
  for(let j=0;j<N;j++){t0+=-Math.log(U())*(60/M.arrival);if(t0>H)break;let t=t0,failed=false;
   for(let i=0;i<M.machines.length;i++){let m=M.machines[i],s=stats[i],start=Math.max(t,s.end),d=sample(m),cur=start;
-   if(M.useFailures){let cycle=m.mttf+m.mttr,rem=d;while(rem>0){let pos=cur%cycle,avail=Math.max(0,m.mttf-pos);if(avail>=rem){cur+=rem;rem=0}else{cur+=avail;rem-=avail;cur+=m.mttr;s.down+=m.mttr}}}else cur+=d;
+   if(M.useFailures&&m.mttr>0){let cycle=m.mttf+m.mttr,rem=d;while(rem>0){let pos=cur%cycle,avail=Math.max(0,m.mttf-pos);if(avail>=rem){cur+=rem;rem=0}else{cur+=avail;rem-=avail;cur+=m.mttr;s.down+=m.mttr}}}else cur+=d;
    s.end=cur;s.busy+=d;s.jobs++;t=cur;
    if(rand()<m.scrap/100){s.scrap++;failed=true;break}else s.good++;
   }if(!failed&&t<=H){good++;ct+=t-t0}}
