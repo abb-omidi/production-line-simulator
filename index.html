@@ -29,7 +29,9 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div><label>Shift duration (min)</label><input id="shiftMinutes" type="number" min=".01" step="1"></div>
 <div><label>Monte Carlo replications</label><input id="reps" type="number" min="1" max="5000"></div>
 <div><label>Random seed (0=random)</label><input id="seed" type="number"></div></div>
-<div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save</button><button class="gray" id="load">Load</button><button class="light" id="reset">Reset</button></div>
+<div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save file</button><button class="gray" id="load">Load file</button><button class="light" id="reset">Reset</button></div>
+<input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
+<div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
 <section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 <section class="card"><h2>3D-style production line</h2><div class="line" id="line"></div></section>
@@ -123,8 +125,72 @@ function log(x){$("log").textContent=x}
 async function run(){if(busy)return;apply();busy=true;try{let r=sim(M.seed||Date.now());show(r);log("RUN COMPLETE\nGood units: "+r.good+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: 1,000,000-arrival safety limit reached; result is truncated.":""));status(r.arrivalLimitReached?"Warning: arrival safety limit reached; result is truncated.":"Simulation complete.",r.arrivalLimitReached?"warn":"ok")}catch(e){status("Error: "+e.message,"warn")}busy=false}
 async function mc(){if(busy)return;apply();busy=true;let a=[],c=[],arrivalLimitReached=false;for(let i=0;i<M.reps;i++){let r=sim((M.seed||Date.now())+i);a.push(r.throughput);c.push(r.cycle);arrivalLimitReached=arrivalLimitReached||r.arrivalLimitReached;if(i%20===0)await new Promise(requestAnimationFrame)}a.sort((x,y)=>x-y);c.sort((x,y)=>x-y);let av=a.reduce((x,y)=>x+y,0)/a.length,sd=Math.sqrt(a.reduce((x,y)=>x+(y-av)**2,0)/Math.max(1,a.length-1)),q=p=>a[Math.floor((a.length-1)*p)];$("mcText").innerHTML=`<b>${M.reps} replications</b><br>Throughput mean <b>${av.toFixed(5)}</b>, SD <b>${sd.toFixed(5)}</b>, P5 <b>${q(.05).toFixed(5)}</b>, P50 <b>${q(.5).toFixed(5)}</b>, P95 <b>${q(.95).toFixed(5)}</b> units/min<br>Cycle-time P50: <b>${c[Math.floor((c.length-1)*.5)].toFixed(2)}</b> min`;log("MONTE CARLO COMPLETE\nReplications: "+M.reps+"\nMean throughput: "+av.toFixed(5)+" units/min"+(arrivalLimitReached?"\nWARNING: arrival safety limit reached; one or more replications were truncated.":""));status(arrivalLimitReached?"Warning: arrival safety limit reached; some replications were truncated.":"Monte Carlo complete.",arrivalLimitReached?"warn":"ok");busy=false}
 $("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();status("New machine added.","warn")};
-$("save").onclick=()=>{apply();localStorage.setItem("pls-model",JSON.stringify(M));status("Model saved on this device.","ok")};
-$("load").onclick=()=>{let x=localStorage.getItem("pls-model");if(!x)return status("No saved model.","warn");M=JSON.parse(x);if(!M.timeUnitsVersion){M.arrivalRate=n(M.arrival,7.5)/60;M.shiftMinutes=n(M.horizon,8)*60;M.timeUnitsVersion=2;delete M.arrival;delete M.horizon;}M.useFailures=!!M.useFailures;M.machines.forEach(m=>{if(m.mttf==null)m.mttf=n(m.mtbf,180);delete m.mtbf;delete m.ideal});render();status("Model loaded. Time inputs use minutes; saved legacy rate/duration values were converted where needed.","ok")};
+function normalizeImportedModel(raw){
+ if(!raw||typeof raw!=="object"||Array.isArray(raw))throw new Error("The file must contain a model object.");
+ let x=copy(raw);
+ if(!x.timeUnitsVersion){
+  if(x.arrival!==undefined&&x.horizon!==undefined){
+   x.arrivalRate=Number(x.arrival)/60;x.shiftMinutes=Number(x.horizon)*60;
+  }
+  x.timeUnitsVersion=2;delete x.arrival;delete x.horizon;
+ }
+ if(x.timeUnitsVersion!==2)throw new Error("This model file uses an unsupported format version.");
+ if(!Number.isFinite(Number(x.arrivalRate))||Number(x.arrivalRate)<=0)throw new Error("Arrival rate must be a positive number in units/min.");
+ if(!Number.isFinite(Number(x.shiftMinutes))||Number(x.shiftMinutes)<=0)throw new Error("Shift duration must be a positive number in minutes.");
+ if(!Array.isArray(x.machines)||x.machines.length<1||x.machines.length>100)throw new Error("The file must contain between 1 and 100 machines.");
+ x.arrivalRate=Number(x.arrivalRate);x.shiftMinutes=Number(x.shiftMinutes);
+ x.reps=Math.max(1,Math.min(5000,Math.round(Number.isFinite(Number(x.reps))?Number(x.reps):100)));
+ x.seed=Math.trunc(Number.isFinite(Number(x.seed))?Number(x.seed):0);
+ x.useFailures=!!x.useFailures;
+ x.machines=x.machines.map((m,i)=>{
+  if(!m||typeof m!=="object"||Array.isArray(m))throw new Error("Machine "+(i+1)+" is invalid.");
+  if(!Object.prototype.hasOwnProperty.call(D,m.dist))throw new Error("Machine "+(i+1)+" has an unknown processing-time distribution.");
+  const p={};
+  D[m.dist].forEach(f=>{const v=Number(m.p?.[f[0]]);p[f[0]]=Number.isFinite(v)?v:f[2]});
+  if(m.dist==="Normal")p.sd=Math.max(.000001,p.sd);
+  if(m.dist==="Triangular"){
+   p.min=Math.max(.000001,p.min);p.max=Math.max(p.min+.000001,p.max);
+   p.mode=Math.max(p.min,Math.min(p.max,p.mode));
+  }
+  D[m.dist].forEach(f=>{if(f[0]!=="sd"&&!(m.dist==="Triangular"&&["min","mode","max"].includes(f[0])))p[f[0]]=Math.max(.000001,p[f[0]])});
+  return {
+   id:"M"+(i+1),name:String(m.name||("Machine "+(i+1))).slice(0,100),dist:m.dist,p,
+   mttf:Math.max(.01,Number.isFinite(Number(m.mttf??m.mtbf))?Number(m.mttf??m.mtbf):180),
+   mttr:Math.max(0,Number.isFinite(Number(m.mttr))?Number(m.mttr):20),
+   buffer:Math.max(0,Math.round(Number.isFinite(Number(m.buffer))?Number(m.buffer):5)),
+   scrap:Math.max(0,Math.min(100,Number.isFinite(Number(m.scrap))?Number(m.scrap):0))
+  };
+ });
+ return x;
+}
+$("save").onclick=()=>{
+ try{
+  apply();
+  const textData=JSON.stringify(M,null,2)+"\\n";
+  const blob=new Blob([textData],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="production-line-model.json";a.style.display="none";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  log("MODEL EXPORTED\\nFile: production-line-model.json\\n"+JSON.stringify(M,null,2));
+  status("Model downloaded as production-line-model.json. Check your Downloads folder.","ok");
+ }catch(e){status("Could not save model file: "+e.message,"warn")}
+};
+$("load").onclick=()=>{$("modelFile").value="";$("modelFile").click()};
+$("modelFile").onchange=e=>{
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const raw=JSON.parse(String(reader.result||""));
+   const loaded=normalizeImportedModel(raw);
+   M=loaded;render();log("MODEL IMPORTED\\nFile: "+file.name+"\\n"+JSON.stringify(M,null,2));
+   status("Model loaded from "+file.name+". Review the settings, then Run.","ok");
+  }catch(err){status("Could not load model file: "+err.message,"warn")}
+ };
+ reader.onerror=()=>status("The selected file could not be read.","warn");
+ reader.readAsText(file);
+};
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
 window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
 if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=5").catch(()=>{});
