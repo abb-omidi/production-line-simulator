@@ -452,6 +452,8 @@ function sim(s,includeTrace=true){
    const p=parts.get(e.id);if(!p)continue;
    emit(e.time,"moveEnd",{id:p.id,station:e.station});
    const st=states[e.station];
+   // Processing time belongs to a station visit. Clear the completed time before the part enters its next station.
+   p.serviceRemaining=null;
    if(e.slot==="server"){
     st.reservedServer=false;st.active=p;p.station=e.station;p.state="waiting";
     emit(e.time,"enterStation",{id:p.id,station:e.station});
@@ -541,7 +543,7 @@ async function mc(){
  }catch(e){status("Monte Carlo error: "+e.message,"warn")}
  finally{busy=false}
 }
-$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("Clock and playback reset. Press Run to generate a new shared simulation trace.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();status("New machine added.","warn")};
+$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("Clock and playback reset. Press Run to generate a new shared simulation trace.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();requestAnimationFrame(()=>{const stage=$("flowStage");stage.scrollLeft=stage.scrollWidth;});status("Machine "+i+" added. The 3D line has been extended; scroll horizontally to see the full line.","warn")};
 function normalizeImportedModel(raw){
  if(!raw||typeof raw!=="object"||Array.isArray(raw))throw new Error("The file must contain a model object.");
  let x=copy(raw);
