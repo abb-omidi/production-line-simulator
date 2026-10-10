@@ -49,8 +49,8 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 const D={Normal:[["mean","Mean μ (min)",10],["sd","Std. dev. σ (min)",2]],Gamma:[["shape","Shape α",4],["scale","Scale β (min)",2]],Poisson:[["lambda","λ (mean min)",8]],Exponential:[["mean","Mean (min)",8]],Weibull:[["shape","Shape k",2],["scale","Scale λ (min)",10]],Triangular:[["min","Minimum (min)",7],["mode","Mode (min)",9],["max","Maximum (min)",13]]};
 const DEF={timeUnitsVersion:2,arrivalRate:0.125,shiftMinutes:480,reps:100,seed:0,useFailures:false,machines:[
 {id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mttf:180,mttr:20,buffer:10,scrap:0},
-{id:"M2",name:"Assembly",dist:"Gamma",p:{shape:4,scale:2},mttf:210,mttr:18,buffer:5,scrap:0},
-{id:"M3",name:"Inspection",dist:"Triangular",p:{min:7,mode:9,max:13},mttf:300,mttr:15,buffer:8,scrap:3}]};
+{id:"M2",name:"Assembly",dist:"Normal",p:{mean:8,sd:4},mttf:210,mttr:18,buffer:5,scrap:0},
+{id:"M3",name:"Inspection",dist:"Normal",p:{mean:9.667,sd:1.247},mttf:300,mttr:15,buffer:8,scrap:3}]};
 const copy=x=>JSON.parse(JSON.stringify(x));
 const $=id=>document.getElementById(id);
 const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
