@@ -1,4 +1,4 @@
-const CACHE="prod-line-sim-v5";
+const CACHE="prod-line-sim-v6";
 const ASSETS=["./","./index.html","./manifest.webmanifest","./sw.js"];
 
 self.addEventListener("install",event=>{
