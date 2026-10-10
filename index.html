@@ -12,17 +12,17 @@ h1{font-size:21px;margin:0}h2{font-size:17px;margin:0 0 12px}.wrap{max-width:110
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 label{display:block;font-size:12px;color:#637386;margin-bottom:4px}input,select,button{width:100%;min-height:44px;border:1px solid #c8d4df;border-radius:9px;padding:9px;font:inherit;background:#fff}
 button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:#16804b}.gray{background:#60788b}.danger{background:#c62828}.light{background:#eaf2f9;color:#0757a0}
-.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.machine{border:1px solid #d5dfe8;border-radius:12px;padding:11px;margin:9px 0;background:#fbfdff}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.machine{border:1px solid #d5dfe8;border-radius:10px;padding:8px;margin:6px 0;background:#fbfdff}.machine input,.machine select{min-height:36px;padding:6px;font-size:14px}.machine .grid{gap:6px}
 .mtop{display:flex;gap:8px;align-items:center;justify-content:space-between}.mtop b{font-size:16px}.mtop button{width:auto;min-height:36px}
-.params{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px}.status{padding:9px;border-radius:9px;background:#eef4f8;font-size:12px;margin-top:9px}.ok{background:#eaf7ef;color:#17683e}.warn{background:#fff4df;color:#8a5a00}
+.params{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:7px}.status{padding:9px;border-radius:9px;background:#eef4f8;font-size:12px;margin-top:9px}.failure-control{margin:2px 0 8px;padding:8px 10px;background:#f3f7fa;border-radius:8px}.failure-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:#25394a;margin:0}.failure-toggle input{width:18px;min-height:18px;padding:0;flex:0 0 auto}.hint{font-size:11px;color:#637386;margin:5px 0 0}.ok{background:#eaf7ef;color:#17683e}.warn{background:#fff4df;color:#8a5a00}
 .line{display:flex;gap:8px;align-items:center;overflow:auto;padding:15px;background:linear-gradient(#dff2ff 0 57%,#b9c2c8 57%);border-radius:10px}.station{min-width:145px;text-align:center}.box{height:72px;border:3px solid #536b78;border-radius:10px;background:linear-gradient(135deg,#f6f8fa,#cbd5db);display:flex;flex-direction:column;justify-content:center}.belt{height:14px;margin-top:9px;border-radius:5px;background:repeating-linear-gradient(90deg,#364a56 0 18px,#627783 18px 26px)}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{border:1px solid #d5dfe8;border-radius:10px;padding:10px}.value{font-size:21px;font-weight:800}.muted{font-size:11px;color:#637386}
 .table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px;border-bottom:1px solid #dce4ea;white-space:nowrap;text-align:right}th:first-child,td:first-child{text-align:left}
 .log{background:#101820;color:#dce8ef;padding:10px;border-radius:9px;white-space:pre-wrap;font:12px monospace;max-height:240px;overflow:auto}
-@media(max-width:700px){.grid4{grid-template-columns:1fr 1fr}.params{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
-@media(max-width:430px){.grid,.params{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.grid4{grid-template-columns:1fr 1fr}.params{grid-template-columns:repeat(3,minmax(0,1fr))}.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:430px){.grid{grid-template-columns:1fr 1fr}.params{grid-template-columns:repeat(2,minmax(0,1fr))}.actions{grid-template-columns:1fr 1fr}}
 </style></head><body>
-<header><h1>Production Line Simulator</h1><div style="font-size:12px;opacity:.9">iPhone / iPad • stochastic production-line simulation • Build 2026-10-09 v4</div></header>
+<header><h1>Production Line Simulator</h1></header>
 <main class="wrap">
 <section class="card"><h2>Simulation settings</h2><div class="grid4">
 <div><label>Arrival rate (units/hour)</label><input id="arrival" type="number" step=".1"></div>
@@ -31,7 +31,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div><label>Random seed (0=random)</label><input id="seed" type="number"></div></div>
 <div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save</button><button class="gray" id="load">Load</button><button class="light" id="reset">Reset</button></div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
-<section class="card"><h2>Machines and process distributions</h2><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
+<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF and MTTR values are ignored until enabled.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 <section class="card"><h2>3D-style production line</h2><div class="line" id="line"></div></section>
 <section class="card"><h2>Results</h2><div class="kpis">
 <div class="kpi"><div class="value" id="tp">—</div><div class="muted">Good throughput (units/h)</div></div>
@@ -45,10 +45,10 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <script>
 "use strict";
 const D={Normal:[["mean","Mean μ (min)",10],["sd","Std. dev. σ",2]],Gamma:[["shape","Shape α",4],["scale","Scale β (min)",2]],Poisson:[["lambda","λ (mean min)",8]],Exponential:[["mean","Mean (min)",8]],Weibull:[["shape","Shape k",2],["scale","Scale λ",10]],Triangular:[["min","Minimum",7],["mode","Mode",9],["max","Maximum",13]]};
-const DEF={arrival:7.5,horizon:8,reps:100,seed:0,machines:[
-{id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mtbf:180,mttr:20,buffer:10,scrap:0,ideal:10},
-{id:"M2",name:"Assembly",dist:"Gamma",p:{shape:4,scale:2},mtbf:210,mttr:18,buffer:5,scrap:0,ideal:8},
-{id:"M3",name:"Inspection",dist:"Triangular",p:{min:7,mode:9,max:13},mtbf:300,mttr:15,buffer:8,scrap:3,ideal:9}]};
+const DEF={arrival:7.5,horizon:8,reps:100,seed:0,useFailures:false,machines:[
+{id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mttf:180,mttr:20,buffer:10,scrap:0},
+{id:"M2",name:"Assembly",dist:"Gamma",p:{shape:4,scale:2},mttf:210,mttr:18,buffer:5,scrap:0},
+{id:"M3",name:"Inspection",dist:"Triangular",p:{min:7,mode:9,max:13},mttf:300,mttr:15,buffer:8,scrap:3}]};
 const copy=x=>JSON.parse(JSON.stringify(x));
 const $=id=>document.getElementById(id);
 const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
@@ -56,17 +56,17 @@ let M=copy(DEF),rand=Math.random,busy=false;
 function status(s,c=""){ $("status").className="status "+c;$("status").textContent=s }
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]))}
 function render(){
- $("arrival").value=M.arrival;$("horizon").value=M.horizon;$("reps").value=M.reps;$("seed").value=M.seed;
+ $("arrival").value=M.arrival;$("horizon").value=M.horizon;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;
  $("machines").innerHTML=M.machines.map((m,i)=>`<div class="machine"><div class="mtop"><b>${m.id} — ${esc(m.name)}</b><button class="danger" data-del="${i}">Remove</button></div>
  <div class="grid"><div><label>Machine / process name</label><input data-i="${i}" data-k="name" value="${esc(m.name)}"></div><div><label>Processing-time distribution</label><select data-i="${i}" data-k="dist">${Object.keys(D).map(d=>`<option ${d===m.dist?"selected":""}>${d}</option>`).join("")}</select></div></div>
  <div class="params">${D[m.dist].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" data-i="${i}" data-p="${f[0]}" value="${n(m.p[f[0]],f[2])}"></div>`).join("")}
- ${[["mtbf","MTBF (min)"],["mttr","MTTR (min)"],["buffer","Buffer capacity"],["ideal","Ideal cycle (min)"],["scrap","Scrap / reject (%)"]].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" min="0" data-i="${i}" data-k="${f[0]}" value="${n(m[f[0]])}"></div>`).join("")}</div></div>`).join("");
+ ${[["mttf","MTTF (min)"],["mttr","MTTR (min)"],["buffer","Buffer capacity"],["scrap","Scrap / reject (%)"]].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" min="0" data-i="${i}" data-k="${f[0]}" value="${n(m[f[0]])}"></div>`).join("")}</div></div>`).join("");
  document.querySelectorAll("[data-i]").forEach(e=>e.onchange=edit);
  document.querySelectorAll("[data-del]").forEach(e=>e.onclick=()=>{if(M.machines.length>1){M.machines.splice(+e.dataset.del,1);M.machines.forEach((m,j)=>m.id="M"+(j+1));render();status("Machine removed.","warn")}});
  $("line").innerHTML=M.machines.map((m,i)=>`<div class="station"><div class="box"><b>${esc(m.id)}</b><small>${esc(m.name)}</small></div><div class="belt"></div><small>Buffer ${m.buffer}</small></div>${i<M.machines.length-1?"<b>›</b>":""}`).join("");
 }
 function edit(e){let i=+e.target.dataset.i,m=M.machines[i];if(e.target.dataset.p)m.p[e.target.dataset.p]=n(e.target.value);else if(e.target.dataset.k==="dist"){m.dist=e.target.value;m.p={};D[m.dist].forEach(f=>m.p[f[0]]=f[2]);render()}else if(e.target.dataset.k==="name")m.name=e.target.value;else m[e.target.dataset.k]=n(e.target.value);status("Parameter changed. Tap Apply model.","warn")}
-function apply(){M.arrival=Math.max(.01,n($("arrival").value,7.5));M.horizon=Math.max(.01,n($("horizon").value,8));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.machines.forEach(m=>{m.mtbf=Math.max(.01,n(m.mtbf,180));m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));m.ideal=Math.max(.01,n(m.ideal,10));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. These parameters are now used by Run and Monte Carlo.","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
+function apply(){M.arrival=Math.max(.01,n($("arrival").value,7.5));M.horizon=Math.max(.01,n($("horizon").value,8));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
 function seed(s){let a=(s>>>0)||1;return()=>{a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
 function U(){return Math.max(1e-12,rand())}
 function norm(mu,sd){let u=U(),v=U();return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
@@ -76,20 +76,20 @@ function lg(z){let c=[.9999999999998099,676.5203681218851,-1259.1392167224028,77
 function mean(m){let p=m.p;if(m.dist==="Normal"||m.dist==="Exponential")return p.mean;if(m.dist==="Poisson")return p.lambda;if(m.dist==="Gamma")return p.shape*p.scale;if(m.dist==="Weibull")return p.scale*Math.exp(lg(1+1/p.shape));return(p.min+p.mode+p.max)/3}
 function sim(s){rand=M.seed?srand(s):Math.random;let H=M.horizon*60,N=Math.max(1,Math.floor(M.arrival*M.horizon)),stats=M.machines.map(()=>({end:0,busy:0,down:0,jobs:0,good:0,scrap:0})),good=0,ct=0,t0=0;
  for(let j=0;j<N;j++){t0+=-Math.log(U())*(60/M.arrival);if(t0>H)break;let t=t0,failed=false;
-  for(let i=0;i<M.machines.length;i++){let m=M.machines[i],s=stats[i],start=Math.max(t,s.end),d=sample(m),cycle=m.mtbf+m.mttr,rem=d,cur=start;
-   while(rem>0){let pos=cur%cycle,avail=Math.max(0,m.mtbf-pos);if(avail>=rem){cur+=rem;rem=0}else{cur+=avail;rem-=avail;cur+=m.mttr;s.down+=m.mttr}}
+  for(let i=0;i<M.machines.length;i++){let m=M.machines[i],s=stats[i],start=Math.max(t,s.end),d=sample(m),cur=start;
+   if(M.useFailures){let cycle=m.mttf+m.mttr,rem=d;while(rem>0){let pos=cur%cycle,avail=Math.max(0,m.mttf-pos);if(avail>=rem){cur+=rem;rem=0}else{cur+=avail;rem-=avail;cur+=m.mttr;s.down+=m.mttr}}}else cur+=d;
    s.end=cur;s.busy+=d;s.jobs++;t=cur;
    if(rand()<m.scrap/100){s.scrap++;failed=true;break}else s.good++;
   }if(!failed&&t<=H){good++;ct+=t-t0}}
- let rows=stats.map((s,i)=>{let m=M.machines[i],av=H/(H+s.down),u=Math.min(1,s.busy/H),q=s.jobs?s.good/s.jobs:1,p=Math.min(1,s.busy?s.good*m.ideal/s.busy:1);return{id:m.id,name:m.name,dist:m.dist,mean:mean(m),av,u,q,oee:av*u*q,good:s.good,scrap:s.scrap}}),b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);return{throughput:good/(M.horizon),cycle:good?ct/good:0,good,rows,b}}
+ let rows=stats.map((s,i)=>{let m=M.machines[i],av=H/(H+s.down),u=Math.min(1,s.busy/H),q=s.jobs?s.good/s.jobs:1;return{id:m.id,name:m.name,dist:m.dist,mean:mean(m),av,u,q,oee:av*u*q,good:s.good,scrap:s.scrap}}),b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);return{throughput:good/(M.horizon),cycle:good?ct/good:0,good,rows,b}}
 function srand(s){return seed(s)}
 function show(r){$("tp").textContent=r.throughput.toFixed(2);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("oee").textContent=(r.rows.reduce((a,x)=>a+x.oee,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.oee*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
 function log(x){$("log").textContent=x}
 async function run(){if(busy)return;apply();busy=true;try{let r=sim(M.seed||Date.now());show(r);log("RUN COMPLETE\nGood units: "+r.good+"\nThroughput: "+r.throughput.toFixed(3)+" units/h\nCycle time: "+r.cycle.toFixed(3)+" min");status("Simulation complete.","ok")}catch(e){status("Error: "+e.message,"warn")}busy=false}
 async function mc(){if(busy)return;apply();busy=true;let a=[],c=[];for(let i=0;i<M.reps;i++){let r=sim((M.seed||Date.now())+i);a.push(r.throughput);c.push(r.cycle);if(i%20===0)await new Promise(requestAnimationFrame)}a.sort((x,y)=>x-y);c.sort((x,y)=>x-y);let av=a.reduce((x,y)=>x+y,0)/a.length,sd=Math.sqrt(a.reduce((x,y)=>x+(y-av)**2,0)/Math.max(1,a.length-1)),q=p=>a[Math.floor((a.length-1)*p)];$("mcText").innerHTML=`<b>${M.reps} replications</b><br>Throughput mean <b>${av.toFixed(2)}</b>, SD <b>${sd.toFixed(2)}</b>, P5 <b>${q(.05).toFixed(2)}</b>, P50 <b>${q(.5).toFixed(2)}</b>, P95 <b>${q(.95).toFixed(2)}</b> units/h<br>Cycle-time P50: <b>${c[Math.floor((c.length-1)*.5)].toFixed(2)}</b> min`;log("MONTE CARLO COMPLETE\nReplications: "+M.reps+"\nMean throughput: "+av.toFixed(3));status("Monte Carlo complete.","ok");busy=false}
-$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mtbf:240,mttr:20,buffer:5,scrap:0,ideal:10});render();status("New machine added.","warn")};
+$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();status("New machine added.","warn")};
 $("save").onclick=()=>{apply();localStorage.setItem("pls-model",JSON.stringify(M));status("Model saved on this device.","ok")};
-$("load").onclick=()=>{let x=localStorage.getItem("pls-model");if(!x)return status("No saved model.","warn");M=JSON.parse(x);render();status("Model loaded.","ok")};
+$("load").onclick=()=>{let x=localStorage.getItem("pls-model");if(!x)return status("No saved model.","warn");M=JSON.parse(x);M.useFailures=!!M.useFailures;M.machines.forEach(m=>{if(m.mttf==null)m.mttf=n(m.mtbf,180);delete m.mtbf;delete m.ideal});render();status("Model loaded.","ok")};
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
 window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
 if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=4").catch(()=>{});
