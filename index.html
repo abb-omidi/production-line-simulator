@@ -31,14 +31,14 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div><label>Random seed (0=random)</label><input id="seed" type="number"></div></div>
 <div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save</button><button class="gray" id="load">Load</button><button class="light" id="reset">Reset</button></div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
-<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF and MTTR values are ignored until enabled.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
+<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 <section class="card"><h2>3D-style production line</h2><div class="line" id="line"></div></section>
 <section class="card"><h2>Results</h2><div class="kpis">
 <div class="kpi"><div class="value" id="tp">—</div><div class="muted">Good throughput (units/min)</div></div>
 <div class="kpi"><div class="value" id="ct">—</div><div class="muted">Cycle time (min)</div></div>
 <div class="kpi"><div class="value" id="bu">—</div><div class="muted">Bottleneck utilization</div></div>
-<div class="kpi"><div class="value" id="oee">—</div><div class="muted">Average OEE</div></div></div></section>
-<section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT</th><th>Availability</th><th>Util.</th><th>OEE</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
+<div class="kpi"><div class="value" id="avgAvailability">—</div><div class="muted">Average availability</div></div></div></section>
+<section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT (min)</th><th>Availability</th><th>Util.</th><th>Quality (%)</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
 <section class="card"><h2>Monte Carlo</h2><div id="mcText" class="muted">Run Monte Carlo for mean, SD and P5/P50/P95 throughput (units/min).</div></section>
 <section class="card"><h2>Log</h2><div id="log" class="log">Ready.</div></section>
 </main>
@@ -60,7 +60,7 @@ function render(){
  $("machines").innerHTML=M.machines.map((m,i)=>`<div class="machine"><div class="mtop"><b>${m.id} — ${esc(m.name)}</b><button class="danger" data-del="${i}">Remove</button></div>
  <div class="grid"><div><label>Machine / process name</label><input data-i="${i}" data-k="name" value="${esc(m.name)}"></div><div><label>Processing-time distribution</label><select data-i="${i}" data-k="dist">${Object.keys(D).map(d=>`<option ${d===m.dist?"selected":""}>${d}</option>`).join("")}</select></div></div>
  <div class="params">${D[m.dist].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" data-i="${i}" data-p="${f[0]}" value="${n(m.p[f[0]],f[2])}"></div>`).join("")}
- ${[["mttf","MTTF (min)"],["mttr","MTTR (min)"],["buffer","Buffer capacity"],["scrap","Scrap / reject (%)"]].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" min="0" data-i="${i}" data-k="${f[0]}" value="${n(m[f[0]])}"></div>`).join("")}</div></div>`).join("");
+ ${[["mttf","MTTF (operating min)"],["mttr","MTTR (repair min)"],["buffer","Buffer capacity"],["scrap","Scrap / reject (%)"]].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" min="0" data-i="${i}" data-k="${f[0]}" value="${n(m[f[0]])}"></div>`).join("")}</div></div>`).join("");
  document.querySelectorAll("[data-i]").forEach(e=>e.onchange=edit);
  document.querySelectorAll("[data-del]").forEach(e=>e.onclick=()=>{if(M.machines.length>1){M.machines.splice(+e.dataset.del,1);M.machines.forEach((m,j)=>m.id="M"+(j+1));render();status("Machine removed.","warn")}});
  $("line").innerHTML=M.machines.map((m,i)=>`<div class="station"><div class="box"><b>${esc(m.id)}</b><small>${esc(m.name)}</small></div><div class="belt"></div><small>Buffer ${m.buffer}</small></div>${i<M.machines.length-1?"<b>›</b>":""}`).join("");
@@ -74,16 +74,51 @@ function gamma(k,t){if(k<1)return gamma(k+1,t)*Math.pow(U(),1/k);let d=k-1/3,c=1
 function sample(m){let p=m.p,x;if(m.dist==="Normal"){do{x=norm(p.mean,p.sd)}while(x<=0)}else if(m.dist==="Gamma")x=gamma(p.shape,p.scale);else if(m.dist==="Poisson"){let L=Math.exp(-p.lambda),q=1,k=0;do{k++;q*=U()}while(q>L);x=k-1}else if(m.dist==="Exponential")x=-p.mean*Math.log(U());else if(m.dist==="Weibull")x=p.scale*Math.pow(-Math.log(U()),1/p.shape);else{let u=U(),f=(p.mode-p.min)/(p.max-p.min);x=u<f?p.min+Math.sqrt(u*(p.max-p.min)*(p.mode-p.min)):p.max-Math.sqrt((1-u)*(p.max-p.min)*(p.max-p.mode))}return Math.max(.001,x)}
 function lg(z){let c=[.9999999999998099,676.5203681218851,-1259.1392167224028,771.3234287776531,-176.6150291621406,12.507343278686905,-.13857109526572012,9.984369578019572e-6,1.5056327351493116e-7];if(z<.5)return Math.log(Math.PI)-Math.log(Math.sin(Math.PI*z))-lg(1-z);z--;let x=c[0];for(let i=1;i<c.length;i++)x+=c[i]/(z+i);let t=z+7.5;return .5*Math.log(2*Math.PI)+(z+.5)*Math.log(t)-t+Math.log(x)}
 function mean(m){let p=m.p;if(m.dist==="Normal"||m.dist==="Exponential")return p.mean;if(m.dist==="Poisson")return p.lambda;if(m.dist==="Gamma")return p.shape*p.scale;if(m.dist==="Weibull")return p.scale*Math.exp(lg(1+1/p.shape));return(p.min+p.mode+p.max)/3}
-function sim(s){rand=M.seed?srand(s):Math.random;let H=M.shiftMinutes,stats=M.machines.map(()=>({end:0,busy:0,down:0,jobs:0,good:0,scrap:0})),good=0,ct=0,t0=0,arrivalLimitReached=false;
- for(let j=0;j<1000000;j++){t0+=-Math.log(U())/M.arrivalRate;if(t0>H)break;if(j===999999)arrivalLimitReached=true;let t=t0,failed=false;
-  for(let i=0;i<M.machines.length;i++){let m=M.machines[i],s=stats[i],start=Math.max(t,s.end),d=sample(m),cur=start;
-   if(M.useFailures&&m.mttr>0){let cycle=m.mttf+m.mttr,rem=d;while(rem>1e-9){let pos=((cur%cycle)+cycle)%cycle;if(pos>=m.mttf){let wait=cycle-pos;cur+=wait;s.down+=wait;continue}let work=Math.min(rem,m.mttf-pos);cur+=work;rem-=work;if(rem>1e-9){cur+=m.mttr;s.down+=m.mttr}}}else cur+=d;
-   s.end=cur;s.busy+=d;s.jobs++;t=cur;
-   if(rand()<m.scrap/100){s.scrap++;failed=true;break}else s.good++;
-  }if(!failed&&t<=H){good++;ct+=t-t0}}
- let rows=stats.map((s,i)=>{let m=M.machines[i],av=H/(H+s.down),u=Math.min(1,s.busy/H),q=s.jobs?s.good/s.jobs:1;return{id:m.id,name:m.name,dist:m.dist,mean:mean(m),av,u,q,oee:av*u*q,good:s.good,scrap:s.scrap}}),b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);return{throughput:good/M.shiftMinutes,cycle:good?ct/good:0,good,rows,b,arrivalLimitReached}}
+function sim(s){
+ rand=M.seed?srand(s):Math.random;
+ let H=M.shiftMinutes,stats=M.machines.map(m=>({end:0,busy:0,down:0,jobs:0,good:0,scrap:0,upRemaining:m.mttf})),good=0,ct=0,t0=0,arrivalLimitReached=false;
+ const overlap=(a,b)=>Math.max(0,Math.min(b,H)-Math.max(a,0));
+ for(let j=0;j<1000000;j++){
+  t0+=-Math.log(U())/M.arrivalRate;
+  if(t0>H)break;
+  if(j===999999)arrivalLimitReached=true;
+  let t=t0,failed=false;
+  for(let i=0;i<M.machines.length;i++){
+   let m=M.machines[i],st=stats[i],start=Math.max(t,st.end),d=sample(m),cur=start,finish,readyAt;
+   if(M.useFailures&&m.mttr>0){
+    let rem=d;
+    while(rem>1e-9){
+     if(st.upRemaining<=1e-9){
+      let downStart=cur;cur+=m.mttr;st.down+=overlap(downStart,cur);st.upRemaining=m.mttf;
+     }
+     let work=Math.min(rem,st.upRemaining),workStart=cur;
+     cur+=work;st.busy+=overlap(workStart,cur);rem-=work;st.upRemaining-=work;
+     if(st.upRemaining<=1e-9){
+      let downStart=cur;
+      if(rem<=1e-9){
+       finish=cur;cur+=m.mttr;st.down+=overlap(downStart,cur);st.upRemaining=m.mttf;break;
+      }
+      cur+=m.mttr;st.down+=overlap(downStart,cur);st.upRemaining=m.mttf;
+     }
+    }
+    if(finish===undefined)finish=cur;
+    readyAt=cur;
+   }else{
+    finish=start+d;readyAt=finish;st.busy+=overlap(start,finish);
+   }
+   st.end=readyAt;st.jobs++;t=finish;
+   if(rand()<m.scrap/100){st.scrap++;failed=true;break}else st.good++;
+  }
+  if(!failed&&t<=H){good++;ct+=t-t0}
+ }
+ let rows=stats.map((st,i)=>{
+  let m=M.machines[i],av=Math.max(0,Math.min(1,1-st.down/H)),u=Math.max(0,Math.min(1,st.busy/H)),q=st.jobs?st.good/st.jobs:1;
+  return{id:m.id,name:m.name,dist:m.dist,mean:mean(m),av,u,q,good:st.good,scrap:st.scrap};
+ }),b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
+ return{throughput:good/M.shiftMinutes,cycle:good?ct/good:0,good,rows,b,arrivalLimitReached};
+}
 function srand(s){return seed(s)}
-function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("oee").textContent=(r.rows.reduce((a,x)=>a+x.oee,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.oee*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
+function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
 function log(x){$("log").textContent=x}
 async function run(){if(busy)return;apply();busy=true;try{let r=sim(M.seed||Date.now());show(r);log("RUN COMPLETE\nGood units: "+r.good+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: 1,000,000-arrival safety limit reached; result is truncated.":""));status(r.arrivalLimitReached?"Warning: arrival safety limit reached; result is truncated.":"Simulation complete.",r.arrivalLimitReached?"warn":"ok")}catch(e){status("Error: "+e.message,"warn")}busy=false}
 async function mc(){if(busy)return;apply();busy=true;let a=[],c=[],arrivalLimitReached=false;for(let i=0;i<M.reps;i++){let r=sim((M.seed||Date.now())+i);a.push(r.throughput);c.push(r.cycle);arrivalLimitReached=arrivalLimitReached||r.arrivalLimitReached;if(i%20===0)await new Promise(requestAnimationFrame)}a.sort((x,y)=>x-y);c.sort((x,y)=>x-y);let av=a.reduce((x,y)=>x+y,0)/a.length,sd=Math.sqrt(a.reduce((x,y)=>x+(y-av)**2,0)/Math.max(1,a.length-1)),q=p=>a[Math.floor((a.length-1)*p)];$("mcText").innerHTML=`<b>${M.reps} replications</b><br>Throughput mean <b>${av.toFixed(5)}</b>, SD <b>${sd.toFixed(5)}</b>, P5 <b>${q(.05).toFixed(5)}</b>, P50 <b>${q(.5).toFixed(5)}</b>, P95 <b>${q(.95).toFixed(5)}</b> units/min<br>Cycle-time P50: <b>${c[Math.floor((c.length-1)*.5)].toFixed(2)}</b> min`;log("MONTE CARLO COMPLETE\nReplications: "+M.reps+"\nMean throughput: "+av.toFixed(5)+" units/min"+(arrivalLimitReached?"\nWARNING: arrival safety limit reached; one or more replications were truncated.":""));status(arrivalLimitReached?"Warning: arrival safety limit reached; some replications were truncated.":"Monte Carlo complete.",arrivalLimitReached?"warn":"ok");busy=false}
