@@ -441,7 +441,7 @@ function sim(s,includeTrace=true){
    parts.set(p.id,p);inputQueue.push(p);
    emit(e.time,"arrival",{id:p.id});
    if(arrivalCount<1000000){
-    nextArrival=e.time-Math.log(1/Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+    nextArrival=e.time-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
     if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
    }else{
     const nextGap=-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
