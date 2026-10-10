@@ -251,8 +251,8 @@ function toggleFlow(){
   $("line").classList.remove("flow-running");$("flowToggle").textContent="▶ Resume flow";$("flowToggle").className="green";
   status("Flow animation paused at "+flowFormat(flow.simMinute)+" simulated minutes.","warn");return;
  }
- apply();
  if(flow.simMinute>=M.shiftMinutes-1e-8)resetFlow();
+ else if(flow.simMinute===0&&flow.parts.length===0)apply();
  flow.running=true;flow.lastTs=0;$("line").classList.add("flow-running");
  $("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value||8)))+"s");
  $("flowToggle").textContent="Ⅱ Pause flow";$("flowToggle").className="gray";
@@ -386,5 +386,5 @@ $("modelFile").onchange=e=>{
 };
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
 window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=5").catch(()=>{});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=6").catch(()=>{});
 </script></body></html>
