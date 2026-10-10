@@ -33,7 +33,6 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
 <div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
-<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 <section class="card"><h2>3D production flow</h2>
 <div class="flow-controls">
 <button id="flowToggle" class="green">▶ Start flow</button>
@@ -42,8 +41,10 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 </div>
 <div class="flow-stage" id="flowStage"><div class="flow-track" id="line"></div></div>
 <div class="flow-readout"><span>Clock: <strong id="flowClock">0.0 / 480.0 min</strong></span><span>Completed: <strong id="flowGood">0</strong></span><span>Rejected: <strong id="flowReject">0</strong></span><span>In process: <strong id="flowWip">0</strong></span></div>
-<div class="flow-note">Start flow to animate individual parts through 3D stations. The speed control advances simulated minutes per real second. Use Run for the statistical shift results; this animation is a visual operating-flow model.</div>
+<div class="flow-note">Press Run to calculate shift results and start the animation, or click Start flow for animation alone. The speed control advances simulated minutes per real second. This animated flow is a visual model and is separate from the statistical result.</div>
 </section>
+<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
+
 <section class="card"><h2>Results</h2><div class="kpis">
 <div class="kpi"><div class="value" id="tp">—</div><div class="muted">Good throughput (units/min)</div></div>
 <div class="kpi"><div class="value" id="ct">—</div><div class="muted">Cycle time (min)</div></div>
@@ -245,21 +246,24 @@ function tickFlow(ts){
  }
  flow.raf=requestAnimationFrame(tickFlow);
 }
+function startFlowAnimation(){
+ if(flow.running)return;
+ if(flow.simMinute>=M.shiftMinutes-1e-8)resetFlow();
+ flow.running=true;flow.lastTs=0;$("line").classList.add("flow-running");
+ $("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value||8)))+"s");
+ $("flowToggle").textContent="Ⅱ Pause flow";$("flowToggle").className="gray";
+ flow.raf=requestAnimationFrame(tickFlow);
+}
 function toggleFlow(){
  if(flow.running){
   flow.running=false;if(flow.raf)cancelAnimationFrame(flow.raf);flow.raf=0;flow.lastTs=0;
   $("line").classList.remove("flow-running");$("flowToggle").textContent="▶ Resume flow";$("flowToggle").className="green";
   status("Flow animation paused at "+flowFormat(flow.simMinute)+" simulated minutes.","warn");return;
  }
- if(flow.simMinute>=M.shiftMinutes-1e-8)resetFlow();
- else if(flow.simMinute===0&&flow.parts.length===0)apply();
- flow.running=true;flow.lastTs=0;$("line").classList.add("flow-running");
- $("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value||8)))+"s");
- $("flowToggle").textContent="Ⅱ Pause flow";$("flowToggle").className="gray";
+ if(flow.simMinute===0&&flow.parts.length===0)apply();
+ startFlowAnimation();
  status("3D flow running. The simulation clock controls arrivals, processing, and conveyor movement.","ok");
- flow.raf=requestAnimationFrame(tickFlow);
 }
-
 function edit(e){let i=+e.target.dataset.i,m=M.machines[i];if(e.target.dataset.p)m.p[e.target.dataset.p]=n(e.target.value);else if(e.target.dataset.k==="dist"){m.dist=e.target.value;m.p={};D[m.dist].forEach(f=>m.p[f[0]]=f[2]);render()}else if(e.target.dataset.k==="name")m.name=e.target.value;else m[e.target.dataset.k]=n(e.target.value);status("Parameter changed. Tap Apply model.","warn")}
 function apply(){M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
 function seed(s){let a=(s>>>0)||1;return()=>{a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
@@ -315,7 +319,17 @@ function sim(s){
 function srand(s){return seed(s)}
 function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
 function log(x){$("log").textContent=x}
-async function run(){if(busy)return;apply();busy=true;try{let r=sim(M.seed||Date.now());show(r);log("RUN COMPLETE\nGood units: "+r.good+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: 1,000,000-arrival safety limit reached; result is truncated.":""));status(r.arrivalLimitReached?"Warning: arrival safety limit reached; result is truncated.":"Simulation complete.",r.arrivalLimitReached?"warn":"ok")}catch(e){status("Error: "+e.message,"warn")}busy=false}
+async function run(){
+ if(busy)return;
+ apply();busy=true;
+ try{
+  let r=sim(M.seed||Date.now());show(r);
+  log("RUN COMPLETE\nGood units: "+r.good+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: 1,000,000-arrival safety limit reached; result is truncated.":""));
+  startFlowAnimation();
+  status(r.arrivalLimitReached?"Statistics calculated with a safety-limit warning; 3D flow started.":"Simulation complete. 3D production flow started.",r.arrivalLimitReached?"warn":"ok");
+ }catch(e){status("Error: "+e.message,"warn")}
+ finally{busy=false}
+}
 async function mc(){if(busy)return;apply();busy=true;let a=[],c=[],arrivalLimitReached=false;for(let i=0;i<M.reps;i++){let r=sim((M.seed||Date.now())+i);a.push(r.throughput);c.push(r.cycle);arrivalLimitReached=arrivalLimitReached||r.arrivalLimitReached;if(i%20===0)await new Promise(requestAnimationFrame)}a.sort((x,y)=>x-y);c.sort((x,y)=>x-y);let av=a.reduce((x,y)=>x+y,0)/a.length,sd=Math.sqrt(a.reduce((x,y)=>x+(y-av)**2,0)/Math.max(1,a.length-1)),q=p=>a[Math.floor((a.length-1)*p)];$("mcText").innerHTML=`<b>${M.reps} replications</b><br>Throughput mean <b>${av.toFixed(5)}</b>, SD <b>${sd.toFixed(5)}</b>, P5 <b>${q(.05).toFixed(5)}</b>, P50 <b>${q(.5).toFixed(5)}</b>, P95 <b>${q(.95).toFixed(5)}</b> units/min<br>Cycle-time P50: <b>${c[Math.floor((c.length-1)*.5)].toFixed(2)}</b> min`;log("MONTE CARLO COMPLETE\nReplications: "+M.reps+"\nMean throughput: "+av.toFixed(5)+" units/min"+(arrivalLimitReached?"\nWARNING: arrival safety limit reached; one or more replications were truncated.":""));status(arrivalLimitReached?"Warning: arrival safety limit reached; some replications were truncated.":"Monte Carlo complete.",arrivalLimitReached?"warn":"ok");busy=false}
 $("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("3D flow clock and parts reset to 0 minutes.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();status("New machine added.","warn")};
 function normalizeImportedModel(raw){
@@ -386,5 +400,5 @@ $("modelFile").onchange=e=>{
 };
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
 window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=6").catch(()=>{});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=7").catch(()=>{});
 </script></body></html>
