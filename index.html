@@ -127,5 +127,5 @@ $("save").onclick=()=>{apply();localStorage.setItem("pls-model",JSON.stringify(M
 $("load").onclick=()=>{let x=localStorage.getItem("pls-model");if(!x)return status("No saved model.","warn");M=JSON.parse(x);if(!M.timeUnitsVersion){M.arrivalRate=n(M.arrival,7.5)/60;M.shiftMinutes=n(M.horizon,8)*60;M.timeUnitsVersion=2;delete M.arrival;delete M.horizon;}M.useFailures=!!M.useFailures;M.machines.forEach(m=>{if(m.mttf==null)m.mttf=n(m.mtbf,180);delete m.mtbf;delete m.ideal});render();status("Model loaded. Time inputs use minutes; saved legacy rate/duration values were converted where needed.","ok")};
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
 window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=4").catch(()=>{});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=5").catch(()=>{});
 </script></body></html>
