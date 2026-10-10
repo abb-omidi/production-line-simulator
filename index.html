@@ -166,13 +166,13 @@ function normalizeImportedModel(raw){
 $("save").onclick=()=>{
  try{
   apply();
-  const textData=JSON.stringify(M,null,2)+"\\n";
+  const textData=JSON.stringify(M,null,2)+"\n";
   const blob=new Blob([textData],{type:"application/json;charset=utf-8"});
   const url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download="production-line-model.json";a.style.display="none";
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1500);
-  log("MODEL EXPORTED\\nFile: production-line-model.json\\n"+JSON.stringify(M,null,2));
+  log("MODEL EXPORTED\nFile: production-line-model.json\n"+JSON.stringify(M,null,2));
   status("Model downloaded as production-line-model.json. Check your Downloads folder.","ok");
  }catch(e){status("Could not save model file: "+e.message,"warn")}
 };
@@ -184,7 +184,7 @@ $("modelFile").onchange=e=>{
   try{
    const raw=JSON.parse(String(reader.result||""));
    const loaded=normalizeImportedModel(raw);
-   M=loaded;render();log("MODEL IMPORTED\\nFile: "+file.name+"\\n"+JSON.stringify(M,null,2));
+   M=loaded;render();log("MODEL IMPORTED\nFile: "+file.name+"\n"+JSON.stringify(M,null,2));
    status("Model loaded from "+file.name+". Review the settings, then Run.","ok");
   }catch(err){status("Could not load model file: "+err.message,"warn")}
  };
