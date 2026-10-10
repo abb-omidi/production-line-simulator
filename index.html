@@ -33,6 +33,9 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
 <div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
+
+<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
+
 <section class="card"><h2>3D production flow</h2>
 <div class="flow-controls">
 <button id="flowToggle" class="green">▶ Start flow</button>
@@ -43,7 +46,6 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div class="flow-readout"><span>Clock: <strong id="flowClock">0.0 / 480.0 min</strong></span><span>Completed: <strong id="flowGood">0</strong></span><span>Rejected: <strong id="flowReject">0</strong></span><span>In process: <strong id="flowWip">0</strong></span></div>
 <div class="flow-note">The animation replays the same simulated events used for the results. Conveyor travel time, machine failures, scrap, and finite buffers are included in the shared model.</div>
 </section>
-<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 
 <section class="card"><h2>Results</h2><div class="kpis">
 <div class="kpi"><div class="value" id="tp">—</div><div class="muted">Good throughput (units/min)</div></div>
