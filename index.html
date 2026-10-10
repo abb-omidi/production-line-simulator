@@ -15,7 +15,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.machine{border:1px solid #d5dfe8;border-radius:10px;padding:8px;margin:6px 0;background:#fbfdff}.machine input,.machine select{min-height:36px;padding:6px;font-size:14px}.machine .grid{gap:6px}
 .mtop{display:flex;gap:8px;align-items:center;justify-content:space-between}.mtop b{font-size:16px}.mtop button{width:auto;min-height:36px}
 .params{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:7px}.status{padding:9px;border-radius:9px;background:#eef4f8;font-size:12px;margin-top:9px}.failure-control{margin:2px 0 8px;padding:8px 10px;background:#f3f7fa;border-radius:8px}.failure-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:#25394a;margin:0}.failure-toggle input{width:18px;min-height:18px;padding:0;flex:0 0 auto}.hint{font-size:11px;color:#637386;margin:5px 0 0}.ok{background:#eaf7ef;color:#17683e}.warn{background:#fff4df;color:#8a5a00}
-.flow-controls{display:grid;grid-template-columns:auto auto minmax(180px,1fr);gap:8px;align-items:center;margin:0 0 10px}.flow-controls button{min-height:38px}.flow-speed{padding:8px 10px;border:1px solid #d5dfe8;border-radius:10px;background:#f8fbfd}.flow-speed label{display:flex;justify-content:space-between;gap:8px;font-size:12px}.flow-speed input{min-height:22px;padding:0;margin-top:5px;accent-color:#0757a0}.flow-stage{position:relative;overflow:auto;border-radius:12px;border:1px solid #cdd9e3;background:linear-gradient(180deg,#d8efff 0%,#eff8fe 54%,#9caeb7 55%,#687d88 100%);overscroll-behavior-x:contain}.flow-track{position:relative;isolation:isolate;display:flex;align-items:stretch;gap:0;width:max-content;min-width:100%;height:300px;padding:18px 26px 15px;background:linear-gradient(180deg,transparent 0 67%,#7b8c95 67% 100%)}.flow-track:before{content:"";position:absolute;z-index:0;left:0;right:0;bottom:37px;height:23px;border-top:3px solid #d0d7dc;border-bottom:3px solid #273a44;background:repeating-linear-gradient(90deg,#425965 0 25px,#566d79 25px 40px);box-shadow:0 5px 0 #43555e}.flow-track.flow-running:before{animation:beltMove var(--belt-speed,.22s) linear infinite}.flow-infeed,.flow-outfeed{position:relative;z-index:2;flex:0 0 72px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:44px;color:#233947;font-size:11px;font-weight:800}.feed-dock{width:46px;height:36px;border:2px solid #647e8c;border-radius:5px 5px 2px 2px;background:linear-gradient(145deg,#eef7fb,#8ca5b1);box-shadow:5px 6px 0 #526772;display:grid;place-items:center;font-size:10px}.flow-outfeed .feed-dock{background:linear-gradient(145deg,#dff8eb,#73b79a)}.station3d{position:relative;z-index:2;flex:0 0 142px;width:142px;height:267px;text-align:center}.station-pill{position:absolute;top:5px;left:18px;right:18px;border-radius:99px;padding:4px 5px;font-size:10px;font-weight:800;letter-spacing:.04em;background:#e9f5ee;color:#246245;border:1px solid #b9d9c7}.station-pill.processing{background:#e0f0ff;border-color:#91c1e7;color:#0757a0}.station-pill.repair{background:#ffebd6;border-color:#efb56d;color:#99500d}.station-pill.queued{background:#fff6d9;border-color:#ead28a;color:#7a6000}.machine-perspective{position:absolute;left:4px;right:4px;top:37px;height:164px;perspective:750px;perspective-origin:50% 54%}.machine-cube{position:absolute;left:21px;top:20px;width:90px;height:74px;transform-style:preserve-3d;transform:rotateX(-7deg) rotateY(-27deg);transition:filter .15s}.station3d.processing .machine-cube{filter:drop-shadow(0 0 7px #40a7ec)}.station3d.repair .machine-cube{filter:drop-shadow(0 0 6px #f0a348);animation:repairShake .28s infinite alternate}.cube-face{position:absolute;box-sizing:border-box;border:1px solid #49616d;backface-visibility:visible}.cube-front{width:90px;height:74px;left:0;top:0;transform:translateZ(24px);background:linear-gradient(135deg,#e8f0f4,#9eb2bd 75%,#8299a5);border-radius:5px;box-shadow:inset 0 0 0 4px #c0ced5}.cube-side{width:48px;height:74px;left:0;top:0;transform:rotateY(90deg) translateZ(45px);background:linear-gradient(90deg,#607986,#344b58);border-radius:2px 5px 5px 2px}.cube-top{width:90px;height:48px;left:0;top:0;transform:rotateX(90deg) translateZ(37px);background:linear-gradient(135deg,#f4f8fa,#acbec8);border-radius:4px}.machine-window{position:absolute;left:19px;top:13px;width:43px;height:28px;border:3px solid #4b6675;border-radius:4px;background:linear-gradient(135deg,#9be1ef,#236483);box-shadow:inset 0 0 8px #c9f7ff}.machine-window:after{content:"";position:absolute;left:18px;top:0;bottom:0;border-left:2px solid #d3f8ff}.machine-button{position:absolute;left:17px;bottom:8px;width:8px;height:8px;border-radius:50%;background:#35a86c;box-shadow:12px 0 #f0b34c,24px 0 #d56b6b}.station3d.processing .machine-button{animation:lampPulse .45s infinite alternate}.machine-nameplate{position:absolute;left:8px;right:8px;bottom:-31px;transform:translateZ(1px);color:#20343f;font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.station-base{position:absolute;left:12px;right:12px;bottom:24px;height:13px;transform:skewX(-24deg);background:linear-gradient(#bcc8ce,#526a75);border:1px solid #435863;box-shadow:5px 5px 0 #3b505a}.station-id{position:absolute;bottom:4px;left:0;right:0;font-size:10px;color:#f1f5f7;font-weight:800;letter-spacing:.08em}.conveyor-link{position:relative;z-index:2;flex:0 0 38px;width:38px;height:267px}.conveyor-arrow{position:absolute;left:8px;top:178px;color:#f2f7f9;font-size:22px;text-shadow:0 1px 2px #273b45}.flow-token-layer{position:absolute;z-index:8;inset:0;pointer-events:none}.part-token{position:absolute;width:17px;height:15px;transform:translate(-50%,-50%);border:1px solid #8d5313;border-radius:3px;background:linear-gradient(135deg,#ffd57b,#e99a28);box-shadow:2px 3px 0 #7b4c21,0 0 4px #fff8;display:grid;place-items:center;color:#50300d;font-size:8px;font-weight:900;transition:none}.part-token:before{content:"";position:absolute;left:2px;right:2px;top:-4px;height:4px;background:#ffe8b0;border:1px solid #aa7629;transform:skewX(-35deg);transform-origin:bottom}.part-token.rejected{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white;box-shadow:2px 3px 0 #762727}.part-token.finished{background:linear-gradient(135deg,#c0f3d0,#2baf67);border-color:#167844;box-shadow:2px 3px 0 #17653d}.flow-readout{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:9px;font-size:12px;color:#4f6572}.flow-readout strong{color:#182e3a}.flow-note{font-size:11px;color:#637386;margin-top:7px}.flow-stage:focus-visible{outline:3px solid #0757a0;outline-offset:2px}@keyframes beltMove{from{background-position:0 0}to{background-position:40px 0}}@keyframes lampPulse{from{filter:brightness(.8)}to{filter:brightness(1.7)}}@keyframes repairShake{from{transform:rotateX(-7deg) rotateY(-29deg) translateX(-1px)}to{transform:rotateX(-7deg) rotateY(-25deg) translateX(1px)}}@media(max-width:620px){.flow-controls{grid-template-columns:1fr 1fr}.flow-speed{grid-column:1/-1}.flow-track{height:285px}.station3d,.conveyor-link{height:252px}.machine-perspective{transform:scale(.91);transform-origin:top center}.flow-infeed,.flow-outfeed{padding-bottom:40px}}@media(prefers-reduced-motion:reduce){.flow-track.flow-running:before,.station3d.processing .machine-button,.station3d.repair .machine-cube{animation:none}}
+.flow-controls{display:grid;grid-template-columns:auto auto minmax(180px,1fr);gap:8px;align-items:center;margin:0 0 10px}.flow-controls button{min-height:38px}.flow-speed{padding:8px 10px;border:1px solid #d5dfe8;border-radius:10px;background:#f8fbfd}.flow-speed label{display:flex;justify-content:space-between;gap:8px;font-size:12px}.flow-speed input{min-height:22px;padding:0;margin-top:5px;accent-color:#0757a0}.flow-stage{position:relative;overflow:auto;border-radius:12px;border:1px solid #cdd9e3;background:linear-gradient(180deg,#d8efff 0%,#eff8fe 54%,#9caeb7 55%,#687d88 100%);overscroll-behavior-x:contain}.flow-track{position:relative;isolation:isolate;display:flex;align-items:stretch;gap:0;width:max-content;min-width:100%;height:300px;padding:18px 26px 15px;background:linear-gradient(180deg,transparent 0 67%,#7b8c95 67% 100%)}.flow-track:before{content:"";position:absolute;z-index:0;left:0;right:0;bottom:37px;height:23px;border-top:3px solid #d0d7dc;border-bottom:3px solid #273a44;background:repeating-linear-gradient(90deg,#425965 0 25px,#566d79 25px 40px);box-shadow:0 5px 0 #43555e}.flow-track.flow-running:before{animation:beltMove var(--belt-speed,.22s) linear infinite}.flow-infeed,.flow-outfeed{position:relative;z-index:2;flex:0 0 72px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:44px;color:#233947;font-size:11px;font-weight:800}.feed-dock{width:46px;height:36px;border:2px solid #647e8c;border-radius:5px 5px 2px 2px;background:linear-gradient(145deg,#eef7fb,#8ca5b1);box-shadow:5px 6px 0 #526772;display:grid;place-items:center;font-size:10px}.flow-outfeed .feed-dock{background:linear-gradient(145deg,#dff8eb,#73b79a)}.station3d{position:relative;z-index:2;flex:0 0 142px;width:142px;height:267px;text-align:center}.station-pill{position:absolute;top:5px;left:18px;right:18px;border-radius:99px;padding:4px 5px;font-size:10px;font-weight:800;letter-spacing:.04em;background:#e9f5ee;color:#246245;border:1px solid #b9d9c7}.station-pill.processing{background:#e0f0ff;border-color:#91c1e7;color:#0757a0}.station-pill.repair{background:#ffebd6;border-color:#efb56d;color:#99500d}.station-pill.queued{background:#fff6d9;border-color:#ead28a;color:#7a6000}.station-pill.blocked{background:#ffe5e5;border-color:#e6a2a2;color:#8b2424}.machine-perspective{position:absolute;left:4px;right:4px;top:37px;height:164px;perspective:750px;perspective-origin:50% 54%}.machine-cube{position:absolute;left:21px;top:20px;width:90px;height:74px;transform-style:preserve-3d;transform:rotateX(-7deg) rotateY(-27deg);transition:filter .15s}.station3d.processing .machine-cube{filter:drop-shadow(0 0 7px #40a7ec)}.station3d.repair .machine-cube{filter:drop-shadow(0 0 6px #f0a348);animation:repairShake .28s infinite alternate}.cube-face{position:absolute;box-sizing:border-box;border:1px solid #49616d;backface-visibility:visible}.cube-front{width:90px;height:74px;left:0;top:0;transform:translateZ(24px);background:linear-gradient(135deg,#e8f0f4,#9eb2bd 75%,#8299a5);border-radius:5px;box-shadow:inset 0 0 0 4px #c0ced5}.cube-side{width:48px;height:74px;left:0;top:0;transform:rotateY(90deg) translateZ(45px);background:linear-gradient(90deg,#607986,#344b58);border-radius:2px 5px 5px 2px}.cube-top{width:90px;height:48px;left:0;top:0;transform:rotateX(90deg) translateZ(37px);background:linear-gradient(135deg,#f4f8fa,#acbec8);border-radius:4px}.machine-window{position:absolute;left:19px;top:13px;width:43px;height:28px;border:3px solid #4b6675;border-radius:4px;background:linear-gradient(135deg,#9be1ef,#236483);box-shadow:inset 0 0 8px #c9f7ff}.machine-window:after{content:"";position:absolute;left:18px;top:0;bottom:0;border-left:2px solid #d3f8ff}.machine-button{position:absolute;left:17px;bottom:8px;width:8px;height:8px;border-radius:50%;background:#35a86c;box-shadow:12px 0 #f0b34c,24px 0 #d56b6b}.station3d.processing .machine-button{animation:lampPulse .45s infinite alternate}.machine-nameplate{position:absolute;left:8px;right:8px;bottom:-31px;transform:translateZ(1px);color:#20343f;font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.station-base{position:absolute;left:12px;right:12px;bottom:24px;height:13px;transform:skewX(-24deg);background:linear-gradient(#bcc8ce,#526a75);border:1px solid #435863;box-shadow:5px 5px 0 #3b505a}.station-id{position:absolute;bottom:4px;left:0;right:0;font-size:10px;color:#f1f5f7;font-weight:800;letter-spacing:.08em}.conveyor-link{position:relative;z-index:2;flex:0 0 38px;width:38px;height:267px}.conveyor-arrow{position:absolute;left:8px;top:178px;color:#f2f7f9;font-size:22px;text-shadow:0 1px 2px #273b45}.flow-token-layer{position:absolute;z-index:8;inset:0;pointer-events:none}.part-token{position:absolute;width:17px;height:15px;transform:translate(-50%,-50%);border:1px solid #8d5313;border-radius:3px;background:linear-gradient(135deg,#ffd57b,#e99a28);box-shadow:2px 3px 0 #7b4c21,0 0 4px #fff8;display:grid;place-items:center;color:#50300d;font-size:8px;font-weight:900;transition:none}.part-token:before{content:"";position:absolute;left:2px;right:2px;top:-4px;height:4px;background:#ffe8b0;border:1px solid #aa7629;transform:skewX(-35deg);transform-origin:bottom}.part-token.rejected{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white;box-shadow:2px 3px 0 #762727}.part-token.blocked{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white}.part-token.repair{background:linear-gradient(135deg,#f5d0ff,#ac63bf);border-color:#6b337d;color:white}.part-token.finished{background:linear-gradient(135deg,#c0f3d0,#2baf67);border-color:#167844;box-shadow:2px 3px 0 #17653d}.flow-readout{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:9px;font-size:12px;color:#4f6572}.flow-readout strong{color:#182e3a}.flow-note{font-size:11px;color:#637386;margin-top:7px}.flow-stage:focus-visible{outline:3px solid #0757a0;outline-offset:2px}@keyframes beltMove{from{background-position:0 0}to{background-position:40px 0}}@keyframes lampPulse{from{filter:brightness(.8)}to{filter:brightness(1.7)}}@keyframes repairShake{from{transform:rotateX(-7deg) rotateY(-29deg) translateX(-1px)}to{transform:rotateX(-7deg) rotateY(-25deg) translateX(1px)}}@media(max-width:620px){.flow-controls{grid-template-columns:1fr 1fr}.flow-speed{grid-column:1/-1}.flow-track{height:285px}.station3d,.conveyor-link{height:252px}.machine-perspective{transform:scale(.91);transform-origin:top center}.flow-infeed,.flow-outfeed{padding-bottom:40px}}@media(prefers-reduced-motion:reduce){.flow-track.flow-running:before,.station3d.processing .machine-button,.station3d.repair .machine-cube{animation:none}}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{border:1px solid #d5dfe8;border-radius:10px;padding:10px}.value{font-size:21px;font-weight:800}.muted{font-size:11px;color:#637386}
 .table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px;border-bottom:1px solid #dce4ea;white-space:nowrap;text-align:right}th:first-child,td:first-child{text-align:left}
 .log{background:#101820;color:#dce8ef;padding:10px;border-radius:9px;white-space:pre-wrap;font:12px monospace;max-height:240px;overflow:auto}
@@ -28,7 +28,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div><label>Arrival rate (units/min)</label><input id="arrivalRate" type="number" min=".000001" step=".001"></div>
 <div><label>Shift duration (min)</label><input id="shiftMinutes" type="number" min=".01" step="1"></div>
 <div><label>Monte Carlo replications</label><input id="reps" type="number" min="1" max="5000"></div>
-<div><label>Random seed (0=random)</label><input id="seed" type="number"></div></div>
+<div><label>Random seed (0=random)</label><input id="seed" type="number"></div><div><label>Conveyor travel time (min)</label><input id="transferMinutes" type="number" min="0" step=".05"></div></div>
 <div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save file</button><button class="gray" id="load">Load file</button><button class="light" id="reset">Reset</button></div>
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
 <div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
@@ -41,7 +41,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 </div>
 <div class="flow-stage" id="flowStage"><div class="flow-track" id="line"></div></div>
 <div class="flow-readout"><span>Clock: <strong id="flowClock">0.0 / 480.0 min</strong></span><span>Completed: <strong id="flowGood">0</strong></span><span>Rejected: <strong id="flowReject">0</strong></span><span>In process: <strong id="flowWip">0</strong></span></div>
-<div class="flow-note">Press Run to calculate shift results and start the animation, or click Start flow for animation alone. The speed control advances simulated minutes per real second. This animated flow is a visual model and is separate from the statistical result.</div>
+<div class="flow-note">The animation replays the same simulated events used for the results. Conveyor travel time, machine failures, scrap, and finite buffers are included in the shared model.</div>
 </section>
 <section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 
@@ -50,14 +50,14 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div class="kpi"><div class="value" id="ct">—</div><div class="muted">Cycle time (min)</div></div>
 <div class="kpi"><div class="value" id="bu">—</div><div class="muted">Bottleneck utilization</div></div>
 <div class="kpi"><div class="value" id="avgAvailability">—</div><div class="muted">Average availability</div></div></div></section>
-<section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT (min)</th><th>Availability</th><th>Util.</th><th>Quality (%)</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
+<section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT (min)</th><th>Availability</th><th>Util.</th><th>Blocked (%)</th><th>Quality (%)</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
 <section class="card"><h2>Monte Carlo</h2><div id="mcText" class="muted">Run Monte Carlo for mean, SD and P5/P50/P95 throughput (units/min).</div></section>
 <section class="card"><h2>Log</h2><div id="log" class="log">Ready.</div></section>
 </main>
 <script>
 "use strict";
 const D={Normal:[["mean","Mean μ (min)",10],["sd","Std. dev. σ (min)",2]],Gamma:[["shape","Shape α",4],["scale","Scale β (min)",2]],Poisson:[["lambda","λ (mean min)",8]],Exponential:[["mean","Mean (min)",8]],Weibull:[["shape","Shape k",2],["scale","Scale λ (min)",10]],Triangular:[["min","Minimum (min)",7],["mode","Mode (min)",9],["max","Maximum (min)",13]]};
-const DEF={timeUnitsVersion:2,arrivalRate:0.125,shiftMinutes:480,reps:100,seed:0,useFailures:false,machines:[
+const DEF={timeUnitsVersion:2,arrivalRate:0.125,shiftMinutes:480,transferMinutes:1.15,reps:100,seed:0,useFailures:false,machines:[
 {id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mttf:180,mttr:20,buffer:10,scrap:0},
 {id:"M2",name:"Assembly",dist:"Normal",p:{mean:8,sd:4},mttf:210,mttr:18,buffer:5,scrap:0},
 {id:"M3",name:"Inspection",dist:"Normal",p:{mean:9.667,sd:1.247},mttf:300,mttr:15,buffer:8,scrap:3}]};
@@ -65,11 +65,11 @@ const copy=x=>JSON.parse(JSON.stringify(x));
 const $=id=>document.getElementById(id);
 const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
 let M=copy(DEF),rand=Math.random,busy=false;
-let flow={running:false,raf:0,lastTs:0,simMinute:0,nextArrival:0,parts:[],stations:[],nextId:1,good:0,rejected:0};
+let flow={running:false,raf:0,lastTs:0,simMinute:0,events:[],cursor:0,parts:new Map(),stations:[],traceReady:false,good:0,rejected:0,expectedGood:0,expectedRejected:0};
 function status(s,c=""){ $("status").className="status "+c;$("status").textContent=s }
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]))}
 function render(){
- $("arrivalRate").value=M.arrivalRate;$("shiftMinutes").value=M.shiftMinutes;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;
+ $("arrivalRate").value=M.arrivalRate;$("shiftMinutes").value=M.shiftMinutes;$("transferMinutes").value=M.transferMinutes??1.15;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;
  $("machines").innerHTML=M.machines.map((m,i)=>`<div class="machine"><div class="mtop"><b>${m.id} — ${esc(m.name)}</b><button class="danger" data-del="${i}">Remove</button></div>
  <div class="grid"><div><label>Machine / process name</label><input data-i="${i}" data-k="name" value="${esc(m.name)}"></div><div><label>Processing-time distribution</label><select data-i="${i}" data-k="dist">${Object.keys(D).map(d=>`<option ${d===m.dist?"selected":""}>${d}</option>`).join("")}</select></div></div>
  <div class="params">${D[m.dist].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" data-i="${i}" data-p="${f[0]}" value="${n(m.p[f[0]],f[2])}"></div>`).join("")}
@@ -96,11 +96,6 @@ function renderFlowLine(){
  html+='<div class="flow-outfeed" id="flowOutfeed"><div class="feed-dock">OK</div><span>FINISHED</span></div><div class="flow-token-layer" id="flowTokenLayer"></div>';
  line.innerHTML=html;
 }
-function exponentialMinutes(rate){return -Math.log(Math.max(1e-12,Math.random()))/Math.max(1e-9,rate)}
-function visualServiceTime(m){
- const saved=rand;rand=Math.random;
- try{return Math.max(.05,sample(m))}finally{rand=saved}
-}
 function flowCenters(){
  const track=$("line"),centers=M.machines.map((_,i)=>{
   const e=$("flow-station-"+i);return e?e.offsetLeft+e.offsetWidth/2:0
@@ -112,7 +107,9 @@ function flowCenters(){
 }
 function resetFlow(){
  if(flow.raf)cancelAnimationFrame(flow.raf);
- flow={running:false,raf:0,lastTs:0,simMinute:0,nextArrival:exponentialMinutes(M.arrivalRate),parts:[],stations:M.machines.map(m=>({active:null,queue:[],upRemaining:m.mttf,downRemaining:0})),nextId:1,good:0,rejected:0};
+ flow={running:false,raf:0,lastTs:0,simMinute:0,events:[],cursor:0,parts:new Map(),
+  stations:M.machines.map(()=>({mode:"ready",queueCount:0,activeId:null,down:false})),
+  traceReady:false,good:0,rejected:0,expectedGood:0,expectedRejected:0};
  $("flowToggle").textContent="▶ Start flow";$("flowToggle").className="green";
  $("line").classList.remove("flow-running");
  drawFlow();updateFlowReadout();updateFlowStations();
@@ -121,134 +118,142 @@ function flowFormat(value){return Math.max(0,value).toFixed(1)}
 function updateFlowReadout(){
  $("flowClock").textContent=flowFormat(Math.min(flow.simMinute,M.shiftMinutes))+" / "+flowFormat(M.shiftMinutes)+" min";
  $("flowGood").textContent=flow.good;$("flowReject").textContent=flow.rejected;
- $("flowWip").textContent=flow.parts.filter(p=>p.state!=="done"&&p.state!=="rejected"&&p.state!=="remove").length;
+ $("flowWip").textContent=Array.from(flow.parts.values()).filter(p=>p.state!=="done"&&p.state!=="rejected").length;
  $("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";
 }
-function flowQueuePart(part,stationIndex){
- part.state="queue";part.station=stationIndex;part.moveRemaining=0;
- flow.stations[stationIndex].queue.push(part.id);
+function loadFlowTrace(r){
+ if(flow.raf)cancelAnimationFrame(flow.raf);
+ flow.running=false;flow.raf=0;flow.lastTs=0;flow.simMinute=0;
+ flow.events=(r.events||[]).slice().sort((a,b)=>a.time-b.time||a.seq-b.seq);
+ flow.cursor=0;flow.parts=new Map();
+ flow.stations=M.machines.map(()=>({mode:"ready",queueCount:0,activeId:null,down:false}));
+ flow.traceReady=true;flow.good=0;flow.rejected=0;
+ flow.expectedGood=r.good;flow.expectedRejected=r.rejected;
+ $("line").classList.remove("flow-running");
+ $("flowToggle").textContent="▶ Start flow";$("flowToggle").className="green";
+ drawFlow();updateFlowReadout();updateFlowStations();
 }
-function spawnFlowPart(centers,source){
- const d=1.15;
- flow.parts.push({id:flow.nextId++,state:"moving",station:0,fromX:source,toX:centers[0],moveDuration:d,moveRemaining:d,serviceRemaining:0,removeRemaining:0});
-}
-function startFlowStation(i){
- const st=flow.stations[i];
- if(st.active||!st.queue.length)return;
- const id=st.queue.shift(),part=flow.parts.find(p=>p.id===id);
- if(!part)return;
- st.active=id;part.state="processing";part.station=i;part.serviceRemaining=visualServiceTime(M.machines[i]);
-}
-function finishFlowService(i,centers,output){
- const st=flow.stations[i],id=st.active,part=flow.parts.find(p=>p.id===id),m=M.machines[i];
- st.active=null;
- if(!part)return;
- if(Math.random()<m.scrap/100){
-  part.state="rejected";part.fromX=centers[i];part.toX=centers[i]+16;part.moveDuration=.25;part.moveRemaining=.25;part.removeRemaining=.35;flow.rejected++;
- }else if(i===M.machines.length-1){
-  part.state="done";part.fromX=centers[i];part.toX=output;part.moveDuration=1.0;part.moveRemaining=1.0;part.removeRemaining=1.0;flow.good++;
- }else{
-  part.state="moving";part.fromX=centers[i];part.toX=centers[i+1];part.moveDuration=1.15;part.moveRemaining=1.15;part.station=i+1;
+function applyFlowEvent(e){
+ let p=flow.parts.get(e.id);
+ if(e.type==="arrival"){
+  flow.parts.set(e.id,{id:e.id,state:"input",station:-1,arrivalTime:e.time});
+ }else if(e.type==="moveStart"){
+  if(!p){p={id:e.id,state:"input",station:-1};flow.parts.set(e.id,p)}
+  p.state="moving";p.from=e.from;p.to=e.to;p.moveStart=e.time;p.moveEnd=e.endTime;
+  p.station=typeof e.to==="number"?e.to:(typeof e.from==="number"?e.from:-1);
+ }else if(e.type==="moveEnd"){
+  if(p){p.state="waiting";p.station=e.station}
+ }else if(e.type==="enterStation"){
+  if(p){p.state="waiting";p.station=e.station}
+ }else if(e.type==="queue"){
+  if(p){p.state="queue";p.station=e.station}
+ }else if(e.type==="queueExit"){
+  if(p){p.state="waiting";p.station=e.station}
+ }else if(e.type==="serviceStart"){
+  if(p){p.state="processing";p.station=e.station}
+ }else if(e.type==="failure"){
+  if(p&&(p.state==="processing"||p.state==="waiting")){p.state="repair";p.station=e.station}
+ }else if(e.type==="repairDone"){
+  if(p&&p.state==="repair"){p.state="waiting";p.station=e.station}
+ }else if(e.type==="blocked"){
+  if(p){p.state="blocked";p.station=e.station}
+ }else if(e.type==="unblocked"){
+  if(p){p.state="waiting";p.station=e.station}
+ }else if(e.type==="reject"){
+  if(p){p.state="rejected";p.station=e.station}
+  flow.rejected++;
+ }else if(e.type==="finish"){
+  if(p){p.state="done";p.station=M.machines.length}
+  flow.good++;
+ }else if(e.type==="removePart"){
+  flow.parts.delete(e.id);
+ }else if(e.type==="stationState"){
+  flow.stations[e.station]={mode:e.mode,queueCount:e.queueCount,activeId:e.activeId,down:e.down};
  }
 }
-function advanceFlowStations(dt,centers,output){
- for(let i=0;i<flow.stations.length;i++){
-  const st=flow.stations[i],m=M.machines[i];let rem=dt,guard=0;
-  while(rem>1e-8&&guard++<80){
-   if(!st.active){startFlowStation(i);if(!st.active)break}
-   const part=flow.parts.find(p=>p.id===st.active);if(!part){st.active=null;continue}
-   if(M.useFailures&&m.mttr>0){
-    if(st.downRemaining>1e-8){
-     const d=Math.min(rem,st.downRemaining);st.downRemaining-=d;rem-=d;
-     if(st.downRemaining<=1e-8)st.upRemaining=m.mttf;
-     continue;
-    }
-    if(st.upRemaining<=1e-8){st.downRemaining=m.mttr;continue}
-    const work=Math.min(rem,part.serviceRemaining,st.upRemaining);
-    part.serviceRemaining-=work;st.upRemaining-=work;rem-=work;
-    if(part.serviceRemaining<=1e-8){finishFlowService(i,centers,output);continue}
-    if(st.upRemaining<=1e-8){st.downRemaining=m.mttr;continue}
-    break;
-   }else{
-    const work=Math.min(rem,part.serviceRemaining);
-    part.serviceRemaining-=work;rem-=work;
-    if(part.serviceRemaining<=1e-8){finishFlowService(i,centers,output);continue}
-    break;
-   }
-  }
+function processFlowEvents(){
+ while(flow.cursor<flow.events.length&&flow.events[flow.cursor].time<=flow.simMinute+1e-9){
+  applyFlowEvent(flow.events[flow.cursor++]);
  }
 }
 function drawFlow(){
  const layer=$("flowTokenLayer");if(!layer)return;
  const pos=flowCenters(),beltY=pos.y;
- const tokenNodes=new Map([...layer.children].map(e=>[Number(e.dataset.part),e]));
- const activeParts=new Set();
- for(const p of flow.parts){
-  activeParts.add(p.id);
-  let node=tokenNodes.get(p.id);
+ const existing=new Map(Array.from(layer.children).map(e=>[Number(e.dataset.part),e]));
+ const values=Array.from(flow.parts.values());
+ const inputRanks=values.filter(p=>p.state==="input").sort((a,b)=>a.id-b.id);
+ const queueRanks=new Map();
+ for(let i=0;i<M.machines.length;i++){
+  queueRanks.set(i,values.filter(p=>p.state==="queue"&&p.station===i).sort((a,b)=>a.id-b.id));
+ }
+ for(const p of values){
+  let node=existing.get(p.id);
   if(!node){node=document.createElement("div");node.className="part-token";node.dataset.part=p.id;node.textContent=String(p.id%100);layer.appendChild(node)}
   let x=pos.source,y=beltY;
-  if(p.state==="moving"||p.state==="done"||p.state==="rejected"){
-   const frac=Math.max(0,Math.min(1,1-p.moveRemaining/Math.max(.001,p.moveDuration)));
-   x=p.fromX+(p.toX-p.fromX)*frac;
-   if(p.state==="done")node.className="part-token finished";
-   else if(p.state==="rejected")node.className="part-token rejected";
-   else node.className="part-token";
-  }else if(p.state==="processing"){
-   x=pos.centers[p.station];y=beltY-7;node.className="part-token";
+  if(p.state==="input"){
+   const rank=inputRanks.findIndex(q=>q.id===p.id);
+   x=Math.max(8,pos.source-14*(rank+1));node.className="part-token";
+  }else if(p.state==="moving"){
+   const duration=Math.max(0.001,p.moveEnd-p.moveStart);
+   const f=Math.max(0,Math.min(1,(flow.simMinute-p.moveStart)/duration));
+   const pointX=v=>v==="source"?pos.source:v==="output"?pos.output:v==="reject"?pos.centers[p.station]+24:pos.centers[Number(v)];
+   x=pointX(p.from)+(pointX(p.to)-pointX(p.from))*f;
+   node.className="part-token";
   }else if(p.state==="queue"){
-   const q=flow.stations[p.station]?.queue||[],rank=Math.max(0,q.indexOf(p.id));
+   const ranks=queueRanks.get(p.station)||[];
+   const rank=Math.max(0,ranks.findIndex(q=>q.id===p.id));
    x=pos.centers[p.station]-18*(rank+1);node.className="part-token";
+  }else if(p.state==="processing"||p.state==="waiting"){
+   x=pos.centers[p.station];y=beltY-7;node.className="part-token";
+  }else if(p.state==="repair"){
+   x=pos.centers[p.station];y=beltY-7;node.className="part-token repair";
+  }else if(p.state==="blocked"){
+   x=pos.centers[p.station]+14;y=beltY-7;node.className="part-token blocked";
+  }else if(p.state==="rejected"){
+   x=pos.centers[p.station]+24;y=beltY-12;node.className="part-token rejected";
+  }else if(p.state==="done"){
+   x=pos.output;y=beltY;node.className="part-token finished";
   }
   node.style.left=x+"px";node.style.top=y+"px";
  }
- for(const [id,node] of tokenNodes)if(!activeParts.has(id))node.remove();
+ for(const [id,node] of existing)if(!flow.parts.has(id))node.remove();
 }
 function updateFlowStations(){
  flow.stations.forEach((st,i)=>{
   const station=$("flow-station-"+i),pill=$("flow-state-"+i);if(!station||!pill)return;
-  station.classList.remove("processing","repair");pill.classList.remove("processing","repair","queued");
-  if(M.useFailures&&M.machines[i].mttr>0&&st.downRemaining>1e-8){station.classList.add("repair");pill.classList.add("repair");pill.textContent="REPAIR";}
-  else if(st.active){station.classList.add("processing");pill.classList.add("processing");pill.textContent="PROCESSING";}
-  else if(st.queue.length){pill.classList.add("queued");pill.textContent="QUEUE "+st.queue.length;}
+  station.classList.remove("processing","repair","blocked");
+  pill.classList.remove("processing","repair","queued","blocked");
+  if(st.mode==="repair"){station.classList.add("repair");pill.classList.add("repair");pill.textContent="REPAIR";}
+  else if(st.mode==="blocked"){station.classList.add("blocked");pill.classList.add("blocked");pill.textContent="BLOCKED";}
+  else if(st.mode==="processing"){station.classList.add("processing");pill.classList.add("processing");pill.textContent="PROCESSING";}
+  else if(st.mode==="queued"){pill.classList.add("queued");pill.textContent="QUEUE "+st.queueCount;}
   else pill.textContent="READY";
  });
 }
 function tickFlow(ts){
  if(!flow.running)return;
  if(!flow.lastTs)flow.lastTs=ts;
- const elapsed=Math.min(.12,Math.max(0,(ts-flow.lastTs)/1000));flow.lastTs=ts;
+ const elapsed=Math.min(.05,Math.max(0,(ts-flow.lastTs)/1000));flow.lastTs=ts;
  const dt=elapsed*Number($("flowSpeed").value||8);
  flow.simMinute=Math.min(M.shiftMinutes,flow.simMinute+dt);
- const pos=flowCenters();
- while(flow.nextArrival<=flow.simMinute&&flow.nextArrival<=M.shiftMinutes+1e-9){
-  spawnFlowPart(pos.centers,pos.source);flow.nextArrival+=exponentialMinutes(M.arrivalRate);
- }
- for(const p of flow.parts){
-  if(p.state==="moving"||p.state==="done"||p.state==="rejected"){
-   const step=Math.min(dt,p.moveRemaining);p.moveRemaining-=step;
-   if(p.moveRemaining<=1e-8){
-    p.moveRemaining=0;
-    if(p.state==="moving")flowQueuePart(p,p.station);
-    else if(p.removeRemaining>0){p.removeRemaining-=dt;if(p.removeRemaining<=0)p.state="remove"}
-   }
-  }
- }
- advanceFlowStations(dt,pos.centers,pos.output);
- flow.parts=flow.parts.filter(p=>p.state!=="remove");
- drawFlow();updateFlowReadout();updateFlowStations();
+ processFlowEvents();drawFlow();updateFlowReadout();updateFlowStations();
  if(flow.simMinute>=M.shiftMinutes-1e-8){
   flow.running=false;flow.raf=0;$("line").classList.remove("flow-running");
-  $("flowToggle").textContent="↻ Restart flow";$("flowToggle").className="green";
-  const wip=flow.parts.filter(p=>p.state!=="done"&&p.state!=="rejected"&&p.state!=="remove").length;
-  status("Shift animation reached "+M.shiftMinutes.toFixed(1)+" min. Completed: "+flow.good+"; rejected: "+flow.rejected+"; remaining WIP: "+wip+". Use Run for statistical results.",wip?"warn":"ok");
+  $("flowToggle").textContent="↻ Replay shift";$("flowToggle").className="green";
+  const matches=flow.good===flow.expectedGood&&flow.rejected===flow.expectedRejected;
+  status("Replay complete. Finished units: "+flow.good+" (simulation: "+flow.expectedGood+"); rejects: "+flow.rejected+" (simulation: "+flow.expectedRejected+"). "+(matches?"Displayed counts match the simulation.":"Displayed counts differ; inspect the event trace."),matches?"ok":"warn");
   return;
  }
  flow.raf=requestAnimationFrame(tickFlow);
 }
 function startFlowAnimation(){
  if(flow.running)return;
- if(flow.simMinute>=M.shiftMinutes-1e-8)resetFlow();
+ if(!flow.traceReady){
+  const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);
+  show(r);loadFlowTrace(r);
+  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: arrival safety limit reached; result may be truncated.":""));
+ }
+ if(flow.simMinute>=M.shiftMinutes-1e-8){const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);show(r);loadFlowTrace(r)}
  flow.running=true;flow.lastTs=0;$("line").classList.add("flow-running");
  $("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value||8)))+"s");
  $("flowToggle").textContent="Ⅱ Pause flow";$("flowToggle").className="gray";
@@ -258,14 +263,18 @@ function toggleFlow(){
  if(flow.running){
   flow.running=false;if(flow.raf)cancelAnimationFrame(flow.raf);flow.raf=0;flow.lastTs=0;
   $("line").classList.remove("flow-running");$("flowToggle").textContent="▶ Resume flow";$("flowToggle").className="green";
-  status("Flow animation paused at "+flowFormat(flow.simMinute)+" simulated minutes.","warn");return;
+  status("Flow replay paused at "+flowFormat(flow.simMinute)+" simulated minutes.","warn");return;
  }
- if(flow.simMinute===0&&flow.parts.length===0)apply();
+ if(!flow.traceReady||flow.simMinute>=M.shiftMinutes-1e-8){
+  apply();
+  flow.traceReady=false;
+ }
  startFlowAnimation();
- status("3D flow running. The simulation clock controls arrivals, processing, and conveyor movement.","ok");
+ status("Replaying the same discrete-event timeline used for the statistical results.","ok");
 }
+
 function edit(e){let i=+e.target.dataset.i,m=M.machines[i];if(e.target.dataset.p)m.p[e.target.dataset.p]=n(e.target.value);else if(e.target.dataset.k==="dist"){m.dist=e.target.value;m.p={};D[m.dist].forEach(f=>m.p[f[0]]=f[2]);render()}else if(e.target.dataset.k==="name")m.name=e.target.value;else m[e.target.dataset.k]=n(e.target.value);status("Parameter changed. Tap Apply model.","warn")}
-function apply(){M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
+function apply(){M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.transferMinutes=Math.max(0,n($("transferMinutes").value,1.15));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
 function seed(s){let a=(s>>>0)||1;return()=>{a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
 function U(){return Math.max(1e-12,rand())}
 function norm(mu,sd){let u=U(),v=U();return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
@@ -273,65 +282,266 @@ function gamma(k,t){if(k<1)return gamma(k+1,t)*Math.pow(U(),1/k);let d=k-1/3,c=1
 function sample(m){let p=m.p,x;if(m.dist==="Normal"){do{x=norm(p.mean,p.sd)}while(x<=0)}else if(m.dist==="Gamma")x=gamma(p.shape,p.scale);else if(m.dist==="Poisson"){let L=Math.exp(-p.lambda),q=1,k=0;do{k++;q*=U()}while(q>L);x=k-1}else if(m.dist==="Exponential")x=-p.mean*Math.log(U());else if(m.dist==="Weibull")x=p.scale*Math.pow(-Math.log(U()),1/p.shape);else{let u=U(),f=(p.mode-p.min)/(p.max-p.min);x=u<f?p.min+Math.sqrt(u*(p.max-p.min)*(p.mode-p.min)):p.max-Math.sqrt((1-u)*(p.max-p.min)*(p.max-p.mode))}return Math.max(.001,x)}
 function lg(z){let c=[.9999999999998099,676.5203681218851,-1259.1392167224028,771.3234287776531,-176.6150291621406,12.507343278686905,-.13857109526572012,9.984369578019572e-6,1.5056327351493116e-7];if(z<.5)return Math.log(Math.PI)-Math.log(Math.sin(Math.PI*z))-lg(1-z);z--;let x=c[0];for(let i=1;i<c.length;i++)x+=c[i]/(z+i);let t=z+7.5;return .5*Math.log(2*Math.PI)+(z+.5)*Math.log(t)-t+Math.log(x)}
 function mean(m){let p=m.p;if(m.dist==="Normal"||m.dist==="Exponential")return p.mean;if(m.dist==="Poisson")return p.lambda;if(m.dist==="Gamma")return p.shape*p.scale;if(m.dist==="Weibull")return p.scale*Math.exp(lg(1+1/p.shape));return(p.min+p.mode+p.max)/3}
-function sim(s){
- rand=M.seed?srand(s):Math.random;
- let H=M.shiftMinutes,stats=M.machines.map(m=>({end:0,busy:0,down:0,jobs:0,good:0,scrap:0,upRemaining:m.mttf})),good=0,ct=0,t0=0,arrivalLimitReached=false;
+function sim(s,includeTrace=true){
+ const H=M.shiftMinutes,eps=1e-9,travel=Math.max(0,n(M.transferMinutes,1.15));
+ rand=(s===undefined||s===null||s===0)?Math.random:seed(s);
  const overlap=(a,b)=>Math.max(0,Math.min(b,H)-Math.max(a,0));
- for(let j=0;j<1000000;j++){
-  t0+=-Math.log(U())/M.arrivalRate;
-  if(t0>H)break;
-  if(j===999999)arrivalLimitReached=true;
-  let t=t0,failed=false;
-  for(let i=0;i<M.machines.length;i++){
-   let m=M.machines[i],st=stats[i],start=Math.max(t,st.end),d=sample(m),cur=start,finish,readyAt;
-   if(M.useFailures&&m.mttr>0){
-    let rem=d;
-    while(rem>1e-9){
-     if(st.upRemaining<=1e-9){
-      let downStart=cur;cur+=m.mttr;st.down+=overlap(downStart,cur);st.upRemaining=m.mttf;
-     }
-     let work=Math.min(rem,st.upRemaining),workStart=cur;
-     cur+=work;st.busy+=overlap(workStart,cur);rem-=work;st.upRemaining-=work;
-     if(st.upRemaining<=1e-9){
-      let downStart=cur;
-      if(rem<=1e-9){
-       finish=cur;cur+=m.mttr;st.down+=overlap(downStart,cur);st.upRemaining=m.mttf;break;
-      }
-      cur+=m.mttr;st.down+=overlap(downStart,cur);st.upRemaining=m.mttf;
-     }
-    }
-    if(finish===undefined)finish=cur;
-    readyAt=cur;
-   }else{
-    finish=start+d;readyAt=finish;st.busy+=overlap(start,finish);
-   }
-   st.end=readyAt;st.jobs++;t=finish;
-   if(rand()<m.scrap/100){st.scrap++;failed=true;break}else st.good++;
+ const trace=[];let traceSeq=0,arrivalLimitReached=false,arrivalCount=0,partId=1,good=0,rejected=0,cycleTotal=0,now=0;
+ const machineCount=M.machines.length,inputQueue=[],parts=new Map();
+ const states=M.machines.map(m=>({active:null,queue:[],processing:false,blocked:false,blockStart:null,blockedTime:0,
+  reservedServer:false,reservedBuffer:0,repairUntil:0,upRemaining:m.mttf,sliceStart:0,busy:0,down:0,jobs:0,good:0,scrap:0}));
+ const heap=[];let heapSeq=0;
+ const priority={repairDone:0,serviceComplete:1,failure:1,stationEnter:2,outputArrive:2,arrival:3,removePart:4};
+ const less=(a,b)=>{
+  if(Math.abs(a.time-b.time)>eps)return a.time<b.time;
+  const pa=priority[a.type]??5,pb=priority[b.type]??5;
+  return pa!==pb?pa<pb:a.seq<b.seq;
+ };
+ const push=e=>{
+  e.seq=heapSeq++;let i=heap.length;heap.push(e);
+  while(i>0){const p=(i-1)>>1;if(!less(heap[i],heap[p]))break;[heap[i],heap[p]]=[heap[p],heap[i]];i=p;}
+ };
+ const pop=()=>{
+  const root=heap[0],last=heap.pop();
+  if(heap.length){heap[0]=last;let i=0;for(;;){let l=i*2+1,r=l+1,b=i;if(l<heap.length&&less(heap[l],heap[b]))b=l;if(r<heap.length&&less(heap[r],heap[b]))b=r;if(b===i)break;[heap[i],heap[b]]=[heap[b],heap[i]];i=b;}}
+  return root;
+ };
+ const emit=(time,type,data={})=>{if(includeTrace)trace.push(Object.assign({time,seq:traceSeq++,type},data));};
+ const stationMode=(st,t)=>{
+  if(st.blocked)return "blocked";
+  if(st.processing)return "processing";
+  if(st.repairUntil>t+eps)return "repair";
+  if(st.queue.length)return "queued";
+  return "ready";
+ };
+ const stationState=(i,t)=>{
+  const st=states[i];
+  emit(t,"stationState",{station:i,mode:stationMode(st,t),queueCount:st.queue.length,activeId:st.active?st.active.id:null,down:st.repairUntil>t+eps});
+ };
+ const reserveSlot=(i,t)=>{
+  const st=states[i],serverFree=st.active===null&&!st.processing&&!st.blocked&&st.repairUntil<=t+eps&&st.queue.length===0&&!st.reservedServer;
+  if(serverFree){st.reservedServer=true;return "server";}
+  if(st.queue.length+st.reservedBuffer<M.machines[i].buffer){st.reservedBuffer++;return "buffer";}
+  return null;
+ };
+ const beginRepair=(i,t,partForVisual=null)=>{
+  const st=states[i],m=M.machines[i];
+  if(!M.useFailures||m.mttr<=0||st.repairUntil>t+eps)return false;
+  st.repairUntil=t+m.mttr;st.upRemaining=0;
+  const activeVisual=partForVisual!==null?partForVisual:(st.active&&st.active.serviceRemaining>eps&&!st.blocked?st.active.id:null);
+  emit(t,"failure",{station:i,id:activeVisual});
+  st.down+=overlap(t,st.repairUntil);
+  push({time:st.repairUntil,type:"repairDone",station:i});
+  stationState(i,t);
+  return true;
+ };
+ const launchMove=(part,from,to,slot,t)=>{
+  const end=t+travel;
+  part.state="moving";part.location=to;
+  emit(t,"moveStart",{id:part.id,from,to,slot,endTime:end,station:typeof to==="number"?to:part.station});
+  push({time:end,type:"stationEnter",id:part.id,station:to,slot});
+ };
+ const launchOutput=(part,from,t)=>{
+  const end=t+travel;part.state="moving";part.location="output";
+  emit(t,"moveStart",{id:part.id,from,to:"output",slot:"output",endTime:end,station:from});
+  push({time:end,type:"outputArrive",id:part.id});
+ };
+ const tryStartStation=(i,t)=>{
+  const st=states[i],m=M.machines[i];let changed=false;
+  if(st.active===null&&!st.blocked&&!st.processing&&st.repairUntil<=t+eps&&st.queue.length){
+   st.active=st.queue.shift();st.active.station=i;st.active.state="waiting";
+   emit(t,"queueExit",{id:st.active.id,station:i});changed=true;
   }
-  if(!failed&&t<=H){good++;ct+=t-t0}
+  if(st.active!==null&&!st.blocked&&!st.processing&&st.repairUntil<=t+eps){
+   const p=st.active;
+   if(p.serviceRemaining===null||p.serviceRemaining===undefined)p.serviceRemaining=Math.max(.001,sample(m));
+   if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps){
+    beginRepair(i,t,p.serviceRemaining>eps?p.id:null);return true;
+   }
+   const duration=p.serviceRemaining;
+   const failure=M.useFailures&&m.mttr>0&&st.upRemaining<duration-eps;
+   const slice=failure?st.upRemaining:duration;
+   if(slice<=eps){beginRepair(i,t,p.id);return true;}
+   st.processing=true;st.sliceStart=t;
+   emit(t,"serviceStart",{id:p.id,station:i,remaining:duration,segment:slice});
+   push({time:t+slice,type:failure?"failure":"serviceComplete",station:i,id:p.id});
+   stationState(i,t);changed=true;
+  }else if(changed)stationState(i,t);
+  return changed;
+ };
+ const launchFromBlocked=(i,t)=>{
+  const st=states[i];if(!st.blocked||!st.active)return false;
+  const slot=reserveSlot(i+1,t);if(!slot)return false;
+  const p=st.active;
+  if(st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,t);
+  st.blockStart=null;st.blocked=false;st.active=null;
+  emit(t,"unblocked",{id:p.id,station:i});
+  launchMove(p,i,i+1,slot,t);
+  stationState(i,t);
+  return true;
+ };
+ const drain=(t)=>{
+  let changed=true,guard=0;
+  while(changed&&guard++<machineCount*4+20){
+   changed=false;
+   for(let i=0;i<machineCount;i++)if(tryStartStation(i,t))changed=true;
+   for(let i=machineCount-2;i>=0;i--)if(launchFromBlocked(i,t))changed=true;
+   while(inputQueue.length){
+    const slot=reserveSlot(0,t);if(!slot)break;
+    const p=inputQueue.shift();launchMove(p,"source",0,slot,t);changed=true;
+   }
+  }
+ };
+ const finishService=(i,t)=>{
+  const st=states[i],m=M.machines[i],p=st.active;
+  if(!p||!st.processing)return;
+  const worked=Math.max(0,t-st.sliceStart);
+  st.busy+=overlap(st.sliceStart,t);st.processing=false;
+  p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
+  if(M.useFailures&&m.mttr>0)st.upRemaining=Math.max(0,st.upRemaining-worked);
+  const inShift=t<=H+eps;
+  if(inShift)st.jobs++;
+  const passes=rand()>=m.scrap/100;
+  emit(t,"serviceComplete",{id:p.id,station:i,passes});
+  if(!passes){
+   if(inShift){st.scrap++;rejected++;}
+   emit(t,"reject",{id:p.id,station:i});
+   p.state="rejected";st.active=null;
+   push({time:t+Math.max(travel,.4),type:"removePart",id:p.id});
+   if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps)beginRepair(i,t,null);
+   stationState(i,t);drain(t);return;
+  }
+  if(inShift)st.good++;
+  if(i===machineCount-1){
+   st.active=null;
+   launchOutput(p,i,t);
+   if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps)beginRepair(i,t,null);
+   stationState(i,t);drain(t);return;
+  }
+  const slot=reserveSlot(i+1,t);
+  if(!slot){
+   st.blocked=true;st.blockStart=t;p.state="blocked";
+   emit(t,"blocked",{id:p.id,station:i});
+  }else{
+   st.active=null;
+   launchMove(p,i,i+1,slot,t);
+  }
+  if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps)beginRepair(i,t,null);
+  stationState(i,t);drain(t);
+ };
+
+ let nextArrival=-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+ if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
+ let processedEvents=0;
+ while(heap.length&&processedEvents++<5000000){
+  const e=pop();now=e.time;
+  if(e.type==="arrival"){
+   arrivalCount++;
+   const p={id:partId++,arrivalTime:e.time,serviceRemaining:null,station:-1,state:"input"};
+   parts.set(p.id,p);inputQueue.push(p);
+   emit(e.time,"arrival",{id:p.id});
+   if(arrivalCount<1000000){
+    nextArrival=e.time-Math.log(1/Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+    if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
+   }else{
+    const nextGap=-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+    if(e.time+nextGap<=H)arrivalLimitReached=true;
+   }
+   drain(e.time);
+  }else if(e.type==="stationEnter"){
+   const p=parts.get(e.id);if(!p)continue;
+   emit(e.time,"moveEnd",{id:p.id,station:e.station});
+   const st=states[e.station];
+   if(e.slot==="server"){
+    st.reservedServer=false;st.active=p;p.station=e.station;p.state="waiting";
+    emit(e.time,"enterStation",{id:p.id,station:e.station});
+   }else{
+    st.reservedBuffer=Math.max(0,st.reservedBuffer-1);
+    st.queue.push(p);p.station=e.station;p.state="queue";
+    emit(e.time,"queue",{id:p.id,station:e.station});
+   }
+   stationState(e.station,e.time);drain(e.time);
+  }else if(e.type==="failure"){
+   const i=e.station,st=states[i],p=st.active;
+   if(!st.processing||!p||p.id!==e.id)continue;
+   const worked=Math.max(0,e.time-st.sliceStart);
+   st.busy+=overlap(st.sliceStart,e.time);
+   p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
+   st.upRemaining=Math.max(0,st.upRemaining-worked);
+   st.processing=false;
+   beginRepair(i,e.time,p.serviceRemaining>eps?p.id:null);
+   stationState(i,e.time);drain(e.time);
+  }else if(e.type==="serviceComplete"){
+   finishService(e.station,e.time);
+  }else if(e.type==="repairDone"){
+   const st=states[e.station],m=M.machines[e.station];
+   if(st.repairUntil>e.time+eps)continue;
+   st.repairUntil=0;st.upRemaining=m.mttf;
+   emit(e.time,"repairDone",{station:e.station,id:st.active&&st.active.serviceRemaining>eps?st.active.id:null});
+   stationState(e.station,e.time);drain(e.time);
+  }else if(e.type==="outputArrive"){
+   const p=parts.get(e.id);if(!p)continue;
+   p.state="done";emit(e.time,"finish",{id:p.id,station:machineCount});
+   if(e.time<=H+eps){good++;cycleTotal+=e.time-p.arrivalTime;}
+   push({time:e.time+Math.max(travel,1),type:"removePart",id:p.id});
+  }else if(e.type==="removePart"){
+   emit(e.time,"removePart",{id:e.id});
+   parts.delete(e.id);
+  }
  }
- let rows=stats.map((st,i)=>{
-  let m=M.machines[i],av=Math.max(0,Math.min(1,1-st.down/H)),u=Math.max(0,Math.min(1,st.busy/H)),q=st.jobs?st.good/st.jobs:1;
-  return{id:m.id,name:m.name,dist:m.dist,mean:mean(m),av,u,q,good:st.good,scrap:st.scrap};
- }),b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
- return{throughput:good/M.shiftMinutes,cycle:good?ct/good:0,good,rows,b,arrivalLimitReached};
+ if(heap.length)arrivalLimitReached=true;
+ for(let i=0;i<machineCount;i++){
+  const st=states[i];
+  if(st.blocked&&st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,H);
+ }
+ if(includeTrace)trace.sort((a,b)=>a.time-b.time||a.seq-b.seq);
+ const rows=states.map((st,i)=>{
+  const m=M.machines[i],availability=Math.max(0,Math.min(1,1-st.down/H));
+  const utilization=Math.max(0,Math.min(1,st.busy/H));
+  const blocked=Math.max(0,Math.min(1,st.blockedTime/H));
+  const quality=st.jobs?st.good/st.jobs:1;
+  return {id:m.id,name:m.name,dist:m.dist,mean:mean(m),av:availability,u:utilization,b:blocked,q:quality,good:st.good,scrap:st.scrap};
+ });
+ const b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
+ return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,events:includeTrace?trace:[]};
 }
-function srand(s){return seed(s)}
-function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
+function srand(s){return seed(s)}function srand(s){return seed(s)}
+function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
 function log(x){$("log").textContent=x}
 async function run(){
  if(busy)return;
  apply();busy=true;
  try{
-  let r=sim(M.seed||Date.now());show(r);
-  log("RUN COMPLETE\nGood units: "+r.good+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: 1,000,000-arrival safety limit reached; result is truncated.":""));
+  const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);
+  show(r);loadFlowTrace(r);
+  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: event/arrival safety limit reached; result may be truncated.":""));
   startFlowAnimation();
-  status(r.arrivalLimitReached?"Statistics calculated with a safety-limit warning; 3D flow started.":"Simulation complete. 3D production flow started.",r.arrivalLimitReached?"warn":"ok");
- }catch(e){status("Error: "+e.message,"warn")}
+  status(r.arrivalLimitReached?"Simulation completed with a safety-limit warning; replay started.":"Simulation complete. Replaying its event trace.",r.arrivalLimitReached?"warn":"ok");
+ }catch(e){status("Error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.stack||""))}
  finally{busy=false}
 }
-async function mc(){if(busy)return;apply();busy=true;let a=[],c=[],arrivalLimitReached=false;for(let i=0;i<M.reps;i++){let r=sim((M.seed||Date.now())+i);a.push(r.throughput);c.push(r.cycle);arrivalLimitReached=arrivalLimitReached||r.arrivalLimitReached;if(i%20===0)await new Promise(requestAnimationFrame)}a.sort((x,y)=>x-y);c.sort((x,y)=>x-y);let av=a.reduce((x,y)=>x+y,0)/a.length,sd=Math.sqrt(a.reduce((x,y)=>x+(y-av)**2,0)/Math.max(1,a.length-1)),q=p=>a[Math.floor((a.length-1)*p)];$("mcText").innerHTML=`<b>${M.reps} replications</b><br>Throughput mean <b>${av.toFixed(5)}</b>, SD <b>${sd.toFixed(5)}</b>, P5 <b>${q(.05).toFixed(5)}</b>, P50 <b>${q(.5).toFixed(5)}</b>, P95 <b>${q(.95).toFixed(5)}</b> units/min<br>Cycle-time P50: <b>${c[Math.floor((c.length-1)*.5)].toFixed(2)}</b> min`;log("MONTE CARLO COMPLETE\nReplications: "+M.reps+"\nMean throughput: "+av.toFixed(5)+" units/min"+(arrivalLimitReached?"\nWARNING: arrival safety limit reached; one or more replications were truncated.":""));status(arrivalLimitReached?"Warning: arrival safety limit reached; some replications were truncated.":"Monte Carlo complete.",arrivalLimitReached?"warn":"ok");busy=false}
-$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("3D flow clock and parts reset to 0 minutes.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();status("New machine added.","warn")};
+async function mc(){
+ if(busy)return;
+ apply();busy=true;
+ try{
+  const values=[],cycles=[];let arrivalLimitReached=false;
+  const baseSeed=M.seed||Date.now();
+  for(let i=0;i<M.reps;i++){
+   const r=sim(baseSeed+i,false);values.push(r.throughput);cycles.push(r.cycle);
+   arrivalLimitReached=arrivalLimitReached||r.arrivalLimitReached;
+   if(i%10===0)await new Promise(requestAnimationFrame);
+  }
+  values.sort((a,b)=>a-b);cycles.sort((a,b)=>a-b);
+  const av=values.reduce((a,b)=>a+b,0)/values.length;
+  const sd=Math.sqrt(values.reduce((a,b)=>a+(b-av)*(b-av),0)/Math.max(1,values.length-1));
+  const q=p=>values[Math.floor((values.length-1)*p)];
+  $("mcText").innerHTML="<b>"+M.reps+" replications</b><br>Throughput mean <b>"+av.toFixed(5)+"</b>, SD <b>"+sd.toFixed(5)+"</b>, P5 <b>"+q(.05).toFixed(5)+"</b>, P50 <b>"+q(.5).toFixed(5)+"</b>, P95 <b>"+q(.95).toFixed(5)+"</b> units/min<br>Cycle-time P50: <b>"+cycles[Math.floor((cycles.length-1)*.5)].toFixed(2)+"</b> min";
+  log("MONTE CARLO COMPLETE\nReplications: "+M.reps+"\nMean throughput: "+av.toFixed(5)+" units/min"+(arrivalLimitReached?"\nWARNING: event/arrival safety limit reached; one or more replications may be truncated.":""));
+  status(arrivalLimitReached?"Monte Carlo completed with a safety-limit warning.":"Monte Carlo complete.",arrivalLimitReached?"warn":"ok");
+ }catch(e){status("Monte Carlo error: "+e.message,"warn")}
+ finally{busy=false}
+}
+$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("Clock and playback reset. Press Run to generate a new shared simulation trace.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();status("New machine added.","warn")};
 function normalizeImportedModel(raw){
  if(!raw||typeof raw!=="object"||Array.isArray(raw))throw new Error("The file must contain a model object.");
  let x=copy(raw);
@@ -345,7 +555,7 @@ function normalizeImportedModel(raw){
  if(!Number.isFinite(Number(x.arrivalRate))||Number(x.arrivalRate)<=0)throw new Error("Arrival rate must be a positive number in units/min.");
  if(!Number.isFinite(Number(x.shiftMinutes))||Number(x.shiftMinutes)<=0)throw new Error("Shift duration must be a positive number in minutes.");
  if(!Array.isArray(x.machines)||x.machines.length<1||x.machines.length>100)throw new Error("The file must contain between 1 and 100 machines.");
- x.arrivalRate=Number(x.arrivalRate);x.shiftMinutes=Number(x.shiftMinutes);
+ x.arrivalRate=Number(x.arrivalRate);x.shiftMinutes=Number(x.shiftMinutes);x.transferMinutes=Math.max(0,Number.isFinite(Number(x.transferMinutes))?Number(x.transferMinutes):1.15);
  x.reps=Math.max(1,Math.min(5000,Math.round(Number.isFinite(Number(x.reps))?Number(x.reps):100)));
  x.seed=Math.trunc(Number.isFinite(Number(x.seed))?Number(x.seed):0);
  x.useFailures=!!x.useFailures;
