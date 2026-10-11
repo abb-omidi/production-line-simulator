@@ -15,7 +15,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.machine{border:1px solid #d5dfe8;border-radius:10px;padding:8px;margin:6px 0;background:#fbfdff}.machine input,.machine select{min-height:36px;padding:6px;font-size:14px}.machine .grid{gap:6px}
 .mtop{display:flex;gap:8px;align-items:center;justify-content:space-between}.mtop b{font-size:16px}.mtop button{width:auto;min-height:36px}
 .params{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:7px}.status{padding:9px;border-radius:9px;background:#eef4f8;font-size:12px;margin-top:9px}.failure-control{margin:2px 0 8px;padding:8px 10px;background:#f3f7fa;border-radius:8px}.failure-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:#25394a;margin:0}.failure-toggle input{width:18px;min-height:18px;padding:0;flex:0 0 auto}.hint{font-size:11px;color:#637386;margin:5px 0 0}.ok{background:#eaf7ef;color:#17683e}.warn{background:#fff4df;color:#8a5a00}
-.flow-controls{display:grid;grid-template-columns:auto auto minmax(180px,1fr);gap:8px;align-items:center;margin:0 0 10px}.flow-controls button{min-height:38px}.flow-speed{padding:8px 10px;border:1px solid #d5dfe8;border-radius:10px;background:#f8fbfd}.flow-speed label{display:flex;justify-content:space-between;gap:8px;font-size:12px}.flow-speed input{min-height:22px;padding:0;margin-top:5px;accent-color:#0757a0}.flow-stage{position:relative;overflow:auto;border-radius:12px;border:1px solid #cdd9e3;background:linear-gradient(180deg,#d8efff 0%,#eff8fe 54%,#9caeb7 55%,#687d88 100%);overscroll-behavior-x:contain}.flow-track{position:relative;isolation:isolate;display:flex;align-items:stretch;gap:0;width:max-content;min-width:100%;height:300px;padding:18px 26px 15px;background:linear-gradient(180deg,transparent 0 67%,#7b8c95 67% 100%)}.flow-track:before{content:"";position:absolute;z-index:0;left:0;right:0;bottom:37px;height:23px;border-top:3px solid #d0d7dc;border-bottom:3px solid #273a44;background:repeating-linear-gradient(90deg,#425965 0 25px,#566d79 25px 40px);box-shadow:0 5px 0 #43555e}.flow-track.flow-running:before{animation:beltMove var(--belt-speed,.22s) linear infinite}.flow-infeed,.flow-outfeed{position:relative;z-index:2;flex:0 0 72px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:44px;color:#233947;font-size:11px;font-weight:800}.feed-dock{width:46px;height:36px;border:2px solid #647e8c;border-radius:5px 5px 2px 2px;background:linear-gradient(145deg,#eef7fb,#8ca5b1);box-shadow:5px 6px 0 #526772;display:grid;place-items:center;font-size:10px}.flow-outfeed .feed-dock{background:linear-gradient(145deg,#dff8eb,#73b79a)}.station3d{position:relative;z-index:2;flex:0 0 142px;width:142px;height:267px;text-align:center}.station-pill{position:absolute;top:5px;left:18px;right:18px;border-radius:99px;padding:4px 5px;font-size:10px;font-weight:800;letter-spacing:.04em;background:#e9f5ee;color:#246245;border:1px solid #b9d9c7}.station-pill.processing{background:#e0f0ff;border-color:#91c1e7;color:#0757a0}.station-pill.repair{background:#ffebd6;border-color:#efb56d;color:#99500d}.station-pill.queued{background:#fff6d9;border-color:#ead28a;color:#7a6000}.station-pill.blocked{background:#ffe5e5;border-color:#e6a2a2;color:#8b2424}.machine-perspective{position:absolute;left:4px;right:4px;top:37px;height:164px;perspective:750px;perspective-origin:50% 54%}.machine-cube{position:absolute;left:21px;top:20px;width:90px;height:74px;transform-style:preserve-3d;transform:rotateX(-7deg) rotateY(-27deg);transition:filter .15s}.station3d.processing .machine-cube{filter:drop-shadow(0 0 7px #40a7ec)}.station3d.repair .machine-cube{filter:drop-shadow(0 0 6px #f0a348);animation:repairShake .28s infinite alternate}.cube-face{position:absolute;box-sizing:border-box;border:1px solid #49616d;backface-visibility:visible}.cube-front{width:90px;height:74px;left:0;top:0;transform:translateZ(24px);background:linear-gradient(135deg,#e8f0f4,#9eb2bd 75%,#8299a5);border-radius:5px;box-shadow:inset 0 0 0 4px #c0ced5}.cube-side{width:48px;height:74px;left:0;top:0;transform:rotateY(90deg) translateZ(45px);background:linear-gradient(90deg,#607986,#344b58);border-radius:2px 5px 5px 2px}.cube-top{width:90px;height:48px;left:0;top:0;transform:rotateX(90deg) translateZ(37px);background:linear-gradient(135deg,#f4f8fa,#acbec8);border-radius:4px}.machine-window{position:absolute;left:19px;top:13px;width:43px;height:28px;border:3px solid #4b6675;border-radius:4px;background:linear-gradient(135deg,#9be1ef,#236483);box-shadow:inset 0 0 8px #c9f7ff}.machine-window:after{content:"";position:absolute;left:18px;top:0;bottom:0;border-left:2px solid #d3f8ff}.machine-button{position:absolute;left:17px;bottom:8px;width:8px;height:8px;border-radius:50%;background:#35a86c;box-shadow:12px 0 #f0b34c,24px 0 #d56b6b}.station3d.processing .machine-button{animation:lampPulse .45s infinite alternate}.machine-nameplate{position:absolute;left:8px;right:8px;bottom:-31px;transform:translateZ(1px);color:#20343f;font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.station-base{position:absolute;left:12px;right:12px;bottom:24px;height:13px;transform:skewX(-24deg);background:linear-gradient(#bcc8ce,#526a75);border:1px solid #435863;box-shadow:5px 5px 0 #3b505a}.station-id{position:absolute;bottom:4px;left:0;right:0;font-size:10px;color:#f1f5f7;font-weight:800;letter-spacing:.08em}.conveyor-link{position:relative;z-index:2;flex:0 0 38px;width:38px;height:267px}.conveyor-arrow{position:absolute;left:8px;top:178px;color:#f2f7f9;font-size:22px;text-shadow:0 1px 2px #273b45}.flow-token-layer{position:absolute;z-index:8;inset:0;pointer-events:none}.part-token{position:absolute;width:17px;height:15px;transform:translate(-50%,-50%);border:1px solid #8d5313;border-radius:3px;background:linear-gradient(135deg,#ffd57b,#e99a28);box-shadow:2px 3px 0 #7b4c21,0 0 4px #fff8;display:grid;place-items:center;color:#50300d;font-size:8px;font-weight:900;transition:none}.part-token:before{content:"";position:absolute;left:2px;right:2px;top:-4px;height:4px;background:#ffe8b0;border:1px solid #aa7629;transform:skewX(-35deg);transform-origin:bottom}.part-token.rejected{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white;box-shadow:2px 3px 0 #762727}.part-token.blocked{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white}.part-token.repair{background:linear-gradient(135deg,#f5d0ff,#ac63bf);border-color:#6b337d;color:white}.part-token.finished{background:linear-gradient(135deg,#c0f3d0,#2baf67);border-color:#167844;box-shadow:2px 3px 0 #17653d}.flow-readout{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:9px;font-size:12px;color:#4f6572}.flow-readout strong{color:#182e3a}.flow-note{font-size:11px;color:#637386;margin-top:7px}.flow-stage:focus-visible{outline:3px solid #0757a0;outline-offset:2px}@keyframes beltMove{from{background-position:0 0}to{background-position:40px 0}}@keyframes lampPulse{from{filter:brightness(.8)}to{filter:brightness(1.7)}}@keyframes repairShake{from{transform:rotateX(-7deg) rotateY(-29deg) translateX(-1px)}to{transform:rotateX(-7deg) rotateY(-25deg) translateX(1px)}}@media(max-width:620px){.flow-controls{grid-template-columns:1fr 1fr}.flow-speed{grid-column:1/-1}.flow-track{height:285px}.station3d,.conveyor-link{height:252px}.machine-perspective{transform:scale(.91);transform-origin:top center}.flow-infeed,.flow-outfeed{padding-bottom:40px}}@media(prefers-reduced-motion:reduce){.flow-track.flow-running:before,.station3d.processing .machine-button,.station3d.repair .machine-cube{animation:none}}
+.flow-controls{display:grid;grid-template-columns:auto auto minmax(180px,1fr);gap:8px;align-items:center;margin:0 0 10px}.flow-controls button{min-height:38px}.flow-speed{padding:8px 10px;border:1px solid #d5dfe8;border-radius:10px;background:#f8fbfd}.flow-speed label{display:flex;justify-content:space-between;gap:8px;font-size:12px}.flow-speed input{min-height:22px;padding:0;margin-top:5px;accent-color:#0757a0}.flow-stage{position:relative;overflow:auto;border-radius:12px;border:1px solid #cdd9e3;background:linear-gradient(180deg,#d8efff 0%,#eff8fe 54%,#9caeb7 55%,#687d88 100%);overscroll-behavior-x:contain}.flow-track{position:relative;isolation:isolate;display:flex;align-items:stretch;gap:0;width:max-content;min-width:100%;height:300px;padding:18px 26px 15px;background:linear-gradient(180deg,transparent 0 67%,#7b8c95 67% 100%)}.flow-track:before{content:"";position:absolute;z-index:0;left:0;right:0;bottom:37px;height:23px;border-top:3px solid #d0d7dc;border-bottom:3px solid #273a44;background:repeating-linear-gradient(90deg,#425965 0 25px,#566d79 25px 40px);box-shadow:0 5px 0 #43555e}.flow-track.flow-running:before{animation:beltMove var(--belt-speed,.22s) linear infinite}.flow-infeed,.flow-outfeed{position:relative;z-index:2;flex:0 0 72px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:44px;color:#233947;font-size:11px;font-weight:800}.feed-dock{width:46px;height:36px;border:2px solid #647e8c;border-radius:5px 5px 2px 2px;background:linear-gradient(145deg,#eef7fb,#8ca5b1);box-shadow:5px 6px 0 #526772;display:grid;place-items:center;font-size:10px}.flow-outfeed .feed-dock{background:linear-gradient(145deg,#dff8eb,#73b79a)}.station3d{position:relative;z-index:2;flex:0 0 142px;width:142px;height:267px;text-align:center}.station-pill{position:absolute;top:5px;left:18px;right:18px;border-radius:99px;padding:4px 5px;font-size:10px;font-weight:800;letter-spacing:.04em;background:#e9f5ee;color:#246245;border:1px solid #b9d9c7}.station-pill.processing{background:#e0f0ff;border-color:#91c1e7;color:#0757a0}.station-pill.repair{background:#ffebd6;border-color:#efb56d;color:#99500d}.station-pill.queued{background:#fff6d9;border-color:#ead28a;color:#7a6000}.station-pill.blocked{background:#ffe5e5;border-color:#e6a2a2;color:#8b2424}.station-pill.resource-wait{background:#ede7fb;border-color:#c4b5e8;color:#60459b}.machine-perspective{position:absolute;left:4px;right:4px;top:37px;height:164px;perspective:750px;perspective-origin:50% 54%}.machine-cube{position:absolute;left:21px;top:20px;width:90px;height:74px;transform-style:preserve-3d;transform:rotateX(-7deg) rotateY(-27deg);transition:filter .15s}.station3d.processing .machine-cube{filter:drop-shadow(0 0 7px #40a7ec)}.station3d.repair .machine-cube{filter:drop-shadow(0 0 6px #f0a348);animation:repairShake .28s infinite alternate}.cube-face{position:absolute;box-sizing:border-box;border:1px solid #49616d;backface-visibility:visible}.cube-front{width:90px;height:74px;left:0;top:0;transform:translateZ(24px);background:linear-gradient(135deg,#e8f0f4,#9eb2bd 75%,#8299a5);border-radius:5px;box-shadow:inset 0 0 0 4px #c0ced5}.cube-side{width:48px;height:74px;left:0;top:0;transform:rotateY(90deg) translateZ(45px);background:linear-gradient(90deg,#607986,#344b58);border-radius:2px 5px 5px 2px}.cube-top{width:90px;height:48px;left:0;top:0;transform:rotateX(90deg) translateZ(37px);background:linear-gradient(135deg,#f4f8fa,#acbec8);border-radius:4px}.machine-window{position:absolute;left:19px;top:13px;width:43px;height:28px;border:3px solid #4b6675;border-radius:4px;background:linear-gradient(135deg,#9be1ef,#236483);box-shadow:inset 0 0 8px #c9f7ff}.machine-window:after{content:"";position:absolute;left:18px;top:0;bottom:0;border-left:2px solid #d3f8ff}.machine-button{position:absolute;left:17px;bottom:8px;width:8px;height:8px;border-radius:50%;background:#35a86c;box-shadow:12px 0 #f0b34c,24px 0 #d56b6b}.station3d.processing .machine-button{animation:lampPulse .45s infinite alternate}.machine-nameplate{position:absolute;left:8px;right:8px;bottom:-31px;transform:translateZ(1px);color:#20343f;font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.station-base{position:absolute;left:12px;right:12px;bottom:24px;height:13px;transform:skewX(-24deg);background:linear-gradient(#bcc8ce,#526a75);border:1px solid #435863;box-shadow:5px 5px 0 #3b505a}.station-id{position:absolute;bottom:4px;left:0;right:0;font-size:10px;color:#f1f5f7;font-weight:800;letter-spacing:.08em}.conveyor-link{position:relative;z-index:2;flex:0 0 38px;width:38px;height:267px}.conveyor-arrow{position:absolute;left:8px;top:178px;color:#f2f7f9;font-size:22px;text-shadow:0 1px 2px #273b45}.flow-token-layer{position:absolute;z-index:8;inset:0;pointer-events:none}.part-token{position:absolute;width:17px;height:15px;transform:translate(-50%,-50%);border:1px solid #8d5313;border-radius:3px;background:linear-gradient(135deg,#ffd57b,#e99a28);box-shadow:2px 3px 0 #7b4c21,0 0 4px #fff8;display:grid;place-items:center;color:#50300d;font-size:8px;font-weight:900;transition:none}.part-token:before{content:"";position:absolute;left:2px;right:2px;top:-4px;height:4px;background:#ffe8b0;border:1px solid #aa7629;transform:skewX(-35deg);transform-origin:bottom}.part-token.rejected{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white;box-shadow:2px 3px 0 #762727}.part-token.blocked{background:linear-gradient(135deg,#ffb8ad,#d94343);border-color:#942b2b;color:white}.part-token.repair{background:linear-gradient(135deg,#f5d0ff,#ac63bf);border-color:#6b337d;color:white}.part-token.finished{background:linear-gradient(135deg,#c0f3d0,#2baf67);border-color:#167844;box-shadow:2px 3px 0 #17653d}.flow-readout{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:9px;font-size:12px;color:#4f6572}.flow-readout strong{color:#182e3a}.flow-note{font-size:11px;color:#637386;margin-top:7px}.flow-stage:focus-visible{outline:3px solid #0757a0;outline-offset:2px}@keyframes beltMove{from{background-position:0 0}to{background-position:40px 0}}@keyframes lampPulse{from{filter:brightness(.8)}to{filter:brightness(1.7)}}@keyframes repairShake{from{transform:rotateX(-7deg) rotateY(-29deg) translateX(-1px)}to{transform:rotateX(-7deg) rotateY(-25deg) translateX(1px)}}@media(max-width:620px){.flow-controls{grid-template-columns:1fr 1fr}.flow-speed{grid-column:1/-1}.flow-track{height:285px}.station3d,.conveyor-link{height:252px}.machine-perspective{transform:scale(.91);transform-origin:top center}.flow-infeed,.flow-outfeed{padding-bottom:40px}}@media(prefers-reduced-motion:reduce){.flow-track.flow-running:before,.station3d.processing .machine-button,.station3d.repair .machine-cube{animation:none}}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{border:1px solid #d5dfe8;border-radius:10px;padding:10px}.value{font-size:21px;font-weight:800}.muted{font-size:11px;color:#637386}
 .table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px;border-bottom:1px solid #dce4ea;white-space:nowrap;text-align:right}th:first-child,td:first-child{text-align:left}
 .log{background:#101820;color:#dce8ef;padding:10px;border-radius:9px;white-space:pre-wrap;font:12px monospace;max-height:240px;overflow:auto}
@@ -29,6 +29,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div><label>Shift duration (min)</label><input id="shiftMinutes" type="number" min=".01" step="1"></div>
 <div><label>Monte Carlo replications</label><input id="reps" type="number" min="1" max="5000"></div>
 <div><label>Random seed (0=random)</label><input id="seed" type="number"></div><div><label>Conveyor travel time (min)</label><input id="transferMinutes" type="number" min="0" step=".05"></div></div>
+<div style="margin-top:12px"><b>Shared resource pools</b><div class="grid4" style="margin-top:7px"><div><label>Available operators</label><input id="operatorsAvailable" type="number" min="0" max="1000" step="1"></div><div><label>Available tools</label><input id="toolsAvailable" type="number" min="0" max="1000" step="1"></div><div><label>Available technicians</label><input id="techniciansAvailable" type="number" min="0" max="1000" step="1"></div></div><p class="hint">Stations request the configured operator/tool/technician quantities before processing. Technicians are also required for repairs when failures are enabled. Requests are all-or-nothing; waiting repairs get priority, then stations are considered in line order.</p></div>
 <div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save file</button><button class="gray" id="load">Load file</button><button class="light" id="reset">Reset</button></div>
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
 <div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
@@ -52,17 +53,17 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div class="kpi"><div class="value" id="ct">—</div><div class="muted">Cycle time (min)</div></div>
 <div class="kpi"><div class="value" id="bu">—</div><div class="muted">Bottleneck utilization</div></div>
 <div class="kpi"><div class="value" id="avgAvailability">—</div><div class="muted">Average availability</div></div></div></section>
-<section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT (min)</th><th>Availability</th><th>Util.</th><th>Blocked (%)</th><th>Quality (%)</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
+<section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT (min)</th><th>Availability</th><th>Util.</th><th>Blocked (%)</th><th>Resource wait (min)</th><th>Quality (%)</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
 <section class="card"><h2>Monte Carlo</h2><div id="mcText" class="muted">Run Monte Carlo for mean, SD and P5/P50/P95 throughput (units/min).</div></section>
 <section class="card"><h2>Log</h2><div id="log" class="log">Ready.</div></section>
 </main>
 <script>
 "use strict";
 const D={Normal:[["mean","Mean μ (min)",10],["sd","Std. dev. σ (min)",2]],Gamma:[["shape","Shape α",4],["scale","Scale β (min)",2]],Poisson:[["lambda","λ (mean min)",8]],Exponential:[["mean","Mean (min)",8]],Weibull:[["shape","Shape k",2],["scale","Scale λ (min)",10]],Triangular:[["min","Minimum (min)",7],["mode","Mode (min)",9],["max","Maximum (min)",13]]};
-const DEF={timeUnitsVersion:2,arrivalRate:0.125,shiftMinutes:480,transferMinutes:1.15,reps:100,seed:0,useFailures:false,machines:[
-{id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mttf:180,mttr:20,buffer:10,scrap:0},
-{id:"M2",name:"Assembly",dist:"Normal",p:{mean:8,sd:4},mttf:210,mttr:18,buffer:5,scrap:0},
-{id:"M3",name:"Inspection",dist:"Normal",p:{mean:9.667,sd:1.247},mttf:300,mttr:15,buffer:8,scrap:3}]};
+const DEF={timeUnitsVersion:2,arrivalRate:0.125,shiftMinutes:480,transferMinutes:1.15,reps:100,seed:0,useFailures:false,resources:{operators:2,tools:2,technicians:1},machines:[
+{id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mttf:180,mttr:20,buffer:10,scrap:0,needOperators:1,needTools:0,needTechnicians:0},
+{id:"M2",name:"Assembly",dist:"Normal",p:{mean:8,sd:4},mttf:210,mttr:18,buffer:5,scrap:0,needOperators:1,needTools:0,needTechnicians:0},
+{id:"M3",name:"Inspection",dist:"Normal",p:{mean:9.667,sd:1.247},mttf:300,mttr:15,buffer:8,scrap:3,needOperators:1,needTools:0,needTechnicians:0}]};
 const copy=x=>JSON.parse(JSON.stringify(x));
 const $=id=>document.getElementById(id);
 const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
@@ -71,11 +72,11 @@ let flow={running:false,raf:0,lastTs:0,simMinute:0,events:[],cursor:0,parts:new 
 function status(s,c=""){ $("status").className="status "+c;$("status").textContent=s }
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]))}
 function render(){
- $("arrivalRate").value=M.arrivalRate;$("shiftMinutes").value=M.shiftMinutes;$("transferMinutes").value=M.transferMinutes??1.15;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;
+ $("arrivalRate").value=M.arrivalRate;$("shiftMinutes").value=M.shiftMinutes;$("transferMinutes").value=M.transferMinutes??1.15;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;$("operatorsAvailable").value=M.resources?.operators??2;$("toolsAvailable").value=M.resources?.tools??2;$("techniciansAvailable").value=M.resources?.technicians??1;
  $("machines").innerHTML=M.machines.map((m,i)=>`<div class="machine"><div class="mtop"><b>${m.id} — ${esc(m.name)}</b><button class="danger" data-del="${i}">Remove</button></div>
  <div class="grid"><div><label>Machine / process name</label><input data-i="${i}" data-k="name" value="${esc(m.name)}"></div><div><label>Processing-time distribution</label><select data-i="${i}" data-k="dist">${Object.keys(D).map(d=>`<option ${d===m.dist?"selected":""}>${d}</option>`).join("")}</select></div></div>
  <div class="params">${D[m.dist].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" data-i="${i}" data-p="${f[0]}" value="${n(m.p[f[0]],f[2])}"></div>`).join("")}
- ${[["mttf","MTTF (operating min)"],["mttr","MTTR (repair min)"],["buffer","Buffer capacity"],["scrap","Scrap / reject (%)"]].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" min="0" data-i="${i}" data-k="${f[0]}" value="${n(m[f[0]])}"></div>`).join("")}</div></div>`).join("");
+ ${[["mttf","MTTF (operating min)"],["mttr","MTTR (repair min)"],["buffer","Buffer capacity"],["scrap","Scrap / reject (%)"],["needOperators","Operators required / job"],["needTools","Tools required / job"],["needTechnicians","Technicians required / job"]].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" min="0" data-i="${i}" data-k="${f[0]}" value="${n(m[f[0]])}"></div>`).join("")}</div></div>`).join("");
  document.querySelectorAll("[data-i]").forEach(e=>e.onchange=edit);
  document.querySelectorAll("[data-del]").forEach(e=>e.onclick=()=>{if(M.machines.length>1){M.machines.splice(+e.dataset.del,1);M.machines.forEach((m,j)=>m.id="M"+(j+1));render();status("Machine removed.","warn")}});
  renderFlowLine();resetFlow();
@@ -223,11 +224,12 @@ function drawFlow(){
 function updateFlowStations(){
  flow.stations.forEach((st,i)=>{
   const station=$("flow-station-"+i),pill=$("flow-state-"+i);if(!station||!pill)return;
-  station.classList.remove("processing","repair","blocked");
-  pill.classList.remove("processing","repair","queued","blocked");
+  station.classList.remove("processing","repair","blocked","resource-wait");
+  pill.classList.remove("processing","repair","queued","blocked","resource-wait");
   if(st.mode==="repair"){station.classList.add("repair");pill.classList.add("repair");pill.textContent="REPAIR";}
   else if(st.mode==="blocked"){station.classList.add("blocked");pill.classList.add("blocked");pill.textContent="BLOCKED";}
   else if(st.mode==="processing"){station.classList.add("processing");pill.classList.add("processing");pill.textContent="PROCESSING";}
+  else if(st.mode==="resourceWait"){station.classList.add("resource-wait");pill.classList.add("resource-wait");pill.textContent="WAIT RESOURCE";}
   else if(st.mode==="queued"){pill.classList.add("queued");pill.textContent="QUEUE "+st.queueCount;}
   else pill.textContent="READY";
  });
@@ -276,7 +278,7 @@ function toggleFlow(){
 }
 
 function edit(e){let i=+e.target.dataset.i,m=M.machines[i];if(e.target.dataset.p)m.p[e.target.dataset.p]=n(e.target.value);else if(e.target.dataset.k==="dist"){m.dist=e.target.value;m.p={};D[m.dist].forEach(f=>m.p[f[0]]=f[2]);render()}else if(e.target.dataset.k==="name")m.name=e.target.value;else m[e.target.dataset.k]=n(e.target.value);status("Parameter changed. Tap Apply model.","warn")}
-function apply(){M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.transferMinutes=Math.max(0,n($("transferMinutes").value,1.15));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
+function apply(){M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.transferMinutes=Math.max(0,n($("transferMinutes").value,1.15));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.resources={operators:Math.max(0,Math.min(1000,Math.round(n($("operatorsAvailable").value,2)))),tools:Math.max(0,Math.min(1000,Math.round(n($("toolsAvailable").value,2)))),technicians:Math.max(0,Math.min(1000,Math.round(n($("techniciansAvailable").value,1))))};M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));m.needOperators=Math.max(0,Math.min(1000,Math.round(n(m.needOperators,1))));m.needTools=Math.max(0,Math.min(1000,Math.round(n(m.needTools,0))));m.needTechnicians=Math.max(0,Math.min(1000,Math.round(n(m.needTechnicians,0))));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
 function seed(s){let a=(s>>>0)||1;return()=>{a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
 function U(){return Math.max(1e-12,rand())}
 function norm(mu,sd){let u=U(),v=U();return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
@@ -290,8 +292,14 @@ function sim(s,includeTrace=true){
  const overlap=(a,b)=>Math.max(0,Math.min(b,H)-Math.max(a,0));
  const trace=[];let traceSeq=0,arrivalLimitReached=false,arrivalCount=0,partId=1,good=0,rejected=0,cycleTotal=0,now=0;
  const machineCount=M.machines.length,inputQueue=[],parts=new Map();
+ const resourceKeys=["operators","tools","technicians"];
+ const resourceCaps={operators:Math.max(0,Math.round(n(M.resources?.operators,2))),tools:Math.max(0,Math.round(n(M.resources?.tools,2))),technicians:Math.max(0,Math.round(n(M.resources?.technicians,1)))};
+ const resourceUse={operators:0,tools:0,technicians:0},resourceTime={operators:0,tools:0,technicians:0},resourceLastTime={operators:0,tools:0,technicians:0};
+ for(const m of M.machines){const demand={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};for(const k of resourceKeys)if(demand[k]>resourceCaps[k])throw new Error(m.id+" requires "+demand[k]+" "+k+", but only "+resourceCaps[k]+" are available.");}
  const states=M.machines.map(m=>({active:null,queue:[],processing:false,blocked:false,blockStart:null,blockedTime:0,
-  reservedServer:false,reservedBuffer:0,repairUntil:0,upRemaining:m.mttf,sliceStart:0,busy:0,down:0,jobs:0,good:0,scrap:0}));
+  reservedServer:false,reservedBuffer:0,repairUntil:0,repairPending:false,downSince:null,repairTechHeld:false,
+  resourcesHeld:false,heldResources:null,waitingResources:false,resourceWaitSince:null,resourceWait:0,
+  upRemaining:m.mttf,sliceStart:0,busy:0,down:0,jobs:0,good:0,scrap:0}));
  const heap=[];let heapSeq=0;
  const priority={repairDone:0,serviceComplete:1,failure:1,stationEnter:2,outputArrive:2,arrival:3,removePart:4};
  const less=(a,b)=>{
@@ -308,34 +316,41 @@ function sim(s,includeTrace=true){
   if(heap.length){heap[0]=last;let i=0;for(;;){let l=i*2+1,r=l+1,b=i;if(l<heap.length&&less(heap[l],heap[b]))b=l;if(r<heap.length&&less(heap[r],heap[b]))b=r;if(b===i)break;[heap[i],heap[b]]=[heap[b],heap[i]];i=b;}}
   return root;
  };
+ const changeResource=(key,delta,t)=>{resourceTime[key]+=overlap(resourceLastTime[key],t)*resourceUse[key];resourceLastTime[key]=t;resourceUse[key]+=delta;if(resourceUse[key]<-eps||resourceUse[key]>resourceCaps[key]+eps)throw new Error("Internal resource accounting error for "+key+".");};
+ const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUse[k]+req[k]>resourceCaps[k]+eps))return false;for(const k of resourceKeys)if(req[k])changeResource(k,req[k],t);st.resourcesHeld=true;st.heldResources=req;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
+ const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys){const q=st.heldResources?.[k]||0;if(q)changeResource(k,-q,t);}st.resourcesHeld=false;st.heldResources=null;};
  const emit=(time,type,data={})=>{if(includeTrace)trace.push(Object.assign({time,seq:traceSeq++,type},data));};
  const stationMode=(st,t)=>{
   if(st.blocked)return "blocked";
   if(st.processing)return "processing";
-  if(st.repairUntil>t+eps)return "repair";
+  if(st.repairPending||st.repairUntil>t+eps)return "repair";
+  if(st.waitingResources)return "resourceWait";
   if(st.queue.length)return "queued";
   return "ready";
  };
  const stationState=(i,t)=>{
   const st=states[i];
-  emit(t,"stationState",{station:i,mode:stationMode(st,t),queueCount:st.queue.length,activeId:st.active?st.active.id:null,down:st.repairUntil>t+eps});
+  emit(t,"stationState",{station:i,mode:stationMode(st,t),queueCount:st.queue.length,activeId:st.active?st.active.id:null,down:st.repairPending||st.repairUntil>t+eps});
  };
  const reserveSlot=(i,t)=>{
-  const st=states[i],serverFree=st.active===null&&!st.processing&&!st.blocked&&st.repairUntil<=t+eps&&st.queue.length===0&&!st.reservedServer;
+  const st=states[i],serverFree=st.active===null&&!st.processing&&!st.blocked&&!st.repairPending&&st.repairUntil<=t+eps&&st.queue.length===0&&!st.reservedServer;
   if(serverFree){st.reservedServer=true;return "server";}
   if(st.queue.length+st.reservedBuffer<M.machines[i].buffer){st.reservedBuffer++;return "buffer";}
   return null;
  };
  const beginRepair=(i,t,partForVisual=null)=>{
   const st=states[i],m=M.machines[i];
-  if(!M.useFailures||m.mttr<=0||st.repairUntil>t+eps)return false;
-  st.repairUntil=t+m.mttr;st.upRemaining=0;
+  if(!M.useFailures||m.mttr<=0||st.repairPending||st.repairUntil>t+eps)return false;
+  st.repairPending=true;st.downSince=t;st.upRemaining=0;
   const activeVisual=partForVisual!==null?partForVisual:(st.active&&st.active.serviceRemaining>eps&&!st.blocked?st.active.id:null);
   emit(t,"failure",{station:i,id:activeVisual});
-  st.down+=overlap(t,st.repairUntil);
-  push({time:st.repairUntil,type:"repairDone",station:i});
   stationState(i,t);
   return true;
+ };
+ const tryStartRepair=(i,t)=>{
+  const st=states[i],m=M.machines[i];if(!st.repairPending||resourceUse.technicians+1>resourceCaps.technicians+eps)return false;
+  changeResource("technicians",1,t);st.repairTechHeld=true;st.repairPending=false;st.repairUntil=t+m.mttr;
+  push({time:st.repairUntil,type:"repairDone",station:i});stationState(i,t);return true;
  };
  const launchMove=(part,from,to,slot,t)=>{
   const end=t+travel;
@@ -350,15 +365,19 @@ function sim(s,includeTrace=true){
  };
  const tryStartStation=(i,t)=>{
   const st=states[i],m=M.machines[i];let changed=false;
-  if(st.active===null&&!st.blocked&&!st.processing&&st.repairUntil<=t+eps&&st.queue.length){
+  if(st.active===null&&!st.blocked&&!st.processing&&!st.repairPending&&st.repairUntil<=t+eps&&st.queue.length){
    st.active=st.queue.shift();st.active.station=i;st.active.state="waiting";
    emit(t,"queueExit",{id:st.active.id,station:i});changed=true;
   }
-  if(st.active!==null&&!st.blocked&&!st.processing&&st.repairUntil<=t+eps){
+  if(st.active!==null&&!st.blocked&&!st.processing&&!st.repairPending&&st.repairUntil<=t+eps){
    const p=st.active;
    if(p.serviceRemaining===null||p.serviceRemaining===undefined)p.serviceRemaining=Math.max(.001,sample(m));
    if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps){
     beginRepair(i,t,p.serviceRemaining>eps?p.id:null);return true;
+   }
+   if(!acquireResources(i,t)){
+    const transitioned=!st.waitingResources;st.waitingResources=true;if(st.resourceWaitSince===null)st.resourceWaitSince=t;
+    if(transitioned){stationState(i,t);return true;}return changed;
    }
    const duration=p.serviceRemaining;
    const failure=M.useFailures&&m.mttr>0&&st.upRemaining<duration-eps;
@@ -386,6 +405,7 @@ function sim(s,includeTrace=true){
   let changed=true,guard=0;
   while(changed&&guard++<machineCount*4+20){
    changed=false;
+   for(let i=0;i<machineCount;i++)if(tryStartRepair(i,t))changed=true;
    for(let i=0;i<machineCount;i++)if(tryStartStation(i,t))changed=true;
    for(let i=machineCount-2;i>=0;i--)if(launchFromBlocked(i,t))changed=true;
    while(inputQueue.length){
@@ -398,7 +418,7 @@ function sim(s,includeTrace=true){
   const st=states[i],m=M.machines[i],p=st.active;
   if(!p||!st.processing)return;
   const worked=Math.max(0,t-st.sliceStart);
-  st.busy+=overlap(st.sliceStart,t);st.processing=false;
+  st.busy+=overlap(st.sliceStart,t);st.processing=false;releaseResources(i,t);
   p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
   if(M.useFailures&&m.mttr>0)st.upRemaining=Math.max(0,st.upRemaining-worked);
   const inShift=t<=H+eps;
@@ -473,7 +493,7 @@ function sim(s,includeTrace=true){
    st.busy+=overlap(st.sliceStart,e.time);
    p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
    st.upRemaining=Math.max(0,st.upRemaining-worked);
-   st.processing=false;p.state="repair";
+   st.processing=false;releaseResources(i,e.time);p.state="repair";
    beginRepair(i,e.time,p.serviceRemaining>eps?p.id:null);
    stationState(i,e.time);drain(e.time);
   }else if(e.type==="serviceComplete"){
@@ -481,7 +501,7 @@ function sim(s,includeTrace=true){
   }else if(e.type==="repairDone"){
    const st=states[e.station],m=M.machines[e.station];
    if(st.repairUntil>e.time+eps)continue;
-   st.repairUntil=0;st.upRemaining=m.mttf;if(st.active)st.active.state="waiting";
+   st.repairUntil=0;st.upRemaining=m.mttf;if(st.repairTechHeld){changeResource("technicians",-1,e.time);st.repairTechHeld=false;}if(st.downSince!==null){st.down+=overlap(st.downSince,e.time);st.downSince=null;}if(st.active)st.active.state="waiting";
    emit(e.time,"repairDone",{station:e.station,id:st.active&&st.active.serviceRemaining>eps?st.active.id:null});
    stationState(e.station,e.time);drain(e.time);
   }else if(e.type==="outputArrive"){
@@ -498,21 +518,25 @@ function sim(s,includeTrace=true){
  for(let i=0;i<machineCount;i++){
   const st=states[i];
   if(st.blocked&&st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,H);
+  if(st.downSince!==null)st.down+=overlap(st.downSince,H);
+  if(st.resourceWaitSince!==null)st.resourceWait+=overlap(st.resourceWaitSince,H);
  }
+ for(const k of resourceKeys){resourceTime[k]+=overlap(resourceLastTime[k],H)*resourceUse[k];resourceLastTime[k]=H;}
  if(includeTrace)trace.sort((a,b)=>a.time-b.time||a.seq-b.seq);
  const rows=states.map((st,i)=>{
   const m=M.machines[i],availability=Math.max(0,Math.min(1,1-st.down/H));
   const utilization=Math.max(0,Math.min(1,st.busy/H));
   const blocked=Math.max(0,Math.min(1,st.blockedTime/H));
   const quality=st.jobs?st.good/st.jobs:1;
-  return {id:m.id,name:m.name,dist:m.dist,mean:mean(m),av:availability,u:utilization,b:blocked,q:quality,good:st.good,scrap:st.scrap};
+  return {id:m.id,name:m.name,dist:m.dist,mean:mean(m),av:availability,u:utilization,b:blocked,q:quality,good:st.good,scrap:st.scrap,resourceWait:st.resourceWait};
  });
  const b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
- const endState={inputQueue:inputQueue.length,inTransit:Array.from(parts.values()).filter(p=>p.state==="moving").length,processing:states.filter(st=>st.processing).length,active:states.filter(st=>st.active!==null).length,buffered:states.reduce((a,st)=>a+st.queue.length,0),blocked:states.filter(st=>st.blocked).length,partsAtEnd:parts.size};
- return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,events:includeTrace?trace:[]};
+ const endState={inputQueue:inputQueue.length,inTransit:Array.from(parts.values()).filter(p=>p.state==="moving").length,processing:states.filter(st=>st.processing).length,active:states.filter(st=>st.active!==null).length,buffered:states.reduce((a,st)=>a+st.queue.length,0),blocked:states.filter(st=>st.blocked).length,repairsWaitingForTechnician:states.filter(st=>st.repairPending).length,stationsWaitingForResources:states.filter(st=>st.waitingResources).length,partsAtEnd:parts.size};
+ const resourceStats=resourceKeys.map(k=>({key:k,name:k.charAt(0).toUpperCase()+k.slice(1),capacity:resourceCaps[k],used:resourceUse[k],busyUnitMinutes:resourceTime[k],utilization:resourceCaps[k]>0?Math.max(0,Math.min(1,resourceTime[k]/(resourceCaps[k]*H))):0}));
+ return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,resourceStats,events:includeTrace?trace:[]};
 }
 function srand(s){return seed(s)}function srand(s){return seed(s)}
-function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
+function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${x.resourceWait.toFixed(1)}</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
 function log(x){$("log").textContent=x}
 async function run(){
  if(busy)return;
@@ -520,7 +544,7 @@ async function run(){
  try{
   const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);
   show(r);loadFlowTrace(r);
-  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nArrivals during shift: "+r.arrivalCount+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min\n\nPER-STATION DIAGNOSTICS\n"+r.rows.map((row,i)=>row.id+" "+row.name+": completed service="+r.stationJobs[i]+", passed="+r.stationGood[i]+", rejected="+r.stationScrap[i]+", blocked="+(row.b*100).toFixed(1)+"%").join("\n")+"\n\nWIP AT SHIFT END\n"+Object.entries(r.endState).map(([k,v])=>k+": "+v).join("\n")+(r.arrivalLimitReached?"\nWARNING: event safety limit reached; result may be truncated.":""));
+  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nArrivals during shift: "+r.arrivalCount+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min\n\nPER-STATION DIAGNOSTICS\n"+r.rows.map((row,i)=>row.id+" "+row.name+": completed service="+r.stationJobs[i]+", passed="+r.stationGood[i]+", rejected="+r.stationScrap[i]+", blocked="+(row.b*100).toFixed(1)+"%").join("\n")+"\n\nSHARED RESOURCE UTILIZATION\n"+r.resourceStats.map(x=>x.name+": capacity="+x.capacity+", utilization="+(x.utilization*100).toFixed(1)+"%, occupied resource-minutes="+x.busyUnitMinutes.toFixed(1)).join("\n")+"\n\nWIP AT SHIFT END\n"+Object.entries(r.endState).map(([k,v])=>k+": "+v).join("\n")+(r.arrivalLimitReached?"\nWARNING: event safety limit reached; result may be truncated.":""));
   startFlowAnimation();
   status(r.arrivalLimitReached?"Simulation completed with a safety-limit warning; replay started.":"Simulation complete. Replaying its event trace.",r.arrivalLimitReached?"warn":"ok");
  }catch(e){status("Error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.stack||""))}
@@ -547,7 +571,7 @@ async function mc(){
  }catch(e){status("Monte Carlo error: "+e.message,"warn")}
  finally{busy=false}
 }
-$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("Clock and playback reset. Press Run to generate a new shared simulation trace.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0});render();requestAnimationFrame(()=>{const stage=$("flowStage");stage.scrollLeft=stage.scrollWidth;});status("Machine "+i+" added. The 3D line has been extended; scroll horizontally to see the full line.","warn")};
+$("apply").onclick=apply;$("run").onclick=run;$("mc").onclick=mc;$("flowToggle").onclick=toggleFlow;$("flowReset").onclick=()=>{resetFlow();status("Clock and playback reset. Press Run to generate a new shared simulation trace.","warn")};$("flowSpeed").oninput=()=>{$("flowSpeedLabel").textContent=$("flowSpeed").value+" simulated min/s";$("line").style.setProperty("--belt-speed",(1/Math.max(1,Number($("flowSpeed").value)))+"s")};$("useFailures").onchange=()=>status("Failure downtime "+($("useFailures").checked?"enabled":"disabled")+". Tap Apply model to confirm.","warn");$("add").onclick=()=>{let i=M.machines.length+1;M.machines.push({id:"M"+i,name:"Machine "+i,dist:"Normal",p:{mean:10,sd:2},mttf:240,mttr:20,buffer:5,scrap:0,needOperators:1,needTools:0,needTechnicians:0});render();requestAnimationFrame(()=>{const stage=$("flowStage");stage.scrollLeft=stage.scrollWidth;});status("Machine "+i+" added. The 3D line has been extended; scroll horizontally to see the full line.","warn")};
 function normalizeImportedModel(raw){
  if(!raw||typeof raw!=="object"||Array.isArray(raw))throw new Error("The file must contain a model object.");
  let x=copy(raw);
@@ -565,6 +589,8 @@ function normalizeImportedModel(raw){
  x.reps=Math.max(1,Math.min(5000,Math.round(Number.isFinite(Number(x.reps))?Number(x.reps):100)));
  x.seed=Math.trunc(Number.isFinite(Number(x.seed))?Number(x.seed):0);
  x.useFailures=!!x.useFailures;
+ const rr=x.resources&&typeof x.resources==="object"?x.resources:{};
+ x.resources={operators:Math.max(0,Math.min(1000,Math.round(Number.isFinite(Number(rr.operators))?Number(rr.operators):2))),tools:Math.max(0,Math.min(1000,Math.round(Number.isFinite(Number(rr.tools))?Number(rr.tools):2))),technicians:Math.max(0,Math.min(1000,Math.round(Number.isFinite(Number(rr.technicians))?Number(rr.technicians):1)))};
  x.machines=x.machines.map((m,i)=>{
   if(!m||typeof m!=="object"||Array.isArray(m))throw new Error("Machine "+(i+1)+" is invalid.");
   if(!Object.prototype.hasOwnProperty.call(D,m.dist))throw new Error("Machine "+(i+1)+" has an unknown processing-time distribution.");
@@ -581,7 +607,10 @@ function normalizeImportedModel(raw){
    mttf:Math.max(.01,Number.isFinite(Number(m.mttf??m.mtbf))?Number(m.mttf??m.mtbf):180),
    mttr:Math.max(0,Number.isFinite(Number(m.mttr))?Number(m.mttr):20),
    buffer:Math.max(0,Math.round(Number.isFinite(Number(m.buffer))?Number(m.buffer):5)),
-   scrap:Math.max(0,Math.min(100,Number.isFinite(Number(m.scrap))?Number(m.scrap):0))
+   scrap:Math.max(0,Math.min(100,Number.isFinite(Number(m.scrap))?Number(m.scrap):0)),
+   needOperators:Math.max(0,Math.min(1000,Math.round(Number.isFinite(Number(m.needOperators))?Number(m.needOperators):1))),
+   needTools:Math.max(0,Math.min(1000,Math.round(Number.isFinite(Number(m.needTools))?Number(m.needTools):0))),
+   needTechnicians:Math.max(0,Math.min(1000,Math.round(Number.isFinite(Number(m.needTechnicians))?Number(m.needTechnicians):0)))
   };
  });
  return x;
