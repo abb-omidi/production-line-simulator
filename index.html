@@ -19,6 +19,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{border:1px solid #d5dfe8;border-radius:10px;padding:10px}.value{font-size:21px;font-weight:800}.muted{font-size:11px;color:#637386}
 .table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px;border-bottom:1px solid #dce4ea;white-space:nowrap;text-align:right}th:first-child,td:first-child{text-align:left}
 .log{background:#101820;color:#dce8ef;padding:10px;border-radius:9px;white-space:pre-wrap;font:12px monospace;max-height:240px;overflow:auto}
+.util-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.util-panel{min-width:0;border:1px solid #dbe5ed;border-radius:13px;padding:13px;background:linear-gradient(180deg,#fbfdff,#f5f9fc)}.util-panel h3{font-size:14px;margin:0 0 5px;color:#20384a}.util-subtitle{font-size:11px;line-height:1.45;color:#687b8c;margin-bottom:12px}.util-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#526779}.util-key{display:inline-flex;align-items:center;gap:5px}.util-dot{display:inline-block;width:9px;height:9px;border-radius:3px}.util-dot.busy{background:#1682ca}.util-dot.idle{background:#d7e3ec}.util-row{margin-top:15px}.util-rowhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px}.util-name{font-size:12px;font-weight:750;color:#243b4a;min-width:0;overflow-wrap:anywhere}.util-values{font-size:11px;color:#5d7181;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}.util-bar{display:flex;overflow:hidden;width:100%;height:13px;border-radius:99px;background:#e6edf3;box-shadow:inset 0 1px 2px #243b4a12}.util-bar-busy{height:100%;background:linear-gradient(90deg,#0757a0,#31a0df);transition:width .25s ease}.util-bar-idle{height:100%;background:linear-gradient(90deg,#c9d9e5,#e5edf3);transition:width .25s ease}.util-meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:#728595}.util-empty{font-size:12px;color:#728595;padding:10px 0}.util-footnote{font-size:11px;color:#667b8b;line-height:1.5;margin-top:12px}@media(max-width:700px){.util-grid{grid-template-columns:1fr}.util-panel{padding:11px}}
 @media(max-width:700px){.grid4{grid-template-columns:1fr 1fr}.params{grid-template-columns:repeat(3,minmax(0,1fr))}.kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:430px){.grid{grid-template-columns:1fr 1fr}.params{grid-template-columns:repeat(2,minmax(0,1fr))}.actions{grid-template-columns:1fr 1fr}}
 </style></head><body>
@@ -54,6 +55,19 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div class="kpi"><div class="value" id="bu">—</div><div class="muted">Bottleneck utilization</div></div>
 <div class="kpi"><div class="value" id="avgAvailability">—</div><div class="muted">Average availability</div></div></div></section>
 <section class="card"><h2>Machine results</h2><div class="table"><table><thead><tr><th>Machine</th><th>Distribution</th><th>Mean PT (min)</th><th>Availability</th><th>Util.</th><th>Blocked (%)</th><th>Resource wait (min)</th><th>Quality (%)</th><th>Good</th><th>Scrap</th></tr></thead><tbody id="results"></tbody></table></div></section>
+<section class="card" id="utilizationSection"><h2>Utilization analysis</h2>
+<div class="util-grid">
+ <div class="util-panel"><h3>Machine utilization</h3><div class="util-subtitle">How each machine's shift time is divided between processing and non-processing.</div>
+  <div class="util-legend"><span class="util-key"><i class="util-dot busy"></i> Busy · processing</span><span class="util-key"><i class="util-dot idle"></i> Idle · not processing</span></div>
+  <div id="machineUtilChart"><div class="util-empty">Run a simulation to see machine utilization.</div></div>
+  <div class="util-footnote">Machine idle time includes all time not spent processing, such as breakdowns, blocking, waiting for parts, and waiting for resources.</div>
+ </div>
+ <div class="util-panel"><h3>Shared resource utilization</h3><div class="util-subtitle">Occupied versus unused capacity across the whole shift.</div>
+  <div class="util-legend"><span class="util-key"><i class="util-dot busy"></i> Busy · occupied</span><span class="util-key"><i class="util-dot idle"></i> Idle · available</span></div>
+  <div id="resourceUtilChart"><div class="util-empty">Run a simulation to see resource utilization.</div></div>
+  <div class="util-footnote">Utilization is occupied resource-minutes divided by available resource-minutes (capacity × shift duration). A pool with zero capacity is shown as N/A.</div>
+ </div>
+</div></section>
 <section class="card"><h2>Monte Carlo</h2><div id="mcText" class="muted">Run Monte Carlo for mean, SD and P5/P50/P95 throughput (units/min).</div></section>
 <section class="card"><h2>Log</h2><div id="log" class="log">Ready.</div></section>
 </main>
@@ -517,6 +531,7 @@ function sim(s,includeTrace=true){
  if(processedEvents>=5000000&&heap.length&&heap[0].time<=H+eps)arrivalLimitReached=true;
  for(let i=0;i<machineCount;i++){
   const st=states[i];
+  if(st.processing)st.busy+=overlap(st.sliceStart,H);
   if(st.blocked&&st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,H);
   if(st.downSince!==null)st.down+=overlap(st.downSince,H);
   if(st.resourceWaitSince!==null)st.resourceWait+=overlap(st.resourceWaitSince,H);
@@ -536,7 +551,21 @@ function sim(s,includeTrace=true){
  return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,resourceStats,events:includeTrace?trace:[]};
 }
 function srand(s){return seed(s)}function srand(s){return seed(s)}
-function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${x.resourceWait.toFixed(1)}</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("")}
+function renderUtilizationPlots(r){
+ const pct=v=>Math.max(0,Math.min(100,Number(v)||0));
+ const machineRows=r.rows||[];
+ $("machineUtilChart").innerHTML=machineRows.length?machineRows.map(x=>{
+  const busy=pct(x.u*100),idle=100-busy;
+  const minutes=(busy/100)*M.shiftMinutes;
+  return `<div class="util-row"><div class="util-rowhead"><div class="util-name">${esc(x.id)} — ${esc(x.name)}</div><div class="util-values">Busy <b>${busy.toFixed(1)}%</b> · Idle ${idle.toFixed(1)}%</div></div><div class="util-bar" role="img" aria-label="${esc(x.name)}: ${busy.toFixed(1)} percent busy, ${idle.toFixed(1)} percent idle"><div class="util-bar-busy" style="width:${busy}%"></div><div class="util-bar-idle" style="width:${idle}%"></div></div><div class="util-meta"><span>${minutes.toFixed(1)} busy min</span><span>${M.shiftMinutes.toFixed(1)} min shift</span></div></div>`;
+ }).join(""):'<div class="util-empty">No machines in this model.</div>';
+ $("resourceUtilChart").innerHTML=(r.resourceStats||[]).map(x=>{
+  if(!(x.capacity>0))return `<div class="util-row"><div class="util-rowhead"><div class="util-name">${esc(x.name)}</div><div class="util-values">Utilization <b>N/A</b></div></div><div class="util-bar" role="img" aria-label="${esc(x.name)} unavailable; capacity is zero"><div class="util-bar-idle" style="width:100%"></div></div><div class="util-meta"><span>Capacity: 0</span><span>No resources available</span></div></div>`;
+  const busy=pct(x.utilization*100),idle=100-busy;
+  return `<div class="util-row"><div class="util-rowhead"><div class="util-name">${esc(x.name)}</div><div class="util-values">Busy <b>${busy.toFixed(1)}%</b> · Idle ${idle.toFixed(1)}%</div></div><div class="util-bar" role="img" aria-label="${esc(x.name)}: ${busy.toFixed(1)} percent busy, ${idle.toFixed(1)} percent idle"><div class="util-bar-busy" style="width:${busy}%"></div><div class="util-bar-idle" style="width:${idle}%"></div></div><div class="util-meta"><span>Pool capacity: ${x.capacity}</span><span>${Number(x.busyUnitMinutes||0).toFixed(1)} occupied resource-min</span></div></div>`;
+ }).join("")||'<div class="util-empty">No shared resources are configured.</div>';
+}
+function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${x.resourceWait.toFixed(1)}</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("");renderUtilizationPlots(r)}
 function log(x){$("log").textContent=x}
 async function run(){
  if(busy)return;
