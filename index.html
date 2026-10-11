@@ -308,10 +308,12 @@ function sim(s,includeTrace=true){
  const resourceKeys=["operators","tools","technicians"];
  const resourceCaps={operators:Math.max(0,Math.round(n(M.resources?.operators,2))),tools:Math.max(0,Math.round(n(M.resources?.tools,2))),technicians:Math.max(0,Math.round(n(M.resources?.technicians,1)))};
  const resourceUse={operators:0,tools:0,technicians:0},resourceTime={operators:0,tools:0,technicians:0},resourceLastTime={operators:0,tools:0,technicians:0};
+ const resourceUnits=Object.fromEntries(resourceKeys.map(k=>[k,Array.from({length:resourceCaps[k]},(_,i)=>({id:i,busy:false,busySince:null,busyUnitMinutes:0}))]));
+ const resourceCursor={operators:0,tools:0,technicians:0};
  for(const m of M.machines){const demand={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};for(const k of resourceKeys)if(demand[k]>resourceCaps[k])throw new Error(m.id+" requires "+demand[k]+" "+k+", but only "+resourceCaps[k]+" are available.");}
  const states=M.machines.map(m=>({active:null,queue:[],processing:false,blocked:false,blockStart:null,blockedTime:0,
   reservedServer:false,reservedBuffer:0,repairUntil:0,repairPending:false,downSince:null,repairTechHeld:false,
-  resourcesHeld:false,heldResources:null,waitingResources:false,resourceWaitSince:null,resourceWait:0,
+  resourcesHeld:false,heldResources:null,waitingResources:false,resourceWaitSince:null,resourceWait:0,repairTechUnit:null,
   upRemaining:m.mttf,sliceStart:0,busy:0,down:0,jobs:0,good:0,scrap:0}));
  const heap=[];let heapSeq=0;
  const priority={repairDone:0,serviceComplete:1,failure:1,stationEnter:2,outputArrive:2,arrival:3,removePart:4};
@@ -330,8 +332,10 @@ function sim(s,includeTrace=true){
   return root;
  };
  const changeResource=(key,delta,t)=>{resourceTime[key]+=overlap(resourceLastTime[key],t)*resourceUse[key];resourceLastTime[key]=t;resourceUse[key]+=delta;if(resourceUse[key]<-eps||resourceUse[key]>resourceCaps[key]+eps)throw new Error("Internal resource accounting error for "+key+".");};
- const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUse[k]+req[k]>resourceCaps[k]+eps))return false;for(const k of resourceKeys)if(req[k])changeResource(k,req[k],t);st.resourcesHeld=true;st.heldResources=req;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
- const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys){const q=st.heldResources?.[k]||0;if(q)changeResource(k,-q,t);}st.resourcesHeld=false;st.heldResources=null;};
+ const acquireUnitIds=(key,count,t)=>{if(count<=0)return [];const pool=resourceUnits[key];if(pool.reduce((a,u)=>a+(u.busy?0:1),0)<count)return null;const ids=[];for(let step=0;step<pool.length&&ids.length<count;step++){const id=(resourceCursor[key]+step)%pool.length;if(!pool[id].busy)ids.push(id);}if(ids.length<count)return null;for(const id of ids){const unit=pool[id];unit.busy=true;unit.busySince=t;changeResource(key,1,t);}resourceCursor[key]=(ids[ids.length-1]+1)%pool.length;return ids;};
+ const releaseUnitIds=(key,ids,t)=>{for(const id of ids||[]){const unit=resourceUnits[key][id];if(!unit||!unit.busy)continue;unit.busyUnitMinutes+=overlap(unit.busySince,t);unit.busy=false;unit.busySince=null;changeResource(key,-1,t);}};
+ const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUnits[k].filter(u=>!u.busy).length<req[k]))return false;const held={};for(const k of resourceKeys){held[k]=acquireUnitIds(k,req[k],t);if(held[k]===null)throw new Error("Resource allocation changed unexpectedly for "+k+".");}st.resourcesHeld=true;st.heldResources=held;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
+ const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys)releaseUnitIds(k,st.heldResources?.[k],t);st.resourcesHeld=false;st.heldResources=null;};
  const emit=(time,type,data={})=>{if(includeTrace)trace.push(Object.assign({time,seq:traceSeq++,type},data));};
  const stationMode=(st,t)=>{
   if(st.blocked)return "blocked";
@@ -361,8 +365,9 @@ function sim(s,includeTrace=true){
   return true;
  };
  const tryStartRepair=(i,t)=>{
-  const st=states[i],m=M.machines[i];if(!st.repairPending||resourceUse.technicians+1>resourceCaps.technicians+eps)return false;
-  changeResource("technicians",1,t);st.repairTechHeld=true;st.repairPending=false;st.repairUntil=t+m.mttr;
+  const st=states[i],m=M.machines[i];if(!st.repairPending)return false;
+  const ids=acquireUnitIds("technicians",1,t);if(!ids)return false;
+  st.repairTechUnit=ids[0];st.repairTechHeld=true;st.repairPending=false;st.repairUntil=t+m.mttr;
   push({time:st.repairUntil,type:"repairDone",station:i});stationState(i,t);return true;
  };
  const launchMove=(part,from,to,slot,t)=>{
@@ -514,7 +519,7 @@ function sim(s,includeTrace=true){
   }else if(e.type==="repairDone"){
    const st=states[e.station],m=M.machines[e.station];
    if(st.repairUntil>e.time+eps)continue;
-   st.repairUntil=0;st.upRemaining=m.mttf;if(st.repairTechHeld){changeResource("technicians",-1,e.time);st.repairTechHeld=false;}if(st.downSince!==null){st.down+=overlap(st.downSince,e.time);st.downSince=null;}if(st.active)st.active.state="waiting";
+   st.repairUntil=0;st.upRemaining=m.mttf;if(st.repairTechHeld&&st.repairTechUnit!==null){releaseUnitIds("technicians",[st.repairTechUnit],e.time);st.repairTechHeld=false;st.repairTechUnit=null;}if(st.downSince!==null){st.down+=overlap(st.downSince,e.time);st.downSince=null;}if(st.active)st.active.state="waiting";
    emit(e.time,"repairDone",{station:e.station,id:st.active&&st.active.serviceRemaining>eps?st.active.id:null});
    stationState(e.station,e.time);drain(e.time);
   }else if(e.type==="outputArrive"){
@@ -535,7 +540,7 @@ function sim(s,includeTrace=true){
   if(st.downSince!==null)st.down+=overlap(st.downSince,H);
   if(st.resourceWaitSince!==null)st.resourceWait+=overlap(st.resourceWaitSince,H);
  }
- for(const k of resourceKeys){resourceTime[k]+=overlap(resourceLastTime[k],H)*resourceUse[k];resourceLastTime[k]=H;}
+ for(const k of resourceKeys){resourceTime[k]+=overlap(resourceLastTime[k],H)*resourceUse[k];resourceLastTime[k]=H;for(const unit of resourceUnits[k])if(unit.busy&&unit.busySince!==null)unit.busyUnitMinutes+=overlap(unit.busySince,H);}
  if(includeTrace)trace.sort((a,b)=>a.time-b.time||a.seq-b.seq);
  const rows=states.map((st,i)=>{
   const m=M.machines[i],availability=Math.max(0,Math.min(1,1-st.down/H));
@@ -547,31 +552,19 @@ function sim(s,includeTrace=true){
  const b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
  const endState={inputQueue:inputQueue.length,inTransit:Array.from(parts.values()).filter(p=>p.state==="moving").length,processing:states.filter(st=>st.processing).length,active:states.filter(st=>st.active!==null).length,buffered:states.reduce((a,st)=>a+st.queue.length,0),blocked:states.filter(st=>st.blocked).length,repairsWaitingForTechnician:states.filter(st=>st.repairPending).length,stationsWaitingForResources:states.filter(st=>st.waitingResources).length,partsAtEnd:parts.size};
  const resourceStats=resourceKeys.map(k=>({key:k,name:k.charAt(0).toUpperCase()+k.slice(1),capacity:resourceCaps[k],used:resourceUse[k],busyUnitMinutes:resourceTime[k],utilization:resourceCaps[k]>0?Math.max(0,Math.min(1,resourceTime[k]/(resourceCaps[k]*H))):0}));
- return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,resourceStats,events:includeTrace?trace:[]};
+ const resourceUnitStats=resourceKeys.flatMap(k=>resourceUnits[k].map((unit,i)=>{const busyUnitMinutes=unit.busyUnitMinutes,idleUnitMinutes=Math.max(0,H-busyUnitMinutes);return {key:k,index:i+1,label:(k==="operators"?"Operator":k==="tools"?"Tool":"Technician")+" "+(i+1),name:k.charAt(0).toUpperCase()+k.slice(1),capacity:resourceCaps[k],busyUnitMinutes,idleUnitMinutes,utilization:Math.max(0,Math.min(1,busyUnitMinutes/H))};}));
+ return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,resourceStats,resourceUnitStats,events:includeTrace?trace:[]};
 }
 function srand(s){return seed(s)}function srand(s){return seed(s)}
 function renderUtilizationPlots(r){
  const pct=v=>Math.max(0,Math.min(100,Number(v)||0));
  const donut=(busy,label,isNA)=>'<div class="util-donut" style="--busy-pct:'+pct(busy)+'%" role="img" aria-label="'+esc(label)+' utilization '+(isNA?'not available':pct(busy).toFixed(1)+' percent')+'"><div class="util-donut-label"><strong>'+(isNA?'N/A':pct(busy).toFixed(1)+'%')+'</strong><span>'+(isNA?'no capacity':'busy')+'</span></div></div>';
  const metric=(kind,label,value)=>'<div class="util-metric-line"><span><i class="util-swatch '+kind+'"></i>'+label+'</span><strong>'+value+'</strong></div>';
- const card=(title,type,busy,foot,extra)=>{
-  const isNA=busy===null,b=isNA?0:pct(busy),idle=isNA?0:100-b;
-  const breakdown=metric("busy","Busy",isNA?"N/A":b.toFixed(1)+"%")+metric("idle","Idle",isNA?"N/A":idle.toFixed(1)+"%")+
-    '<div class="util-item-bar" role="img" aria-label="'+esc(title)+': busy '+(isNA?'not available':b.toFixed(1)+' percent')+', idle '+(isNA?'not available':idle.toFixed(1)+' percent')+'"><div class="busy" style="width:'+b+'%"></div><div class="idle" style="width:'+(isNA?100:idle)+'%"></div></div>';
-  return '<article class="util-item-card"><div class="util-item-title">'+esc(title)+'</div><div class="util-item-type">'+esc(type)+'</div><div class="util-donut-row">'+donut(b,title,isNA)+'<div class="util-breakdown">'+breakdown+'</div></div><div class="util-item-foot">'+foot+(extra||"")+'</div></article>';
- };
- const machines=r.rows||[];
- $("machineUtilChart").innerHTML=machines.length?machines.map(x=>{
-  const b=pct(x.u*100),busyMin=b/100*M.shiftMinutes,idleMin=Math.max(0,M.shiftMinutes-busyMin);
-  return card(x.id+" — "+x.name,"Machine",b,busyMin.toFixed(1)+" busy min · "+idleMin.toFixed(1)+" not-processing min");
- }).join(""):'<div class="util-empty-card">No machines in this model.</div>';
- const resources=r.resourceStats||[];
- $("resourceUtilChart").innerHTML=resources.length?resources.map(x=>{
-  if(!(x.capacity>0))return card(x.name,"Shared resource pool",null,"Pool capacity: 0 · No resources available during this shift.");
-  const b=pct(x.utilization*100),unitMinutes=Math.max(0,Number(x.busyUnitMinutes)||0),totalMinutes=x.capacity*M.shiftMinutes;
-  const idleUnitMinutes=Math.max(0,totalMinutes-unitMinutes);
-  return card(x.name,"Shared resource pool",b,unitMinutes.toFixed(1)+" occupied resource-min · "+idleUnitMinutes.toFixed(1)+" idle resource-min","Pool capacity: "+x.capacity);
- }).join(""):'<div class="util-empty-card">No shared resources are configured.</div>';
+ const card=(title,type,busy,foot)=>{const isNA=busy===null,b=isNA?0:pct(busy),idle=isNA?0:100-b;const breakdown=metric("busy","Busy",isNA?"N/A":b.toFixed(1)+"%")+metric("idle","Idle",isNA?"N/A":idle.toFixed(1)+"%")+'<div class="util-item-bar" role="img" aria-label="'+esc(title)+': busy '+(isNA?'not available':b.toFixed(1)+' percent')+', idle '+(isNA?'not available':idle.toFixed(1)+' percent')+'"><div class="busy" style="width:'+b+'%"></div><div class="idle" style="width:'+(isNA?100:idle)+'%"></div></div>';return '<article class="util-item-card"><div class="util-item-title">'+esc(title)+'</div><div class="util-item-type">'+esc(type)+'</div><div class="util-donut-row">'+donut(b,title,isNA)+'<div class="util-breakdown">'+breakdown+'</div></div><div class="util-item-foot">'+foot+'</div></article>';};
+ const machines=r.rows||[];$("machineUtilChart").innerHTML=machines.length?machines.map(x=>{const b=pct(x.u*100),busyMin=b/100*M.shiftMinutes,idleMin=Math.max(0,M.shiftMinutes-busyMin);return card(x.id+" — "+x.name,"Machine",b,busyMin.toFixed(1)+" busy min · "+idleMin.toFixed(1)+" not-processing min");}).join(""):'<div class="util-empty-card">No machines in this model.</div>';
+ const resources=r.resourceUnitStats||[];const resourceHtml=resources.map(x=>card(x.label,x.name,pct(x.utilization*100),Number(x.busyUnitMinutes).toFixed(1)+" busy min · "+Number(x.idleUnitMinutes).toFixed(1)+" idle min"));
+ const types=[{key:"operators",label:"Operator"},{key:"tools",label:"Tool"},{key:"technicians",label:"Technician"}];for(const type of types){const pool=(r.resourceStats||[]).find(x=>x.key===type.key);if(pool&&pool.capacity===0)resourceHtml.push(card(type.label+" pool","Shared resource",null,"Pool capacity: 0 · No individual units are available."));}
+ $("resourceUtilChart").innerHTML=resourceHtml.join("")||'<div class="util-empty-card">No shared resources are configured.</div>';
 }
 function show(r){$("tp").textContent=r.throughput.toFixed(4);$("ct").textContent=r.cycle.toFixed(2);$("bu").textContent=(r.rows[r.b].u*100).toFixed(1)+"%";$("avgAvailability").textContent=(r.rows.reduce((a,x)=>a+x.av,0)/r.rows.length*100).toFixed(1)+"%";$("results").innerHTML=r.rows.map(x=>`<tr><td>${esc(x.id)} — ${esc(x.name)}</td><td>${x.dist}</td><td>${x.mean.toFixed(2)}</td><td>${(x.av*100).toFixed(1)}%</td><td>${(x.u*100).toFixed(1)}%</td><td>${(x.b*100).toFixed(1)}%</td><td>${x.resourceWait.toFixed(1)}</td><td>${(x.q*100).toFixed(1)}%</td><td>${x.good}</td><td>${x.scrap}</td></tr>`).join("");renderUtilizationPlots(r)}
 function log(x){$("log").textContent=x}
@@ -682,5 +675,5 @@ $("modelFile").onchange=e=>{
 };
 $("reset").onclick=()=>{M=copy(DEF);render();status("Defaults restored.","warn")};render();
 window.addEventListener("error",e=>{try{status("JavaScript error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.error?.stack||""))}catch(_){}});
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=8").catch(()=>{});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js?v=9").catch(()=>{});
 </script></body></html>
