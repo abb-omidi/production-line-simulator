@@ -30,9 +30,13 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 
 <section class="card"><h2>Model input</h2><div class="grid4">
 <div><label>Arrival rate (units/min)</label><input id="arrivalRate" type="number" min=".000001" step=".001"></div>
+<div><label>Interarrival-time distribution</label><select id="arrivalDist"><option value="Exponential">Exponential</option><option value="Normal">Normal</option><option value="Uniform">Uniform</option></select></div>
+<div id="arrivalVariabilityWrap"><label id="arrivalVariabilityLabel">Variability (% of mean interval)</label><input id="arrivalVariabilityPct" type="number" min="0" max="90" step="1"></div>
 <div><label>Shift duration (min)</label><input id="shiftMinutes" type="number" min=".01" step="1"></div>
 <div><label>Monte Carlo replications</label><input id="reps" type="number" min="1" max="5000"></div>
-<div><label>Random seed (0=random)</label><input id="seed" type="number"></div><div><label>Conveyor travel time (min)</label><input id="transferMinutes" type="number" min="0" step=".05"></div></div>
+<div><label>Random seed (0=random)</label><input id="seed" type="number"></div>
+<div><label>Conveyor travel time (min)</label><input id="transferMinutes" type="number" min="0" step=".05"></div></div>
+<p id="arrivalDistHint" class="hint">Arrival rate sets the average input rate; the distribution controls random spacing between arrivals.</p>
 <div style="margin-top:12px"><b>Shared resource pools</b><div class="grid4" style="margin-top:7px"><div><label>Available operators</label><input id="operatorsAvailable" type="number" min="0" max="1000" step="1"></div><div><label>Available tools</label><input id="toolsAvailable" type="number" min="0" max="1000" step="1"></div><div><label>Available technicians</label><input id="techniciansAvailable" type="number" min="0" max="1000" step="1"></div></div><p class="hint">Stations request the configured operator/tool/technician quantities before processing. Technicians are also required for repairs when failures are enabled. Requests are all-or-nothing; waiting repairs get priority, then stations are considered in line order.</p></div>
 <div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save file</button><button class="gray" id="load">Load file</button><button class="light" id="reset">Reset</button></div>
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
@@ -73,7 +77,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <script>
 "use strict";
 const D={Normal:[["mean","Mean μ (min)",10],["sd","Std. dev. σ (min)",2]],Gamma:[["shape","Shape α",4],["scale","Scale β (min)",2]],Poisson:[["lambda","λ (mean min)",8]],Exponential:[["mean","Mean (min)",8]],Weibull:[["shape","Shape k",2],["scale","Scale λ (min)",10]],Triangular:[["min","Minimum (min)",7],["mode","Mode (min)",9],["max","Maximum (min)",13]]};
-const DEF={timeUnitsVersion:2,arrivalRate:0.125,shiftMinutes:480,transferMinutes:1.15,reps:100,seed:0,useFailures:false,resources:{operators:2,tools:2,technicians:1},machines:[
+const DEF={timeUnitsVersion:2,arrivalRate:0.125,arrivalDist:"Exponential",arrivalVariabilityPct:25,shiftMinutes:480,transferMinutes:1.15,reps:100,seed:0,useFailures:false,resources:{operators:2,tools:2,technicians:1},machines:[
 {id:"M1",name:"Cutting",dist:"Normal",p:{mean:10,sd:2},mttf:180,mttr:20,buffer:10,scrap:0,needOperators:1,needTools:0,needTechnicians:0},
 {id:"M2",name:"Assembly",dist:"Normal",p:{mean:8,sd:4},mttf:210,mttr:18,buffer:5,scrap:0,needOperators:1,needTools:0,needTechnicians:0},
 {id:"M3",name:"Inspection",dist:"Normal",p:{mean:9.667,sd:1.247},mttf:300,mttr:15,buffer:8,scrap:3,needOperators:1,needTools:0,needTechnicians:0}]};
@@ -81,11 +85,31 @@ const copy=x=>JSON.parse(JSON.stringify(x));
 const $=id=>document.getElementById(id);
 const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
 let M=copy(DEF),rand=Math.random,busy=false;
+function updateArrivalControls(){
+ const d=$("arrivalDist").value||"Exponential";
+ const variability=$("arrivalVariabilityPct");
+ $("arrivalVariabilityWrap").style.display=d==="Exponential"?"none":"";
+ $("arrivalVariabilityLabel").textContent=d==="Normal"?"Std. dev. (% of mean interval)":"Half-range (% of mean interval)";
+ variability.max=d==="Normal"?"40":"90";
+ if(n(variability.value,25)>Number(variability.max))variability.value=variability.max;
+ $("arrivalDistHint").textContent=d==="Exponential"
+  ?"Exponential: random gaps, with mean gap = 1 ÷ arrival rate. This is the current/default behavior."
+  :d==="Normal"
+  ?"Normal: gaps are centered on 1 ÷ arrival rate; the percentage sets the standard deviation. Non-positive samples are redrawn."
+  :"Uniform: gaps are sampled evenly between the mean interval minus and plus the selected half-range percentage.";
+}
 let flow={running:false,raf:0,lastTs:0,simMinute:0,events:[],cursor:0,parts:new Map(),stations:[],traceReady:false,good:0,rejected:0,expectedGood:0,expectedRejected:0};
 function status(s,c=""){ $("status").className="status "+c;$("status").textContent=s }
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]))}
 function render(){
- $("arrivalRate").value=M.arrivalRate;$("shiftMinutes").value=M.shiftMinutes;$("transferMinutes").value=M.transferMinutes??1.15;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;$("operatorsAvailable").value=M.resources?.operators??2;$("toolsAvailable").value=M.resources?.tools??2;$("techniciansAvailable").value=M.resources?.technicians??1;
+ $("arrivalRate").value=M.arrivalRate;
+ $("arrivalDist").value=["Normal","Exponential","Uniform"].includes(M.arrivalDist)?M.arrivalDist:"Exponential";
+ $("arrivalVariabilityPct").value=n(M.arrivalVariabilityPct,25);
+ updateArrivalControls();
+ $("arrivalDist").onchange=()=>{updateArrivalControls();status("Arrival distribution changed. Tap Apply model.","warn")};
+ $("arrivalVariabilityPct").onchange=()=>status("Arrival variability changed. Tap Apply model.","warn");
+ $("arrivalRate").onchange=()=>status("Arrival rate changed. Tap Apply model.","warn");
+ $("shiftMinutes").value=M.shiftMinutes;$("transferMinutes").value=M.transferMinutes??1.15;$("reps").value=M.reps;$("seed").value=M.seed;$("useFailures").checked=!!M.useFailures;$("operatorsAvailable").value=M.resources?.operators??2;$("toolsAvailable").value=M.resources?.tools??2;$("techniciansAvailable").value=M.resources?.technicians??1;
  $("machines").innerHTML=M.machines.map((m,i)=>`<div class="machine"><div class="mtop"><b>${m.id} — ${esc(m.name)}</b><button class="danger" data-del="${i}">Remove</button></div>
  <div class="grid"><div><label>Machine / process name</label><input data-i="${i}" data-k="name" value="${esc(m.name)}"></div><div><label>Processing-time distribution</label><select data-i="${i}" data-k="dist">${Object.keys(D).map(d=>`<option ${d===m.dist?"selected":""}>${d}</option>`).join("")}</select></div></div>
  <div class="params">${D[m.dist].map(f=>`<div><label>${f[1]}</label><input type="number" step=".01" data-i="${i}" data-p="${f[0]}" value="${n(m.p[f[0]],f[2])}"></div>`).join("")}
@@ -268,7 +292,7 @@ function startFlowAnimation(){
  if(!flow.traceReady){
   const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);
   show(r);loadFlowTrace(r);
-  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: arrival safety limit reached; result may be truncated.":""));
+  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nInterarrival distribution: "+M.arrivalDist+(M.arrivalDist==="Exponential"?"":" ("+M.arrivalVariabilityPct+"% variability)")+"\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min"+(r.arrivalLimitReached?"\nWARNING: arrival safety limit reached; result may be truncated.":""));
  }
  if(flow.simMinute>=M.shiftMinutes-1e-8){const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);show(r);loadFlowTrace(r)}
  flow.running=true;flow.lastTs=0;$("line").classList.add("flow-running");
@@ -291,11 +315,30 @@ function toggleFlow(){
 }
 
 function edit(e){let i=+e.target.dataset.i,m=M.machines[i];if(e.target.dataset.p)m.p[e.target.dataset.p]=n(e.target.value);else if(e.target.dataset.k==="dist"){m.dist=e.target.value;m.p={};D[m.dist].forEach(f=>m.p[f[0]]=f[2]);render()}else if(e.target.dataset.k==="name")m.name=e.target.value;else m[e.target.dataset.k]=n(e.target.value);status("Parameter changed. Tap Apply model.","warn")}
-function apply(){M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.transferMinutes=Math.max(0,n($("transferMinutes").value,1.15));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.resources={operators:Math.max(0,Math.min(1000,Math.round(n($("operatorsAvailable").value,2)))),tools:Math.max(0,Math.min(1000,Math.round(n($("toolsAvailable").value,2)))),technicians:Math.max(0,Math.min(1000,Math.round(n($("techniciansAvailable").value,1))))};M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));m.needOperators=Math.max(0,Math.min(1000,Math.round(n(m.needOperators,1))));m.needTools=Math.max(0,Math.min(1000,Math.round(n(m.needTools,0))));m.needTechnicians=Math.max(0,Math.min(1000,Math.round(n(m.needTechnicians,0))));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
+function apply(){
+ M.arrivalRate=Math.max(.000001,n($("arrivalRate").value,.125));
+ M.arrivalDist=["Normal","Exponential","Uniform"].includes($("arrivalDist").value)?$("arrivalDist").value:"Exponential";
+ M.arrivalVariabilityPct=Math.max(0,Math.min(M.arrivalDist==="Normal"?40:90,n($("arrivalVariabilityPct").value,25)));
+ M.shiftMinutes=Math.max(.01,n($("shiftMinutes").value,480));M.transferMinutes=Math.max(0,n($("transferMinutes").value,1.15));M.reps=Math.max(1,Math.min(5000,Math.round(n($("reps").value,100))));M.seed=Math.trunc(n($("seed").value));M.useFailures=$("useFailures").checked;M.timeUnitsVersion=2;M.resources={operators:Math.max(0,Math.min(1000,Math.round(n($("operatorsAvailable").value,2)))),tools:Math.max(0,Math.min(1000,Math.round(n($("toolsAvailable").value,2)))),technicians:Math.max(0,Math.min(1000,Math.round(n($("techniciansAvailable").value,1))))};M.machines.forEach(m=>{m.mttf=Math.max(.01,n(m.mttf??m.mtbf,180));delete m.mtbf;delete m.ideal;m.mttr=Math.max(0,n(m.mttr,20));m.buffer=Math.max(0,Math.round(n(m.buffer,5)));m.scrap=Math.max(0,Math.min(100,n(m.scrap)));m.needOperators=Math.max(0,Math.min(1000,Math.round(n(m.needOperators,1))));m.needTools=Math.max(0,Math.min(1000,Math.round(n(m.needTools,0))));m.needTechnicians=Math.max(0,Math.min(1000,Math.round(n(m.needTechnicians,0))));D[m.dist].forEach(f=>m.p[f[0]]=Math.max(.000001,n(m.p[f[0]],f[2])));if(m.dist==="Normal")m.p.sd=Math.max(.000001,m.p.sd);if(m.dist==="Triangular"){m.p.max=Math.max(m.p.min+.000001,m.p.max);m.p.mode=Math.max(m.p.min,Math.min(m.p.max,m.p.mode))}});render();status("Model applied. Failure downtime is "+(M.useFailures?"enabled":"disabled")+".","ok");log("MODEL APPLIED\n"+JSON.stringify(M,null,2))}
 function seed(s){let a=(s>>>0)||1;return()=>{a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
 function U(){return Math.max(1e-12,rand())}
 function norm(mu,sd){let u=U(),v=U();return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
 function gamma(k,t){if(k<1)return gamma(k+1,t)*Math.pow(U(),1/k);let d=k-1/3,c=1/Math.sqrt(9*d);for(;;){let x=norm(0,1),v=1+c*x;if(v<=0)continue;v*=v*v;let u=U();if(u<1-.0331*x*x*x*x||Math.log(u)<.5*x*x+d*(1-v+Math.log(v)))return d*v*t}}
+function sampleInterarrival(){
+ const meanGap=1/Math.max(1e-9,M.arrivalRate),d=M.arrivalDist||"Exponential";
+ if(d==="Normal"){
+  const sd=meanGap*Math.max(0,Math.min(.4,n(M.arrivalVariabilityPct,25)/100));
+  if(sd<=1e-12)return meanGap;
+  let gap,tries=0;
+  do{gap=norm(meanGap,sd);tries++}while(gap<=0&&tries<1000);
+  return gap>0?gap:meanGap;
+ }
+ if(d==="Uniform"){
+  const spread=Math.max(0,Math.min(.9,n(M.arrivalVariabilityPct,25)/100));
+  return meanGap*(1-spread+2*spread*U());
+ }
+ return -meanGap*Math.log(U());
+}
 function sample(m){let p=m.p,x;if(m.dist==="Normal"){do{x=norm(p.mean,p.sd)}while(x<=0)}else if(m.dist==="Gamma")x=gamma(p.shape,p.scale);else if(m.dist==="Poisson"){let L=Math.exp(-p.lambda),q=1,k=0;do{k++;q*=U()}while(q>L);x=k-1}else if(m.dist==="Exponential")x=-p.mean*Math.log(U());else if(m.dist==="Weibull")x=p.scale*Math.pow(-Math.log(U()),1/p.shape);else{let u=U(),f=(p.mode-p.min)/(p.max-p.min);x=u<f?p.min+Math.sqrt(u*(p.max-p.min)*(p.mode-p.min)):p.max-Math.sqrt((1-u)*(p.max-p.min)*(p.max-p.mode))}return Math.max(.001,x)}
 function lg(z){let c=[.9999999999998099,676.5203681218851,-1259.1392167224028,771.3234287776531,-176.6150291621406,12.507343278686905,-.13857109526572012,9.984369578019572e-6,1.5056327351493116e-7];if(z<.5)return Math.log(Math.PI)-Math.log(Math.sin(Math.PI*z))-lg(1-z);z--;let x=c[0];for(let i=1;i<c.length;i++)x+=c[i]/(z+i);let t=z+7.5;return .5*Math.log(2*Math.PI)+(z+.5)*Math.log(t)-t+Math.log(x)}
 function mean(m){let p=m.p;if(m.dist==="Normal"||m.dist==="Exponential")return p.mean;if(m.dist==="Poisson")return p.lambda;if(m.dist==="Gamma")return p.shape*p.scale;if(m.dist==="Weibull")return p.scale*Math.exp(lg(1+1/p.shape));return(p.min+p.mode+p.max)/3}
@@ -470,7 +513,7 @@ function sim(s,includeTrace=true){
   stationState(i,t);drain(t);
  };
 
- let nextArrival=-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+ let nextArrival=sampleInterarrival();
  if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
  let processedEvents=0;
  // A shift ends at H: do not execute arrivals, processing completions, or repairs after the horizon.
@@ -482,10 +525,10 @@ function sim(s,includeTrace=true){
    parts.set(p.id,p);inputQueue.push(p);
    emit(e.time,"arrival",{id:p.id});
    if(arrivalCount<1000000){
-    nextArrival=e.time-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+    nextArrival=e.time+sampleInterarrival();
     if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
    }else{
-    const nextGap=-Math.log(Math.max(1e-12,rand()))/Math.max(1e-9,M.arrivalRate);
+    const nextGap=sampleInterarrival();
     if(e.time+nextGap<=H)arrivalLimitReached=true;
    }
    drain(e.time);
@@ -574,7 +617,7 @@ async function run(){
  try{
   const baseSeed=M.seed||Date.now(),r=sim(baseSeed,true);
   show(r);loadFlowTrace(r);
-  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nArrivals during shift: "+r.arrivalCount+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min\n\nPER-STATION DIAGNOSTICS\n"+r.rows.map((row,i)=>row.id+" "+row.name+": completed service="+r.stationJobs[i]+", passed="+r.stationGood[i]+", rejected="+r.stationScrap[i]+", blocked="+(row.b*100).toFixed(1)+"%").join("\n")+"\n\nSHARED RESOURCE UTILIZATION\n"+r.resourceStats.map(x=>x.name+": capacity="+x.capacity+", utilization="+(x.utilization*100).toFixed(1)+"%, occupied resource-minutes="+x.busyUnitMinutes.toFixed(1)).join("\n")+"\n\nWIP AT SHIFT END\n"+Object.entries(r.endState).map(([k,v])=>k+": "+v).join("\n")+(r.arrivalLimitReached?"\nWARNING: event safety limit reached; result may be truncated.":""));
+  log("SIMULATION COMPLETE\nGood units by shift end: "+r.good+"\nRejected by shift end: "+r.rejected+"\nArrivals during shift: "+r.arrivalCount+"\nShift duration: "+M.shiftMinutes.toFixed(2)+" min\nArrival rate: "+M.arrivalRate.toFixed(4)+" units/min\nInterarrival distribution: "+M.arrivalDist+(M.arrivalDist==="Exponential"?"":" ("+M.arrivalVariabilityPct+"% variability)")+"\nConveyor travel: "+M.transferMinutes.toFixed(2)+" min per segment\nThroughput: "+r.throughput.toFixed(5)+" units/min\nCycle time: "+r.cycle.toFixed(3)+" min\n\nPER-STATION DIAGNOSTICS\n"+r.rows.map((row,i)=>row.id+" "+row.name+": completed service="+r.stationJobs[i]+", passed="+r.stationGood[i]+", rejected="+r.stationScrap[i]+", blocked="+(row.b*100).toFixed(1)+"%").join("\n")+"\n\nSHARED RESOURCE UTILIZATION\n"+r.resourceStats.map(x=>x.name+": capacity="+x.capacity+", utilization="+(x.utilization*100).toFixed(1)+"%, occupied resource-minutes="+x.busyUnitMinutes.toFixed(1)).join("\n")+"\n\nWIP AT SHIFT END\n"+Object.entries(r.endState).map(([k,v])=>k+": "+v).join("\n")+(r.arrivalLimitReached?"\nWARNING: event safety limit reached; result may be truncated.":""));
   startFlowAnimation();
   status(r.arrivalLimitReached?"Simulation completed with a safety-limit warning; replay started.":"Simulation complete. Replaying its event trace.",r.arrivalLimitReached?"warn":"ok");
  }catch(e){status("Error: "+e.message,"warn");log("ERROR\n"+e.message+"\n"+(e.stack||""))}
@@ -615,7 +658,10 @@ function normalizeImportedModel(raw){
  if(!Number.isFinite(Number(x.arrivalRate))||Number(x.arrivalRate)<=0)throw new Error("Arrival rate must be a positive number in units/min.");
  if(!Number.isFinite(Number(x.shiftMinutes))||Number(x.shiftMinutes)<=0)throw new Error("Shift duration must be a positive number in minutes.");
  if(!Array.isArray(x.machines)||x.machines.length<1||x.machines.length>100)throw new Error("The file must contain between 1 and 100 machines.");
- x.arrivalRate=Number(x.arrivalRate);x.shiftMinutes=Number(x.shiftMinutes);x.transferMinutes=Math.max(0,Number.isFinite(Number(x.transferMinutes))?Number(x.transferMinutes):1.15);
+ x.arrivalRate=Number(x.arrivalRate);
+ x.arrivalDist=["Normal","Exponential","Uniform"].includes(x.arrivalDist)?x.arrivalDist:"Exponential";
+ x.arrivalVariabilityPct=Math.max(0,Math.min(x.arrivalDist==="Normal"?40:90,Number.isFinite(Number(x.arrivalVariabilityPct))?Number(x.arrivalVariabilityPct):25));
+ x.shiftMinutes=Number(x.shiftMinutes);x.transferMinutes=Math.max(0,Number.isFinite(Number(x.transferMinutes))?Number(x.transferMinutes):1.15);
  x.reps=Math.max(1,Math.min(5000,Math.round(Number.isFinite(Number(x.reps))?Number(x.reps):100)));
  x.seed=Math.trunc(Number.isFinite(Number(x.seed))?Number(x.seed):0);
  x.useFailures=!!x.useFailures;
