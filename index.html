@@ -26,7 +26,9 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 </style></head><body>
 <header><h1>Production Line Simulator</h1></header>
 <main class="wrap">
-<section class="card"><h2>Simulation settings</h2><div class="grid4">
+<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
+
+<section class="card"><h2>Model input</h2><div class="grid4">
 <div><label>Arrival rate (units/min)</label><input id="arrivalRate" type="number" min=".000001" step=".001"></div>
 <div><label>Shift duration (min)</label><input id="shiftMinutes" type="number" min=".01" step="1"></div>
 <div><label>Monte Carlo replications</label><input id="reps" type="number" min="1" max="5000"></div>
@@ -36,8 +38,6 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
 <div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
-
-<section class="card"><h2>Machines and process distributions</h2><div class="failure-control"><label class="failure-toggle"><input id="useFailures" type="checkbox"> Use failures (MTTF/MTTR downtime)</label><p class="hint">Off by default. MTTF is operating time between failures; MTTR is repair time. Both are in minutes.</p></div><div id="machines"></div><button class="light" id="add">＋ Add machine</button></section>
 
 <section class="card"><h2>3D production flow</h2>
 <div class="flow-controls">
