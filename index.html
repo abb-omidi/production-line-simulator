@@ -54,6 +54,18 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div class="flow-note">The animation replays the same simulated events used for the results. Conveyor travel time, machine failures, scrap, and finite buffers are included in the shared model.</div>
 </section>
 
+<section class="card" id="liveUtilizationSection"><h2>Live utilization</h2>
+<div class="util-intro">These charts update with the 3D flow clock. Values are cumulative from the start of the shift to the current simulated time.</div>
+<div class="flow-readout" style="margin:0 0 12px">Elapsed simulated time: <strong id="liveUtilClock">0.0 min</strong></div>
+<div class="util-group"><h3 class="util-group-title">Machine utilization — live</h3>
+ <div id="liveMachineUtilChart" class="util-item-grid"><div class="util-empty-card">Run a simulation and start the flow to see live machine utilization.</div></div>
+</div>
+<div class="util-group" style="margin-top:18px"><h3 class="util-group-title">Individual resource utilization — live</h3>
+ <div id="liveResourceUtilChart" class="util-item-grid"><div class="util-empty-card">Live operator, tool, and technician utilization will appear here.</div></div>
+</div>
+<div class="util-footnote">Machine busy time counts processing only. Resource busy time counts the time each individual unit is allocated to processing or repair.</div>
+</section>
+
 <section class="card"><h2>Results</h2><div class="kpis">
 <div class="kpi"><div class="value" id="tp">—</div><div class="muted">Good throughput (units/min)</div></div>
 <div class="kpi"><div class="value" id="ct">—</div><div class="muted">Cycle time (min)</div></div>
@@ -150,9 +162,86 @@ function resetFlow(){
  flow={running:false,raf:0,lastTs:0,simMinute:0,events:[],cursor:0,parts:new Map(),
   stations:M.machines.map(()=>({mode:"ready",queueCount:0,activeId:null,down:false})),
   traceReady:false,good:0,rejected:0,expectedGood:0,expectedRejected:0};
+ resetLiveUtilizationState();
+ renderLiveUtilizationCards();
  $("flowToggle").textContent="▶ Start flow";$("flowToggle").className="green";
  $("line").classList.remove("flow-running");
  drawFlow();updateFlowReadout();updateFlowStations();
+}
+function resetLiveUtilizationState(){
+ flow.liveLastTime=0;
+ flow.liveMachineBusy=M.machines.map(()=>0);
+ flow.liveResources=Object.fromEntries(["operators","tools","technicians"].map(key=>[
+  key,Array.from({length:Math.max(0,Math.round(n(M.resources?.[key],0)))},()=>({busy:false,busyMinutes:0}))
+ ]));
+ flow.lastLivePlotTime=-1;
+}
+function accountLiveUtilization(until){
+ if(!flow.liveMachineBusy||!flow.liveResources)return;
+ const target=Math.max(flow.liveLastTime||0,Math.min(M.shiftMinutes,Math.max(0,n(until,0))));
+ const dt=target-(flow.liveLastTime||0);
+ if(dt<=0)return;
+ (flow.stations||[]).forEach((st,i)=>{if(st.mode==="processing"&&i<flow.liveMachineBusy.length)flow.liveMachineBusy[i]+=dt;});
+ for(const units of Object.values(flow.liveResources))for(const unit of units)if(unit.busy)unit.busyMinutes+=dt;
+ flow.liveLastTime=target;
+}
+function liveUtilCard(title,type,kind,key,index){
+ return '<article class="util-item-card" data-live-kind="'+kind+'" data-live-key="'+(key||"")+'" data-live-index="'+index+'">'+
+  '<div class="util-item-title">'+esc(title)+'</div><div class="util-item-type">'+esc(type)+'</div>'+
+  '<div class="util-donut-row"><div class="util-donut" data-live-donut style="--busy-pct:0%"><div class="util-donut-label"><strong data-live-pct>0.0%</strong><span>busy</span></div></div>'+
+  '<div class="util-breakdown"><div class="util-metric-line"><span><i class="util-swatch busy"></i>Busy</span><strong data-live-busy-pct>0.0%</strong></div>'+
+  '<div class="util-metric-line"><span><i class="util-swatch idle"></i>Idle</span><strong data-live-idle-pct>100.0%</strong></div>'+
+  '<div class="util-item-bar"><div class="busy" data-live-bar-busy style="width:0%"></div><div class="idle" data-live-bar-idle style="width:100%"></div></div></div></div>'+
+  '<div class="util-item-foot" data-live-foot>0.0 busy min · 0.0 idle min · 0.0 elapsed min</div></article>';
+}
+function liveNoCapacityCard(title){
+ return '<article class="util-item-card"><div class="util-item-title">'+esc(title)+'</div><div class="util-item-type">Shared resource</div>'+
+  '<div class="util-donut-row"><div class="util-donut" style="--busy-pct:0%"><div class="util-donut-label"><strong>N/A</strong><span>no capacity</span></div></div>'+
+  '<div class="util-breakdown"><div class="util-metric-line"><span>Busy</span><strong>N/A</strong></div><div class="util-metric-line"><span>Idle</span><strong>N/A</strong></div>'+
+  '<div class="util-item-bar"><div class="idle" style="width:100%"></div></div></div></div>'+
+  '<div class="util-item-foot">No individual units are available.</div></article>';
+}
+function renderLiveUtilizationCards(){
+ const machines=$("liveMachineUtilChart"),resources=$("liveResourceUtilChart");
+ if(!flow.traceReady){
+  machines.innerHTML='<div class="util-empty-card">Run a simulation and start the flow to see live machine utilization.</div>';
+  resources.innerHTML='<div class="util-empty-card">Live operator, tool, and technician utilization will appear here.</div>';
+  $("liveUtilClock").textContent="0.0 min";
+  return;
+ }
+ machines.innerHTML=M.machines.map((m,i)=>liveUtilCard(m.id+" — "+m.name,"Machine","machine","",i)).join("")||
+  '<div class="util-empty-card">No machines in this model.</div>';
+ const types=[{key:"operators",label:"Operator"},{key:"tools",label:"Tool"},{key:"technicians",label:"Technician"}];
+ const resourceHtml=[];
+ for(const type of types){
+  const units=flow.liveResources?.[type.key]||[];
+  if(!units.length)resourceHtml.push(liveNoCapacityCard(type.label+" pool"));
+  else units.forEach((unit,i)=>resourceHtml.push(liveUtilCard(type.label+" "+(i+1),type.label,"resource",type.key,i)));
+ }
+ resources.innerHTML=resourceHtml.join("");
+ updateLiveUtilizationPlots();
+}
+function updateLiveUtilizationPlots(){
+ if(!flow.traceReady)return;
+ const elapsed=Math.max(0,Math.min(M.shiftMinutes,flow.simMinute||0));
+ $("liveUtilClock").textContent=elapsed.toFixed(1)+" min";
+ document.querySelectorAll("#liveMachineUtilChart [data-live-kind], #liveResourceUtilChart [data-live-kind]").forEach(card=>{
+  const kind=card.dataset.liveKind,key=card.dataset.liveKey,index=Number(card.dataset.liveIndex);
+  let busyMinutes=0;
+  if(kind==="machine")busyMinutes=flow.liveMachineBusy?.[index]||0;
+  else busyMinutes=flow.liveResources?.[key]?.[index]?.busyMinutes||0;
+  busyMinutes=Math.max(0,Math.min(elapsed,busyMinutes));
+  const idleMinutes=Math.max(0,elapsed-busyMinutes);
+  const busyPct=elapsed>1e-9?Math.max(0,Math.min(100,busyMinutes/elapsed*100)):0;
+  const idlePct=100-busyPct;
+  card.querySelector("[data-live-pct]").textContent=busyPct.toFixed(1)+"%";
+  card.querySelector("[data-live-busy-pct]").textContent=busyPct.toFixed(1)+"%";
+  card.querySelector("[data-live-idle-pct]").textContent=idlePct.toFixed(1)+"%";
+  card.querySelector("[data-live-donut]").style.setProperty("--busy-pct",busyPct+"%");
+  card.querySelector("[data-live-bar-busy]").style.width=busyPct+"%";
+  card.querySelector("[data-live-bar-idle]").style.width=idlePct+"%";
+  card.querySelector("[data-live-foot]").textContent=busyMinutes.toFixed(1)+" busy min · "+idleMinutes.toFixed(1)+(kind==="machine"?" not-processing min":" idle min")+" · "+elapsed.toFixed(1)+" elapsed min";
+ });
 }
 function flowFormat(value){return Math.max(0,value).toFixed(1)}
 function updateFlowReadout(){
@@ -169,11 +258,17 @@ function loadFlowTrace(r){
  flow.stations=M.machines.map(()=>({mode:"ready",queueCount:0,activeId:null,down:false}));
  flow.traceReady=true;flow.good=0;flow.rejected=0;
  flow.expectedGood=r.good;flow.expectedRejected=r.rejected;
+ resetLiveUtilizationState();renderLiveUtilizationCards();
  $("line").classList.remove("flow-running");
  $("flowToggle").textContent="▶ Start flow";$("flowToggle").className="green";
  drawFlow();updateFlowReadout();updateFlowStations();
 }
 function applyFlowEvent(e){
+ if(e.type==="resourceState"){
+  const unit=flow.liveResources?.[e.resource]?.[e.unit];
+  if(unit)unit.busy=!!e.busy;
+  return;
+ }
  let p=flow.parts.get(e.id);
  if(e.type==="arrival"){
   flow.parts.set(e.id,{id:e.id,state:"input",station:-1,arrivalTime:e.time});
@@ -213,8 +308,11 @@ function applyFlowEvent(e){
 }
 function processFlowEvents(){
  while(flow.cursor<flow.events.length&&flow.events[flow.cursor].time<=flow.simMinute+1e-9){
-  applyFlowEvent(flow.events[flow.cursor++]);
+  const e=flow.events[flow.cursor++];
+  accountLiveUtilization(e.time);
+  applyFlowEvent(e);
  }
+ accountLiveUtilization(flow.simMinute);
 }
 function drawFlow(){
  const layer=$("flowTokenLayer");if(!layer)return;
@@ -278,6 +376,10 @@ function tickFlow(ts){
  const dt=elapsed*Number($("flowSpeed").value||8);
  flow.simMinute=Math.min(M.shiftMinutes,flow.simMinute+dt);
  processFlowEvents();drawFlow();updateFlowReadout();updateFlowStations();
+ const liveUpdateInterval=Math.max(.1,M.shiftMinutes/1200);
+ if(flow.lastLivePlotTime<0||flow.simMinute-flow.lastLivePlotTime>=liveUpdateInterval||flow.simMinute>=M.shiftMinutes-1e-8){
+  updateLiveUtilizationPlots();flow.lastLivePlotTime=flow.simMinute;
+ }
  if(flow.simMinute>=M.shiftMinutes-1e-8){
   flow.running=false;flow.raf=0;$("line").classList.remove("flow-running");
   $("flowToggle").textContent="↻ Replay shift";$("flowToggle").className="green";
@@ -375,8 +477,8 @@ function sim(s,includeTrace=true){
   return root;
  };
  const changeResource=(key,delta,t)=>{resourceTime[key]+=overlap(resourceLastTime[key],t)*resourceUse[key];resourceLastTime[key]=t;resourceUse[key]+=delta;if(resourceUse[key]<-eps||resourceUse[key]>resourceCaps[key]+eps)throw new Error("Internal resource accounting error for "+key+".");};
- const acquireUnitIds=(key,count,t)=>{if(count<=0)return [];const pool=resourceUnits[key];if(pool.reduce((a,u)=>a+(u.busy?0:1),0)<count)return null;const ids=[];for(let step=0;step<pool.length&&ids.length<count;step++){const id=(resourceCursor[key]+step)%pool.length;if(!pool[id].busy)ids.push(id);}if(ids.length<count)return null;for(const id of ids){const unit=pool[id];unit.busy=true;unit.busySince=t;changeResource(key,1,t);}resourceCursor[key]=(ids[ids.length-1]+1)%pool.length;return ids;};
- const releaseUnitIds=(key,ids,t)=>{for(const id of ids||[]){const unit=resourceUnits[key][id];if(!unit||!unit.busy)continue;unit.busyUnitMinutes+=overlap(unit.busySince,t);unit.busy=false;unit.busySince=null;changeResource(key,-1,t);}};
+ const acquireUnitIds=(key,count,t)=>{if(count<=0)return [];const pool=resourceUnits[key];if(pool.reduce((a,u)=>a+(u.busy?0:1),0)<count)return null;const ids=[];for(let step=0;step<pool.length&&ids.length<count;step++){const id=(resourceCursor[key]+step)%pool.length;if(!pool[id].busy)ids.push(id);}if(ids.length<count)return null;for(const id of ids){const unit=pool[id];unit.busy=true;unit.busySince=t;changeResource(key,1,t);emit(t,"resourceState",{resource:key,unit:id,busy:true});}resourceCursor[key]=(ids[ids.length-1]+1)%pool.length;return ids;};
+ const releaseUnitIds=(key,ids,t)=>{for(const id of ids||[]){const unit=resourceUnits[key][id];if(!unit||!unit.busy)continue;unit.busyUnitMinutes+=overlap(unit.busySince,t);unit.busy=false;unit.busySince=null;changeResource(key,-1,t);emit(t,"resourceState",{resource:key,unit:id,busy:false});}};
  const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUnits[k].filter(u=>!u.busy).length<req[k]))return false;const held={};for(const k of resourceKeys){held[k]=acquireUnitIds(k,req[k],t);if(held[k]===null)throw new Error("Resource allocation changed unexpectedly for "+k+".");}st.resourcesHeld=true;st.heldResources=held;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
  const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys)releaseUnitIds(k,st.heldResources?.[k],t);st.resourcesHeld=false;st.heldResources=null;};
  const emit=(time,type,data={})=>{if(includeTrace)trace.push(Object.assign({time,seq:traceSeq++,type},data));};
