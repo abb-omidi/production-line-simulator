@@ -40,7 +40,7 @@ button{background:#0757a0;color:#fff;border:0;font-weight:700}.green{background:
 <div style="margin-top:12px"><b>Shared resource pools</b><div class="grid4" style="margin-top:7px"><div><label>Available operators</label><input id="operatorsAvailable" type="number" min="0" max="1000" step="1"></div><div><label>Available tools</label><input id="toolsAvailable" type="number" min="0" max="1000" step="1"></div><div><label>Available technicians</label><input id="techniciansAvailable" type="number" min="0" max="1000" step="1"></div></div><p class="hint">Stations request the configured operator/tool/technician quantities before processing. Technicians are also required for repairs when failures are enabled. Requests are all-or-nothing; waiting repairs get priority, then stations are considered in line order.</p></div>
 <div class="actions"><button id="apply">Apply model</button><button class="green" id="run">▶ Run</button><button id="mc">Monte Carlo</button><button class="gray" id="save">Save file</button><button class="gray" id="load">Load file</button><button class="light" id="reset">Reset</button></div>
 <input id="modelFile" type="file" accept=".json,.txt,application/json,text/plain" hidden>
-<div class="hint">Save downloads a portable plain-text JSON model file. Load imports a saved .json or .txt model file.</div>
+<div class="hint">Save opens a location picker where supported; otherwise it downloads the JSON file. Load imports a saved .json or .txt model file.</div>
 <div id="status" class="status">Edit parameters and tap Apply model.</div></section>
 
 <section class="card"><h2>3D production flow</h2>
@@ -691,18 +691,50 @@ function normalizeImportedModel(raw){
  });
  return x;
 }
-$("save").onclick=()=>{
+$("save").onclick=async()=>{
  try{
   apply();
   const textData=JSON.stringify(M,null,2)+"\n";
+
+  // Use the browser's Save As dialog when supported (desktop Chromium browsers).
+  // The File System Access API must be called directly from this user click.
+  if(typeof window.showSaveFilePicker==="function"){
+   const handle=await window.showSaveFilePicker({
+    suggestedName:"production-line-model.json",
+    types:[{
+     description:"Production Line Simulator model",
+     accept:{"application/json":[".json"],"text/plain":[".txt"]}
+    }]
+   });
+   const writable=await handle.createWritable();
+   try{
+    await writable.write(new Blob([textData],{type:"application/json;charset=utf-8"}));
+    await writable.close();
+   }catch(writeError){
+    try{await writable.abort()}catch(_){}
+    throw writeError;
+   }
+   log("MODEL SAVED\nFile: "+handle.name+"\n"+JSON.stringify(M,null,2));
+   status("Model saved to the selected location as "+handle.name+".","ok");
+   return;
+  }
+
+  // Fallback for browsers without a native save-location picker (e.g. many mobile browsers).
   const blob=new Blob([textData],{type:"application/json;charset=utf-8"});
   const url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download="production-line-model.json";a.style.display="none";
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1500);
   log("MODEL EXPORTED\nFile: production-line-model.json\n"+JSON.stringify(M,null,2));
-  status("Model downloaded as production-line-model.json. Check your Downloads folder.","ok");
- }catch(e){status("Could not save model file: "+e.message,"warn")}
+  status("This browser does not support choosing a save location. The model was downloaded as production-line-model.json; check your Downloads folder or browser download settings.","ok");
+ }catch(e){
+  if(e&&e.name==="AbortError"){
+   status("Save cancelled. No file was written.","warn");
+   return;
+  }
+  status("Could not save model file: "+(e&&e.message?e.message:String(e)),"warn");
+  log("SAVE ERROR\n"+(e&&e.message?e.message:String(e)));
+ }
 };
 $("load").onclick=()=>{$("modelFile").value="";$("modelFile").click()};
 $("modelFile").onchange=e=>{
