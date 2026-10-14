@@ -118,10 +118,10 @@ function sim(s,includeTrace=true){
   return root;
  };
  const changeResource=(key,delta,t)=>{resourceTime[key]+=overlap(resourceLastTime[key],t)*resourceUse[key];resourceLastTime[key]=t;resourceUse[key]+=delta;if(resourceUse[key]<-eps||resourceUse[key]>resourceCaps[key]+eps)throw new Error("Internal resource accounting error for "+key+".");};
- const acquireUnitIds=(key,count,t)=>{if(count<=0)return [];const pool=resourceUnits[key];if(pool.reduce((a,u)=>a+(u.busy?0:1),0)<count)return null;const ids=[];for(let step=0;step<pool.length&&ids.length<count;step++){const id=(resourceCursor[key]+step)%pool.length;if(!pool[id].busy)ids.push(id);}if(ids.length<count)return null;for(const id of ids){const unit=pool[id];unit.busy=true;unit.busySince=t;changeResource(key,1,t);emit(t,"resourceState",{resource:key,unit:id,busy:true});}resourceCursor[key]=(ids[ids.length-1]+1)%pool.length;return ids;};
- const releaseUnitIds=(key,ids,t)=>{for(const id of ids||[]){const unit=resourceUnits[key][id];if(!unit||!unit.busy)continue;unit.busyUnitMinutes+=overlap(unit.busySince,t);unit.busy=false;unit.busySince=null;changeResource(key,-1,t);emit(t,"resourceState",{resource:key,unit:id,busy:false});}};
- const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUnits[k].filter(u=>!u.busy).length<req[k]))return false;const held={};for(const k of resourceKeys){held[k]=acquireUnitIds(k,req[k],t);if(held[k]===null)throw new Error("Resource allocation changed unexpectedly for "+k+".");}st.resourcesHeld=true;st.heldResources=held;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
- const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys)releaseUnitIds(k,st.heldResources?.[k],t);st.resourcesHeld=false;st.heldResources=null;};
+ const acquireUnitIds=(key,count,t,station=null)=>{if(count<=0)return [];const pool=resourceUnits[key];if(pool.reduce((a,u)=>a+(u.busy?0:1),0)<count)return null;const ids=[];for(let step=0;step<pool.length&&ids.length<count;step++){const id=(resourceCursor[key]+step)%pool.length;if(!pool[id].busy)ids.push(id);}if(ids.length<count)return null;for(const id of ids){const unit=pool[id];unit.busy=true;unit.busySince=t;changeResource(key,1,t);emit(t,"resourceState",{resource:key,unit:id,busy:true,station});}resourceCursor[key]=(ids[ids.length-1]+1)%pool.length;return ids;};
+ const releaseUnitIds=(key,ids,t,station=null)=>{for(const id of ids||[]){const unit=resourceUnits[key][id];if(!unit||!unit.busy)continue;unit.busyUnitMinutes+=overlap(unit.busySince,t);unit.busy=false;unit.busySince=null;changeResource(key,-1,t);emit(t,"resourceState",{resource:key,unit:id,busy:false,station});}};
+ const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUnits[k].filter(u=>!u.busy).length<req[k]))return false;const held={};for(const k of resourceKeys){held[k]=acquireUnitIds(k,req[k],t,i);if(held[k]===null)throw new Error("Resource allocation changed unexpectedly for "+k+".");}st.resourcesHeld=true;st.heldResources=held;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
+ const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys)releaseUnitIds(k,st.heldResources?.[k],t,i);st.resourcesHeld=false;st.heldResources=null;};
  const emit=(time,type,data={})=>{if(includeTrace)trace.push(Object.assign({time,seq:traceSeq++,type},data));};
  const stationMode=(st,t)=>{
   if(st.blocked)return "blocked";
@@ -152,7 +152,7 @@ function sim(s,includeTrace=true){
  };
  const tryStartRepair=(i,t)=>{
   const st=states[i],m=M.machines[i];if(!st.repairPending)return false;
-  const ids=acquireUnitIds("technicians",1,t);if(!ids)return false;
+  const ids=acquireUnitIds("technicians",1,t,i);if(!ids)return false;
   st.repairTechUnit=ids[0];st.repairTechHeld=true;st.repairPending=false;st.repairUntil=t+m.mttr;
   push({time:st.repairUntil,type:"repairDone",station:i});stationState(i,t);return true;
  };
@@ -305,7 +305,7 @@ function sim(s,includeTrace=true){
   }else if(e.type==="repairDone"){
    const st=states[e.station],m=M.machines[e.station];
    if(st.repairUntil>e.time+eps)continue;
-   st.repairUntil=0;st.upRemaining=m.mttf;if(st.repairTechHeld&&st.repairTechUnit!==null){releaseUnitIds("technicians",[st.repairTechUnit],e.time);st.repairTechHeld=false;st.repairTechUnit=null;}if(st.downSince!==null){st.down+=overlap(st.downSince,e.time);st.downSince=null;}if(st.active)st.active.state="waiting";
+   st.repairUntil=0;st.upRemaining=m.mttf;if(st.repairTechHeld&&st.repairTechUnit!==null){releaseUnitIds("technicians",[st.repairTechUnit],e.time,e.station);st.repairTechHeld=false;st.repairTechUnit=null;}if(st.downSince!==null){st.down+=overlap(st.downSince,e.time);st.downSince=null;}if(st.active)st.active.state="waiting";
    emit(e.time,"repairDone",{station:e.station,id:st.active&&st.active.serviceRemaining>eps?st.active.id:null});
    stationState(e.station,e.time);drain(e.time);
   }else if(e.type==="outputArrive"){
@@ -442,10 +442,10 @@ canvas.addEventListener('pointerdown',e=>{if(e.button!==0||simViz.active)return;
 canvas.addEventListener('pointermove',e=>{if(!dragging)return;const p=intersectFloor(e);if(p){positionObject(dragging,p.x+dragOffset.x,p.z+dragOffset.z);$('objX').value=dragging.position.x.toFixed(2);$('objZ').value=dragging.position.z.toFixed(2);createFlowDots();}});
 canvas.addEventListener('pointerup',e=>{dragging=null;controls.enabled=true;try{canvas.releasePointerCapture(e.pointerId);}catch{}});
 window.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='r'&&selected){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}if((e.key==='Delete'||e.key==='Backspace')&&selected&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)){deleteSelected();createFlowDots();}if(e.key==='Escape'){placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}});
-$('applyObject').onclick=()=>{applySelected();renderSummary();};
-$('rotateObject').onclick=()=>{if(selected){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}};
-$('duplicateObject').onclick=duplicateSelected;
-$('deleteObject').onclick=()=>{deleteSelected();createFlowDots();};
+$('applyObject').onclick=()=>{if(simViz.active)return;applySelected();renderSummary();};
+$('rotateObject').onclick=()=>{if(simViz.active)return;if(selected){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}};
+$('duplicateObject').onclick=()=>{if(!simViz.active)duplicateSelected();};
+$('deleteObject').onclick=()=>{if(simViz.active)return;deleteSelected();createFlowDots();};
 $('gridToggle').onclick=()=>{gridVisible=!gridVisible;grid.visible=gridVisible;$('gridToggle').textContent=gridVisible?'Grid on':'Grid off';$('gridToggle').classList.toggle('active',gridVisible);};
 $('flowToggle').onclick=()=>{flowVisible=!flowVisible;flowDots.forEach(d=>d.visible=flowVisible);$('flowToggle').textContent=flowVisible?'Flow on':'Flow off';$('flowToggle').classList.toggle('active',flowVisible);};
 $('toggleFlow').onclick=()=>{flowRunning=!flowRunning;$('toggleFlow').textContent=flowRunning?'Pause material flow':'Resume material flow';};
@@ -458,7 +458,7 @@ function exportSimulationModel(){const stations=objects.filter(isProcessStation)
 $('exportModel').onclick=exportSimulationModel;
 $('saveLayout').onclick=()=>{const blob=new Blob([JSON.stringify(exportLayout(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='factory-layout.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);};
 $('loadLayout').onclick=()=>$('loadFile').click();
-$('loadFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const outer=JSON.parse(await file.text());const data=outer.visualLayout&&Array.isArray(outer.visualLayout.objects)?outer.visualLayout:outer;if(!Array.isArray(data.objects))throw new Error('JSON must contain an objects array or a visualLayout.objects array');if(outer.arrivalRate!==undefined)$('modelArrivalRate').value=outer.arrivalRate;if(outer.arrivalDist)$('modelArrivalDist').value=outer.arrivalDist;if(outer.arrivalVariabilityPct!==undefined)$('modelArrivalVariability').value=outer.arrivalVariabilityPct;if(outer.shiftMinutes!==undefined)$('modelShift').value=outer.shiftMinutes;if(outer.transferMinutes!==undefined)$('modelTransfer').value=outer.transferMinutes;if(outer.reps!==undefined)$('modelReps').value=outer.reps;if(outer.useFailures!==undefined)$('modelUseFailures').checked=!!outer.useFailures;if(outer.resources){$('modelOperators').value=outer.resources.operators??2;$('modelTools').value=outer.resources.tools??2;$('modelTechnicians').value=outer.resources.technicians??1;}clearObjects();for(const o of data.objects){if(kinds[o.kind])addObject(o.kind,o.x,o.z,o);}createFlowDots();$('coords').textContent='Imported '+objects.length+' objects';$('exportStatus').textContent='Layout imported. Review station settings before exporting a simulator model.';}catch(err){alert('Could not import layout: '+err.message);}e.target.value='';};
+$('loadFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;if(simViz.active){alert('Click Edit layout before importing a different layout.');e.target.value='';return;}try{const outer=JSON.parse(await file.text());const data=outer.visualLayout&&Array.isArray(outer.visualLayout.objects)?outer.visualLayout:outer;if(!Array.isArray(data.objects))throw new Error('JSON must contain an objects array or a visualLayout.objects array');if(outer.arrivalRate!==undefined)$('modelArrivalRate').value=outer.arrivalRate;if(outer.arrivalDist)$('modelArrivalDist').value=outer.arrivalDist;if(outer.arrivalVariabilityPct!==undefined)$('modelArrivalVariability').value=outer.arrivalVariabilityPct;if(outer.shiftMinutes!==undefined)$('modelShift').value=outer.shiftMinutes;if(outer.transferMinutes!==undefined)$('modelTransfer').value=outer.transferMinutes;if(outer.reps!==undefined)$('modelReps').value=outer.reps;if(outer.useFailures!==undefined)$('modelUseFailures').checked=!!outer.useFailures;if(outer.resources){$('modelOperators').value=outer.resources.operators??2;$('modelTools').value=outer.resources.tools??2;$('modelTechnicians').value=outer.resources.technicians??1;}clearObjects();for(const o of data.objects){if(kinds[o.kind])addObject(o.kind,o.x,o.z,o);}createFlowDots();$('coords').textContent='Imported '+objects.length+' objects';$('exportStatus').textContent='Layout imported. Review station settings before exporting a simulator model.';}catch(err){alert('Could not import layout: '+err.message);}e.target.value='';};
 
 function resize(){const r=viewport.getBoundingClientRect();if(r.width<1||r.height<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
 new ResizeObserver(resize).observe(viewport);
@@ -521,6 +521,13 @@ function stationSide(i){const d=lineDirection(i);return new THREE.Vector3(-d.z,0
 function sourcePoint(){if(!simViz.stationObjects.length)return new THREE.Vector3(-10,.22,0);return stationCenter(0).sub(lineDirection(0).multiplyScalar(3.2));}
 function outputPoint(){const nStations=simViz.stationObjects.length;if(!nStations)return new THREE.Vector3(10,.22,0);return stationCenter(nStations-1).add(lineDirection(nStations-1).multiplyScalar(3.2));}
 function endpointPoint(value){return typeof value==='number'?stationCenter(value):value==='output'?outputPoint():sourcePoint();}
+function buildProductPath(from,to){
+ const start=endpointPoint(from),end=endpointPoint(to),dx=end.x-start.x,dz=end.z-start.z,len2=dx*dx+dz*dz;
+ if(len2<1e-5)return new THREE.LineCurve3(start,end);
+ const between=objects.filter(o=>o.userData.kind==='conveyor').map(o=>{const vx=o.position.x-start.x,vz=o.position.z-start.z,t=(vx*dx+vz*dz)/len2,px=start.x+t*dx,pz=start.z+t*dz;return {o,t,dist:Math.hypot(o.position.x-px,o.position.z-pz)};}).filter(x=>x.t>.04&&x.t<.96&&x.dist<Math.max(1.2,x.o.userData.d*1.5)).sort((a,b)=>a.t-b.t);
+ const points=[start,...between.map(x=>new THREE.Vector3(x.o.position.x,.22,x.o.position.z)),end];
+ return points.length===2?new THREE.LineCurve3(start,end):new THREE.CatmullRomCurve3(points,false,'centripetal',.25);
+}
 function makeStatusBadge(parent){
  const c=document.createElement('canvas');c.width=512;c.height=112;const ctx=c.getContext('2d');
  const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;
@@ -632,12 +639,8 @@ function applyActorResourceEvent(e){
  const actor=simViz.actors[e.resource]?.[e.unit];if(!actor)return;
  const data=actor.userData.actor;data.busy=!!e.busy;
  if(!e.busy){data.station=-1;data.target.copy(data.home);return;}
- if(e.resource==='technicians'){
-  const repairIndex=simViz.stationStates.findIndex(st=>st.mode==='repair');
-  if(repairIndex>=0){data.station=repairIndex;data.target.copy(stationActorTarget(repairIndex,e.unit));}
- }else if(e.resource==='tools'){
-  data.station=-1;
- }
+ if(Number.isInteger(e.station)&&simViz.stationObjects[e.station]){data.station=e.station;data.target.copy(stationActorTarget(e.station,e.unit));}
+ else data.station=-1;
 }
 function assignBusyActors(resource,station,count){
  if(!count)return;
@@ -662,7 +665,7 @@ function applyLiveEvent(e){
   setProductLook(p,'input');
  }else if(e.type==='moveStart'){
   if(!p){p={id:e.id,state:'moving',station:-1,object:createProduct(e.id)};simViz.parts.set(e.id,p);}
-  p.state='moving';p.from=e.from;p.to=e.to;p.start=e.time;p.end=e.endTime;p.station=typeof e.to==='number'?e.to:(typeof e.from==='number'?e.from:-1);setProductLook(p,'moving');
+  p.state='moving';p.from=e.from;p.to=e.to;p.start=e.time;p.end=e.endTime;p.path=buildProductPath(e.from,e.to);p.station=typeof e.to==='number'?e.to:(typeof e.from==='number'?e.from:-1);setProductLook(p,'moving');
  }else if(e.type==='moveEnd'){
   if(p){p.state='waiting';p.station=e.station;setProductLook(p,'waiting');}
  }else if(e.type==='enterStation'){
@@ -707,8 +710,8 @@ function updateProductPositions(){
  const grouped=new Map();
  for(const p of simViz.parts.values()){
   if(p.state==='moving'){
-   const from=endpointPoint(p.from),to=endpointPoint(p.to),span=Math.max(1e-6,p.end-p.start),u=THREE.MathUtils.clamp((simViz.time-p.start)/span,0,1);
-   p.object.position.set(THREE.MathUtils.lerp(from.x,to.x,u),.2+Math.sin(Math.PI*u)*.34,THREE.MathUtils.lerp(from.z,to.z,u));
+   const path=p.path||buildProductPath(p.from,p.to),span=Math.max(1e-6,p.end-p.start),u=THREE.MathUtils.clamp((simViz.time-p.start)/span,0,1),point=path.getPointAt(u);
+   p.object.position.set(point.x,.2+Math.sin(Math.PI*u)*.34,point.z);
   }else if(p.state==='input'){
    const peers=Array.from(simViz.parts.values()).filter(x=>x.state==='input'&&x.id<=p.id),src=sourcePoint();
    p.object.position.set(src.x-(peers.length-1)*.52,.2,src.z+.25);
@@ -717,7 +720,7 @@ function updateProductPositions(){
    p.object.position.set(out.x,.2,out.z+rank*.48);
   }else if(Number.isInteger(p.station)&&p.station>=0&&p.station<simViz.stationObjects.length){
    const i=p.station,o=simViz.stationObjects[i],center=stationCenter(i),side=stationSide(i);
-   if(p.state==='processing'){center.add(side.multiplyScalar((o.userData.d||1)*.24));center.y=(o.userData.h||1)*.65+.2;}
+   if(p.state==='processing'){center.add(side.multiplyScalar((o.userData.d||1)/2+.48));center.y=.23;}
    else if(p.state==='blocked'){center.add(lineDirection(i).multiplyScalar((o.userData.w||1)*.42));center.y=.24;}
    else{
     if(!grouped.has(i))grouped.set(i,[]);
@@ -725,7 +728,8 @@ function updateProductPositions(){
    }
    p.object.position.copy(center);
   }else{p.object.position.copy(sourcePoint());}
-  p.object.rotation.y=p.state==='moving'?0:(p.station>=0?THREE.MathUtils.radToDeg(simViz.stationObjects[p.station]?.rotation?.y||0):0);
+  p.object.rotation.y=p.station>=0?(simViz.stationObjects[p.station]?.rotation?.y||0):0;
+  p.object.rotation.x=p.state==='processing'?Math.sin(simViz.time*5)*.04:0;
  }
  grouped.forEach((list,i)=>{
   list.sort((a,b)=>a.id-b.id);const center=stationCenter(i),side=stationSide(i),o=simViz.stationObjects[i];
@@ -754,7 +758,7 @@ function updateActors(dt){
   const d=a.userData.actor,delta=d.target.clone().sub(a.position),dist=delta.length();
   if(dist>.035){const move=Math.min(dist,Math.max(.0,dt)*2.1);a.position.add(delta.normalize().multiplyScalar(move));if(Math.abs(d.target.x-a.position.x)+Math.abs(d.target.z-a.position.z)>.05)a.rotation.y=Math.atan2(d.target.x-a.position.x,d.target.z-a.position.z);}
   const phase=simViz.time*4+i;
-  if(d.arms){const swing=dist>.04?Math.sin(phase)*.26:0;d.arms[0].rotation.z=-.22+swing;d.arms[1].rotation.z=.22-swing;d.legs[0].rotation.x=dist>.04?Math.sin(phase)*.3:0;d.legs[1].rotation.x=dist>.04?-Math.sin(phase)*.3:0;}
+  if(d.arms){const walking=dist>.04,working=d.busy&&d.station>=0,swing=walking?Math.sin(phase)*.26:working?Math.sin(phase*1.7)*.38:0;d.arms[0].rotation.z=-.22+swing;d.arms[1].rotation.z=.22-swing;d.legs[0].rotation.x=walking?Math.sin(phase)*.3:0;d.legs[1].rotation.x=walking?-Math.sin(phase)*.3:0;}
  });
 }
 function updateMachineActions(dt){
