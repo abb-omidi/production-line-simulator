@@ -8,7 +8,7 @@
 :root{color-scheme:dark;--bg:#101820;--panel:#182632;--line:#304451;--text:#eaf2f7;--muted:#9fb1bd;--accent:#54c7a3}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
 header{height:auto;min-height:64px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);background:#111d26}
-h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{margin:6px 0;color:var(--muted)}button,select,input{font:inherit;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px}button{cursor:pointer}button:hover{border-color:var(--accent)}button.active{background:#1d5b50;border-color:var(--accent)}.primary{background:#166b59;border-color:#2ba98a}.layout{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;height:calc(100vh - 65px);min-height:520px}.sidebar{padding:14px;border-right:1px solid var(--line);background:var(--panel);overflow:auto}.right{border-right:0;border-left:1px solid var(--line)}.group{padding:0 0 15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.object-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.linkbtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px;font:inherit}.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sim-grid .field{min-width:0}.sim-grid input,.sim-grid select{width:100%;min-width:0}.station-note{font-size:11px;color:var(--muted);margin:5px 0 8px}.object-btn{min-height:64px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px}.object-btn span:first-child{font-size:20px}.small{font-size:12px;color:var(--muted)}.viewport{position:relative;min-width:0;min-height:0;background:#d9e0e4}#scene{width:100%;height:100%;display:block;touch-action:none}.simbar{position:absolute;left:12px;right:12px;bottom:64px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#12202be8;border:1px solid #3a5361;border-radius:10px;padding:8px 10px;box-shadow:0 3px 12px #0002}.simbar button{padding:7px 10px;min-height:34px}.simbar label{display:flex;align-items:center;gap:5px;font-size:11px;color:#d7e4eb}.simbar input[type=range]{width:75px;padding:0;min-height:20px}.simbar #simScrub{width:clamp(80px,14vw,180px)}#simReadout{font-size:11px;color:#cfe7e0;flex:1;min-width:140px}.sim-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.sim-kpi div{padding:8px;border:1px solid #304451;border-radius:7px;background:#13222c}.sim-kpi b{display:block;font-size:16px;color:#eaf2f7}.sim-kpi span{font-size:10px;color:var(--muted)}.overlay{position:absolute;left:12px;top:12px;padding:9px 11px;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;max-width:min(520px,calc(100% - 24px));font-size:12px;color:#d7e4eb;pointer-events:none}.toolbar{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.toolbar button{box-shadow:0 2px 10px #0003}.bottom{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;padding:9px 11px}.bottom label{display:flex;align-items:center;gap:6px;font-size:12px}.bottom input{width:70px;padding:5px}.field{display:grid;gap:4px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}.field input{width:100%}.status{font-size:12px;color:var(--accent);min-height:18px}.selected-title{font-weight:650;overflow-wrap:anywhere}.empty{border:1px dashed #45606d;border-radius:9px;padding:12px;color:var(--muted);font-size:12px}.object-row{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer}.object-row.selected{border-color:var(--accent);background:#1c3c3d}.object-row .name{flex:1;min-width:0;overflow-wrap:anywhere}.flow-key{display:inline-flex;align-items:center;gap:5px;margin-right:8px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#f5aa42}.muted-btn{background:transparent}.danger{color:#ffb4aa;border-color:#8d4b4b}.note{font-size:11px;color:var(--muted);margin-top:8px}
+h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{margin:6px 0;color:var(--muted)}button,select,input{font:inherit;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px}button{cursor:pointer}button:hover{border-color:var(--accent)}button.active{background:#1d5b50;border-color:var(--accent)}.primary{background:#166b59;border-color:#2ba98a}.layout{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;height:calc(100vh - 65px);min-height:520px}.sidebar{padding:14px;border-right:1px solid var(--line);background:var(--panel);overflow:auto}.right{border-right:0;border-left:1px solid var(--line)}.group{padding:0 0 15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.object-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.linkbtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px;font:inherit}.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sim-grid .field{min-width:0}.sim-grid input,.sim-grid select{width:100%;min-width:0}.station-note{font-size:11px;color:var(--muted);margin:5px 0 8px}.object-btn{min-height:64px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px}.object-btn span:first-child{font-size:20px}.small{font-size:12px;color:var(--muted)}.viewport{position:relative;min-width:0;min-height:0;background:#d9e0e4}#scene{width:100%;height:100%;display:block;touch-action:none}.simbar{position:absolute;left:12px;right:12px;bottom:64px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#12202be8;border:1px solid #3a5361;border-radius:10px;padding:8px 10px;box-shadow:0 3px 12px #0002}.simbar button{padding:7px 10px;min-height:34px}.simbar label{display:flex;align-items:center;gap:5px;font-size:11px;color:#d7e4eb}.simbar input[type=range]{width:75px;padding:0;min-height:20px}.simbar #simScrub{width:clamp(80px,14vw,180px)}#simReadout{font-size:11px;color:#cfe7e0;flex:1;min-width:140px}.sim-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.sim-kpi div{padding:8px;border:1px solid #304451;border-radius:7px;background:#13222c}.sim-kpi b{display:block;font-size:16px;color:#eaf2f7}.sim-kpi span{font-size:10px;color:var(--muted)}.overlay{position:absolute;left:12px;top:12px;padding:9px 11px;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;max-width:min(520px,calc(100% - 24px));font-size:12px;color:#d7e4eb;pointer-events:none}.toolbar{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.toolbar button{box-shadow:0 2px 10px #0003}.move-toggle.active{background:#1d5b50;border-color:var(--accent)}.viewport.move-mode #scene{cursor:grab}.viewport.is-dragging #scene{cursor:grabbing}.bottom{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;padding:9px 11px}.bottom label{display:flex;align-items:center;gap:6px;font-size:12px}.bottom input{width:70px;padding:5px}.field{display:grid;gap:4px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}.field input{width:100%}.status{font-size:12px;color:var(--accent);min-height:18px}.selected-title{font-weight:650;overflow-wrap:anywhere}.empty{border:1px dashed #45606d;border-radius:9px;padding:12px;color:var(--muted);font-size:12px}.object-row{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer}.object-row.selected{border-color:var(--accent);background:#1c3c3d}.object-row .name{flex:1;min-width:0;overflow-wrap:anywhere}.flow-key{display:inline-flex;align-items:center;gap:5px;margin-right:8px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#f5aa42}.muted-btn{background:transparent}.danger{color:#ffb4aa;border-color:#8d4b4b}.note{font-size:11px;color:var(--muted);margin-top:8px}
 @media(max-width:900px){.layout{grid-template-columns:190px minmax(0,1fr);height:auto;min-height:calc(100vh - 65px)}.viewport{height:70vh;min-height:560px}.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.sidebar{padding:10px}.object-list{grid-template-columns:1fr 1fr}.simbar{bottom:72px;gap:5px;padding:6px}.simbar input[type=range]{width:58px}.simbar #simScrub{width:78px}#simReadout{min-width:110px}}
 @media(max-width:560px){header{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr;height:auto}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.object-list{grid-template-columns:repeat(3,1fr)}.object-btn{min-height:55px;padding:5px}.viewport{height:60vh;min-height:400px}.right{grid-column:auto}.toolbar{top:auto;bottom:64px}}
 
@@ -68,8 +68,8 @@ h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{mar
 </aside>
 <main class="viewport" id="viewport">
  <canvas id="scene"></canvas>
- <div class="overlay"><strong>Live 3D production line</strong><br>Run the model to watch individual products move, queue, process, finish or scrap. Operators and repair technicians walk to stations as resources are used.</div>
- <div class="toolbar"><button id="topView">Top view</button><button id="isoView">Isometric</button><button id="gridToggle" class="active">Grid on</button><button id="flowToggle">Demo flow off</button></div>
+ <div class="overlay" id="layoutHelp"><strong>Manual layout editing</strong><br>Click and drag any object to move it. You can also select it and change X / Z on the right. Use arrow keys for fine positioning.</div>
+ <div class="toolbar"><button id="moveMode" class="move-toggle active" aria-pressed="true">Move objects: ON</button><button id="topView">Top view</button><button id="isoView">Isometric</button><button id="gridToggle" class="active">Grid on</button><button id="flowToggle">Demo flow off</button></div>
  <div class="simbar"><button id="runSim" class="primary">▶ Run production</button><button id="playPause" disabled>Pause</button><button id="resetSim" disabled>↺ Restart</button><button id="editLayout" disabled>✎ Edit layout</button><label>Speed <input id="simSpeed" type="range" min="0.25" max="8" step="0.25" value="2"><span id="simSpeedText">2×</span></label><label>Shift <input id="simScrub" type="range" min="0" max="1000" step="1" value="0" disabled></label><span id="simReadout">Ready · configure stations, then run</span></div>
  <div class="bottom"><label><input id="snap" type="checkbox" checked> Snap to grid</label><label>Grid size <input id="gridSize" type="number" min="0.25" max="5" step="0.25" value="1"></label><span class="small" id="coords">Floor: 24 × 18 m</span></div>
 </main>
@@ -78,8 +78,8 @@ h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{mar
  <div id="selectionForm" hidden>
  <div class="selected-title" id="selectedName"></div>
  <div class="field"><label>Object name</label><input id="objName" maxlength="70"></div>
- <div class="field"><label>X position (m)</label><input id="objX" type="number" step=".25"></div>
- <div class="field"><label>Z position (m)</label><input id="objZ" type="number" step=".25"></div>
+ <div class="field"><label>X position (m) · changes apply on Enter or blur</label><input id="objX" type="number" step=".25"></div>
+ <div class="field"><label>Z position (m) · changes apply on Enter or blur</label><input id="objZ" type="number" step=".25"></div><p class="small">Tip: select an object, then use ← ↑ → ↓ to move it by one grid step.</p>
  <div class="field"><label>Rotation (degrees)</label><select id="objRot"><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div>
  <div class="field"><label>Width (m)</label><input id="objW" type="number" min=".5" max="10" step=".25"></div>
  <div class="field"><label>Depth (m)</label><input id="objD" type="number" min=".5" max="10" step=".25"></div>
@@ -422,7 +422,7 @@ function isProcessStation(o){return !!o&&['machine','inspection'].includes(o.use
 function defaultStationSim(kind){const inspection=kind==='inspection';return {dist:'Normal',p:{mean:inspection?6:10,sd:inspection?1:2,shape:4,scale:2,lambda:8,min:7,mode:9,max:13},mttf:180,mttr:20,buffer:5,scrap:0,needOperators:1,needTools:0,needTechnicians:0};}
 function normalizeStationSim(raw,kind){const d=defaultStationSim(kind),r=raw&&typeof raw==='object'?raw:{};const p=r.p&&typeof r.p==='object'?r.p:{};return {dist:Object.prototype.hasOwnProperty.call(stationDistributions,r.dist)?r.dist:d.dist,p:{...d.p,...p},mttf:Number.isFinite(Number(r.mttf))?Math.max(.01,Number(r.mttf)):d.mttf,mttr:Number.isFinite(Number(r.mttr))?Math.max(0,Number(r.mttr)):d.mttr,buffer:Number.isFinite(Number(r.buffer))?Math.max(0,Math.round(Number(r.buffer))):d.buffer,scrap:Number.isFinite(Number(r.scrap))?Math.max(0,Math.min(100,Number(r.scrap))):d.scrap,needOperators:Number.isFinite(Number(r.needOperators))?Math.max(0,Math.round(Number(r.needOperators))):d.needOperators,needTools:Number.isFinite(Number(r.needTools))?Math.max(0,Math.round(Number(r.needTools))):d.needTools,needTechnicians:Number.isFinite(Number(r.needTechnicians))?Math.max(0,Math.round(Number(r.needTechnicians))):d.needTechnicians};}
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(new THREE.Vector3(0,1,0),0),hitPoint=new THREE.Vector3();
-const objects=[],flowDots=[];let selected=null,placeKind=null,dragging=null,dragOffset=new THREE.Vector3(),gridVisible=true,flowVisible=false,flowRunning=false,lastTime=0,flowPhase=0,objectCounter=0;
+const objects=[],flowDots=[];let selected=null,placeKind=null,dragging=null,dragPointerId=null,moveModeEnabled=true,dragOffset=new THREE.Vector3(),gridVisible=true,flowVisible=false,flowRunning=false,lastTime=0,flowPhase=0,objectCounter=0;
 function material(color,roughness=.7){return new THREE.MeshStandardMaterial({color,roughness});}
 function makeMesh(geo,mat,x,y,z,parent){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
 function addLabel(text,parent,y){const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=512;c.height=128;ctx.fillStyle='#14242d';ctx.fillRect(0,0,512,128);ctx.fillStyle='#f4fafc';ctx.font='bold 42px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,64);const tex=new THREE.CanvasTexture(c);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));sp.scale.set(2.5,.62,1);sp.position.set(0,y,0);parent.add(sp);return sp;}
@@ -489,25 +489,101 @@ function deleteSelected(){if(!selected)return;scene.remove(selected);objects.spl
 function duplicateSelected(){if(!selected)return;const o=selected;addObject(o.userData.kind,o.position.x+1,o.position.z+1,{name:o.userData.label+' copy',w:o.userData.w,d:o.userData.d,rotation:THREE.MathUtils.radToDeg(o.rotation.y),flowOrder:objects.length});createFlowDots();}
 function intersectFloor(ev){const r=canvas.getBoundingClientRect();pointer.x=((ev.clientX-r.left)/r.width)*2-1;pointer.y=-((ev.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);return raycaster.ray.intersectPlane(plane,hitPoint)?hitPoint.clone():null;}
 function findObject(ev){const r=canvas.getBoundingClientRect();pointer.x=((ev.clientX-r.left)/r.width)*2-1;pointer.y=-((ev.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(objects,true);for(const h of hits){let o=h.object;while(o&&!o.userData.isFactoryObject)o=o.parent;if(o)return o;}return null;}
+function syncMoveMode(){
+ $('moveMode').textContent='Move objects: '+(moveModeEnabled?'ON':'OFF');
+ $('moveMode').classList.toggle('active',moveModeEnabled);
+ $('moveMode').setAttribute('aria-pressed',String(moveModeEnabled));
+ viewport.classList.toggle('move-mode',moveModeEnabled);
+ $('layoutHelp').innerHTML=moveModeEnabled
+  ?'<strong>Manual layout editing</strong><br>Click and drag any object to move it. Or select one and edit X / Z on the right. Arrow keys nudge it by one grid step.'
+  :'<strong>Selection / camera mode</strong><br>Click to select objects and drag empty space to orbit. Turn Move objects ON to reposition equipment.';
+}
 function setPlaceKind(kind){if(simViz.active)return;placeKind=kind;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));$('coords').textContent='Placement mode: '+kinds[kind].label+' · click the floor';}
 document.querySelectorAll('[data-kind]').forEach(b=>{b.addEventListener('click',()=>setPlaceKind(b.dataset.kind));b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/factory-kind',b.dataset.kind);e.dataTransfer.effectAllowed='copy';});});
 canvas.addEventListener('dragover',e=>{e.preventDefault();});
 canvas.addEventListener('drop',e=>{e.preventDefault();if(simViz.active)return;const kind=e.dataTransfer.getData('text/factory-kind');const p=intersectFloor(e);if(kinds[kind]&&p){addObject(kind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}});
-canvas.addEventListener('pointerdown',e=>{if(e.button!==0||simViz.active)return;const obj=findObject(e);if(obj){select(obj);dragging=obj;const p=intersectFloor(e);if(p)dragOffset.copy(obj.position).sub(p);controls.enabled=false;canvas.setPointerCapture(e.pointerId);return;}const p=intersectFloor(e);if(p&&placeKind){addObject(placeKind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}else if(p){select(null);}});
-canvas.addEventListener('pointermove',e=>{if(!dragging)return;const p=intersectFloor(e);if(p){positionObject(dragging,p.x+dragOffset.x,p.z+dragOffset.z);$('objX').value=dragging.position.x.toFixed(2);$('objZ').value=dragging.position.z.toFixed(2);createFlowDots();}});
-canvas.addEventListener('pointerup',e=>{dragging=null;controls.enabled=true;try{canvas.releasePointerCapture(e.pointerId);}catch{}});
-window.addEventListener('keydown',e=>{if(simViz.active)return;if(e.key.toLowerCase()==='r'&&selected){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}if((e.key==='Delete'||e.key==='Backspace')&&selected&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)){deleteSelected();createFlowDots();}if(e.key==='Escape'){placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}});
-$('applyObject').onclick=()=>{if(simViz.active)return;applySelected();renderSummary();};
-$('rotateObject').onclick=()=>{if(simViz.active)return;if(selected){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}};
-$('duplicateObject').onclick=()=>{if(!simViz.active)duplicateSelected();};
-$('deleteObject').onclick=()=>{if(simViz.active)return;deleteSelected();createFlowDots();};
-$('gridToggle').onclick=()=>{gridVisible=!gridVisible;grid.visible=gridVisible;$('gridToggle').textContent=gridVisible?'Grid on':'Grid off';$('gridToggle').classList.toggle('active',gridVisible);};
-$('flowToggle').onclick=()=>{flowVisible=!flowVisible;flowDots.forEach(d=>d.visible=flowVisible);$('flowToggle').textContent=flowVisible?'Flow on':'Flow off';$('flowToggle').classList.toggle('active',flowVisible);};
-$('toggleFlow').onclick=()=>{flowRunning=!flowRunning;$('toggleFlow').textContent=flowRunning?'Pause material flow':'Resume material flow';};
-$('flowSpeed').oninput=e=>{flowSpeed=Number(e.target.value);};
-let flowSpeed=1;
-$('topView').onclick=()=>{camera.position.set(0,32,.01);controls.target.set(0,0,0);controls.update();};
-$('isoView').onclick=()=>{camera.position.set(22,23,25);controls.target.set(0,0,0);controls.update();};
+function finishManualDrag(e){
+ if(!dragging)return;
+ if(e&&dragPointerId!==null&&e.pointerId!==undefined&&e.pointerId!==dragPointerId)return;
+ const pointerId=dragPointerId;dragging=null;dragPointerId=null;controls.enabled=true;viewport.classList.remove('is-dragging');
+ if(selected){$('objX').value=selected.position.x.toFixed(2);$('objZ').value=selected.position.z.toFixed(2);renderObjectList();createFlowDots();}
+ if(e&&e.type!=='lostpointercapture'){try{if(pointerId!==null&&canvas.hasPointerCapture(pointerId))canvas.releasePointerCapture(pointerId);}catch{}}
+ if(e&&e.cancelable)e.preventDefault();
+ if(e)e.stopImmediatePropagation();
+}
+canvas.addEventListener('pointerdown',e=>{
+ if(e.button!==0||simViz.active)return;
+ const obj=findObject(e);
+ if(obj){
+  select(obj);
+  if(!moveModeEnabled)return;
+  const p=intersectFloor(e);if(!p)return;
+  dragging=obj;dragPointerId=e.pointerId;dragOffset.copy(obj.position).sub(p);
+  controls.enabled=false;viewport.classList.add('is-dragging');
+  try{canvas.setPointerCapture(e.pointerId);}catch{}
+  e.preventDefault();e.stopImmediatePropagation();
+  $('coords').textContent='Moving '+obj.userData.label+' · release to finish';
+  return;
+ }
+ const p=intersectFloor(e);
+ if(p&&placeKind){addObject(placeKind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}
+ else if(p){select(null);}
+},true);
+canvas.addEventListener('pointermove',e=>{
+ if(!dragging||e.pointerId!==dragPointerId)return;
+ const p=intersectFloor(e);
+ if(p){
+  positionObject(dragging,p.x+dragOffset.x,p.z+dragOffset.z);
+  $('objX').value=dragging.position.x.toFixed(2);$('objZ').value=dragging.position.z.toFixed(2);
+  $('coords').textContent='Moving '+dragging.userData.label+' · X '+dragging.position.x.toFixed(2)+' / Z '+dragging.position.z.toFixed(2);
+  createFlowDots();
+ }
+ if(e.cancelable)e.preventDefault();
+ e.stopImmediatePropagation();
+},true);
+canvas.addEventListener('pointerup',finishManualDrag,true);
+canvas.addEventListener('pointercancel',finishManualDrag,true);
+canvas.addEventListener('lostpointercapture',finishManualDrag,true);
+window.addEventListener('pointerup',finishManualDrag,true);
+function nudgeSelected(dx,dz){
+ if(!selected||simViz.active)return;
+ const step=$('snap').checked?Math.max(.25,Number($('gridSize').value)||1):.25;
+ positionObject(selected,selected.position.x+dx*step,selected.position.z+dz*step);
+ $('objX').value=selected.position.x.toFixed(2);$('objZ').value=selected.position.z.toFixed(2);
+ $('coords').textContent='Moved '+selected.userData.label+' · X '+selected.position.x.toFixed(2)+' / Z '+selected.position.z.toFixed(2);
+ renderObjectList();createFlowDots();
+}
+function applyCoordinateInputs(){
+ if(!selected||simViz.active)return;
+ const x=Number($('objX').value),z=Number($('objZ').value);
+ if(Number.isFinite(x)&&Number.isFinite(z)){
+  positionObject(selected,x,z);$('objX').value=selected.position.x.toFixed(2);$('objZ').value=selected.position.z.toFixed(2);
+  $('coords').textContent='Position updated · X '+selected.position.x.toFixed(2)+' / Z '+selected.position.z.toFixed(2);
+  renderObjectList();createFlowDots();
+ }
+}
+$('objX').addEventListener('change',applyCoordinateInputs);
+$('objZ').addEventListener('change',applyCoordinateInputs);
+$('objX').addEventListener('keydown',e=>{if(e.key==='Enter'){applyCoordinateInputs();$('objX').blur();}});
+$('objZ').addEventListener('keydown',e=>{if(e.key==='Enter'){applyCoordinateInputs();$('objZ').blur();}});
+$('moveMode').onclick=()=>{
+ if(simViz.active){$('coords').textContent='Click Edit layout to stop playback before moving objects.';return;}
+ moveModeEnabled=!moveModeEnabled;syncMoveMode();
+};
+window.addEventListener('keydown',e=>{
+ if(simViz.active)return;
+ if(e.key.toLowerCase()==='r'&&selected&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}
+ const inputFocused=['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName);
+ if(!inputFocused&&selected&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
+  e.preventDefault();
+  if(e.key==='ArrowLeft')nudgeSelected(-1,0);
+  else if(e.key==='ArrowRight')nudgeSelected(1,0);
+  else if(e.key==='ArrowUp')nudgeSelected(0,-1);
+  else if(e.key==='ArrowDown')nudgeSelected(0,1);
+ }
+ if((e.key==='Delete'||e.key==='Backspace')&&selected&&!inputFocused){deleteSelected();createFlowDots();}
+ if(e.key==='Escape'){placeKind=null;dragging=null;dragPointerId=null;controls.enabled=true;viewport.classList.remove('is-dragging');document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}
+});
 function exportLayout(){return {schemaVersion:2,project:'Production Line Simulator 3D Layout',floor:{width:24,depth:18},objects:objects.map(o=>{const item={id:o.userData.id,kind:o.userData.kind,name:o.userData.label,x:Number(o.position.x.toFixed(3)),z:Number(o.position.z.toFixed(3)),rotation:Math.round(THREE.MathUtils.radToDeg(o.rotation.y))%360,w:o.userData.w,d:o.userData.d,h:o.userData.h,flowOrder:o.userData.flowOrder};if(isProcessStation(o)){item.processOrder=safeInt(o.userData.processOrder,1);item.sim=JSON.parse(JSON.stringify(o.userData.sim||normalizeStationSim({},o.userData.kind)));}return item;}),note:'Layout geometry and station process settings. Animation in the 3D editor is illustrative; use the compatible simulator model export for discrete-event results.'};}
 function exportSimulationModel(){const stations=objects.filter(isProcessStation).slice().sort((a,b)=>safeInt(a.userData.processOrder,1)-safeInt(b.userData.processOrder,1)||String(a.userData.id).localeCompare(String(b.userData.id)));if(!stations.length){$('exportStatus').textContent='Add at least one Machine or Inspection object before exporting.';alert('Add at least one Machine or Inspection object before exporting a simulator model.');return;}const orderKeys=stations.map(o=>safeInt(o.userData.processOrder,1));if(new Set(orderKeys).size!==orderKeys.length){$('exportStatus').textContent='Process sequence numbers must be unique.';alert('Each process station must have a unique process sequence number. Edit the sequence values and try again.');return;}const machines=stations.map((o,i)=>{const s=normalizeStationSim(o.userData.sim,o.userData.kind),fields=stationDistributions[s.dist],p={};fields.forEach(f=>{const raw=Number(s.p[f[0]]);p[f[0]]=Number.isFinite(raw)?Math.max(.000001,raw):f[2];});if(s.dist==='Normal')p.sd=Math.max(.000001,p.sd);if(s.dist==='Triangular'){p.min=Math.max(.000001,p.min);p.max=Math.max(p.min+.000001,p.max);p.mode=Math.max(p.min,Math.min(p.max,p.mode));}return {id:'M'+(i+1),name:String(o.userData.label||('Station '+(i+1))).slice(0,100),dist:s.dist,p,mttf:s.mttf,mttr:s.mttr,buffer:s.buffer,scrap:Math.max(0,Math.min(100,s.scrap)),needOperators:s.needOperators,needTools:s.needTools,needTechnicians:s.needTechnicians};});const dist=$('modelArrivalDist').value;const variability=Math.max(0,Math.min(dist==='Normal'?40:90,Number($('modelArrivalVariability').value)||0));const model={timeUnitsVersion:2,arrivalRate:Math.max(.000001,Number($('modelArrivalRate').value)||.125),arrivalDist:['Normal','Exponential','Uniform'].includes(dist)?dist:'Exponential',arrivalVariabilityPct:variability,shiftMinutes:Math.max(.01,Number($('modelShift').value)||480),transferMinutes:Math.max(0,Number($('modelTransfer').value)||0),reps:Math.max(1,Math.min(5000,Math.round(Number($('modelReps').value)||100))),seed:0,useFailures:$('modelUseFailures').checked,resources:{operators:Math.max(0,Math.round(Number($('modelOperators').value)||0)),tools:Math.max(0,Math.round(Number($('modelTools').value)||0)),technicians:Math.max(0,Math.round(Number($('modelTechnicians').value)||0))},machines,visualLayout:exportLayout()};const blob=new Blob([JSON.stringify(model,null,2)+'\n'],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='production-line-model-from-3d.json';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);$('exportStatus').textContent='Exported '+machines.length+' stations to production-line-model-from-3d.json. Open the original simulator and choose Load file.';}
 $('exportModel').onclick=exportSimulationModel;
@@ -932,7 +1008,7 @@ $('playPause').onclick=()=>{
 };
 $('resetSim').onclick=()=>{if(!simViz.active)return;simViz.playing=false;resetReplay(0,true);setSimUiState();};
 $('editLayout').onclick=()=>{
- simViz.playing=false;simViz.active=false;
+ simViz.playing=false;simViz.active=false;moveModeEnabled=true;syncMoveMode();
  clearGroup(simViz.productGroup);clearGroup(simViz.actorGroup);clearStationVisuals();
  simViz.parts.clear();simViz.events=[];simViz.result=null;simViz.stationObjects=[];simViz.stationStates=[];simViz.machineBusyMinutes=[];simViz.resourceBusyMinutes={operators:[],technicians:[],tools:[]};simViz.resourceBusy={operators:[],technicians:[],tools:[]};
  restorePlacedOperators();setSimUiState();simNumbers();render3DUtilizationCards();
@@ -984,7 +1060,7 @@ function animate(t){
  updateActors(dt);updateMachineActions(dt);
  renderer.render(scene,camera);
 }
-setSimUiState();simNumbers();resize();animate(0);
+syncMoveMode();setSimUiState();simNumbers();resize();animate(0);
 </script>
 </body>
 </html>
