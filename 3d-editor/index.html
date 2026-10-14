@@ -34,9 +34,9 @@ h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{mar
 <main class="viewport" id="viewport">
  <canvas id="scene"></canvas>
  <div class="overlay"><strong>Live 3D production line</strong><br>Run the model to watch individual products move, queue, process, finish or scrap. Operators and repair technicians walk to stations as resources are used.</div>
- <div class="toolbar"><button id="topView">Top view</button><button id="isoView">Isometric</button><button id="gridToggle" class="active">Grid on</button><button id="flowToggle" class="active">Demo flow on</button></div>
- <div class="simbar"><button id="runSim" class="primary">▶ Run production</button><button id="playPause" disabled>Pause</button><button id="resetSim" disabled>↺ Restart</button><label>Speed <input id="simSpeed" type="range" min="0.25" max="8" step="0.25" value="2"><span id="simSpeedText">2×</span></label><label>Shift <input id="simScrub" type="range" min="0" max="1000" step="1" value="0" disabled></label><span id="simReadout">Ready · configure stations, then run</span></div>
- <div class="bottom><label><input id="snap" type="checkbox" checked> Snap to grid</label><label>Grid size <input id="gridSize" type="number" min="0.25" max="5" step="0.25" value="1"></label><span class="small" id="coords">Floor: 24 × 18 m</span></div>
+ <div class="toolbar"><button id="topView">Top view</button><button id="isoView">Isometric</button><button id="gridToggle" class="active">Grid on</button><button id="flowToggle">Demo flow off</button></div>
+ <div class="simbar"><button id="runSim" class="primary">▶ Run production</button><button id="playPause" disabled>Pause</button><button id="resetSim" disabled>↺ Restart</button><button id="editLayout" disabled>✎ Edit layout</button><label>Speed <input id="simSpeed" type="range" min="0.25" max="8" step="0.25" value="2"><span id="simSpeedText">2×</span></label><label>Shift <input id="simScrub" type="range" min="0" max="1000" step="1" value="0" disabled></label><span id="simReadout">Ready · configure stations, then run</span></div>
+ <div class="bottom"><label><input id="snap" type="checkbox" checked> Snap to grid</label><label>Grid size <input id="gridSize" type="number" min="0.25" max="5" step="0.25" value="1"></label><span class="small" id="coords">Floor: 24 × 18 m</span></div>
 </main>
 <aside class="sidebar right">
  <section class="group"><h2>Selected object</h2><div id="selectionEmpty" class="empty">Select an object on the floor or in the object list to edit it.</div>
@@ -367,7 +367,7 @@ function isProcessStation(o){return !!o&&['machine','inspection'].includes(o.use
 function defaultStationSim(kind){const inspection=kind==='inspection';return {dist:'Normal',p:{mean:inspection?6:10,sd:inspection?1:2,shape:4,scale:2,lambda:8,min:7,mode:9,max:13},mttf:180,mttr:20,buffer:5,scrap:0,needOperators:1,needTools:0,needTechnicians:0};}
 function normalizeStationSim(raw,kind){const d=defaultStationSim(kind),r=raw&&typeof raw==='object'?raw:{};const p=r.p&&typeof r.p==='object'?r.p:{};return {dist:Object.prototype.hasOwnProperty.call(stationDistributions,r.dist)?r.dist:d.dist,p:{...d.p,...p},mttf:Number.isFinite(Number(r.mttf))?Math.max(.01,Number(r.mttf)):d.mttf,mttr:Number.isFinite(Number(r.mttr))?Math.max(0,Number(r.mttr)):d.mttr,buffer:Number.isFinite(Number(r.buffer))?Math.max(0,Math.round(Number(r.buffer))):d.buffer,scrap:Number.isFinite(Number(r.scrap))?Math.max(0,Math.min(100,Number(r.scrap))):d.scrap,needOperators:Number.isFinite(Number(r.needOperators))?Math.max(0,Math.round(Number(r.needOperators))):d.needOperators,needTools:Number.isFinite(Number(r.needTools))?Math.max(0,Math.round(Number(r.needTools))):d.needTools,needTechnicians:Number.isFinite(Number(r.needTechnicians))?Math.max(0,Math.round(Number(r.needTechnicians))):d.needTechnicians};}
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(new THREE.Vector3(0,1,0),0),hitPoint=new THREE.Vector3();
-const objects=[],flowDots=[];let selected=null,placeKind=null,dragging=null,dragOffset=new THREE.Vector3(),gridVisible=true,flowVisible=true,flowRunning=true,lastTime=0,flowPhase=0,objectCounter=0;
+const objects=[],flowDots=[];let selected=null,placeKind=null,dragging=null,dragOffset=new THREE.Vector3(),gridVisible=true,flowVisible=false,flowRunning=false,lastTime=0,flowPhase=0,objectCounter=0;
 function material(color,roughness=.7){return new THREE.MeshStandardMaterial({color,roughness});}
 function makeMesh(geo,mat,x,y,z,parent){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
 function addLabel(text,parent,y){const c=document.createElement('canvas'),ctx=c.getContext('2d');c.width=512;c.height=128;ctx.fillStyle='#14242d';ctx.fillRect(0,0,512,128);ctx.fillStyle='#f4fafc';ctx.font='bold 42px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,64);const tex=new THREE.CanvasTexture(c);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));sp.scale.set(2.5,.62,1);sp.position.set(0,y,0);parent.add(sp);return sp;}
@@ -421,7 +421,7 @@ function addObject(kind,x=0,z=0,data=null){
 }
 function clearObjects(){for(const o of objects)scene.remove(o);objects.length=0;selected=null;objectCounter=0;renderObjectList();renderSelection();renderSummary();clearFlowDots();}
 function clearFlowDots(){for(const d of flowDots)scene.remove(d);flowDots.length=0;}
-function createFlowDots(){clearFlowDots();const route=objects.filter(o=>o.userData.kind==='machine'||o.userData.kind==='conveyor').sort((a,b)=>a.userData.flowOrder-b.userData.flowOrder);if(route.length<2)return;const points=[];for(const o of route)points.push(new THREE.Vector3(o.position.x,.28,o.position.z));const curve=new THREE.CatmullRomCurve3(points);for(let i=0;i<14;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),new THREE.MeshStandardMaterial({color:0xf2a23a,emissive:0x5a2b00}));dot.userData.offset=i/14;dot.userData.curve=curve;scene.add(dot);flowDots.push(dot);} }
+function createFlowDots(){clearFlowDots();const route=objects.filter(o=>o.userData.kind==='machine'||o.userData.kind==='conveyor').sort((a,b)=>a.userData.flowOrder-b.userData.flowOrder);if(route.length<2)return;const points=[];for(const o of route)points.push(new THREE.Vector3(o.position.x,.28,o.position.z));const curve=new THREE.CatmullRomCurve3(points);for(let i=0;i<14;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),new THREE.MeshStandardMaterial({color:0xf2a23a,emissive:0x5a2b00}));dot.visible=flowVisible;dot.userData.offset=i/14;dot.userData.curve=curve;scene.add(dot);flowDots.push(dot);} }
 function renderObjectList(){const el=$('objectList');if(!objects.length){el.innerHTML='No objects yet. Add an item from the library.';return;}el.innerHTML='';for(const o of objects){const row=document.createElement('div');row.className='object-row'+(o===selected?' selected':'');row.innerHTML='<span>'+({machine:'🏭',conveyor:'↔️',table:'🟫',rack:'🗄️',operator:'🧍',inspection:'🔎'}[o.userData.kind]||'◼')+'</span><span class="name">'+escapeHtml(o.userData.label)+'</span><button aria-label="Select object">Select</button>';row.onclick=()=>select(o);el.appendChild(row);}}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function renderSummary(){$('summary').textContent=objects.length+' objects · '+objects.filter(isProcessStation).length+' process stations · '+objects.filter(o=>o.userData.kind==='conveyor').length+' conveyors';}
@@ -434,11 +434,11 @@ function deleteSelected(){if(!selected)return;scene.remove(selected);objects.spl
 function duplicateSelected(){if(!selected)return;const o=selected;addObject(o.userData.kind,o.position.x+1,o.position.z+1,{name:o.userData.label+' copy',w:o.userData.w,d:o.userData.d,rotation:THREE.MathUtils.radToDeg(o.rotation.y),flowOrder:objects.length});createFlowDots();}
 function intersectFloor(ev){const r=canvas.getBoundingClientRect();pointer.x=((ev.clientX-r.left)/r.width)*2-1;pointer.y=-((ev.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);return raycaster.ray.intersectPlane(plane,hitPoint)?hitPoint.clone():null;}
 function findObject(ev){const r=canvas.getBoundingClientRect();pointer.x=((ev.clientX-r.left)/r.width)*2-1;pointer.y=-((ev.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(objects,true);for(const h of hits){let o=h.object;while(o&&!o.userData.isFactoryObject)o=o.parent;if(o)return o;}return null;}
-function setPlaceKind(kind){placeKind=kind;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));$('coords').textContent='Placement mode: '+kinds[kind].label+' · click the floor';}
+function setPlaceKind(kind){if(simViz.active)return;placeKind=kind;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b.dataset.kind===kind));$('coords').textContent='Placement mode: '+kinds[kind].label+' · click the floor';}
 document.querySelectorAll('[data-kind]').forEach(b=>{b.addEventListener('click',()=>setPlaceKind(b.dataset.kind));b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/factory-kind',b.dataset.kind);e.dataTransfer.effectAllowed='copy';});});
 canvas.addEventListener('dragover',e=>{e.preventDefault();});
-canvas.addEventListener('drop',e=>{e.preventDefault();const kind=e.dataTransfer.getData('text/factory-kind');const p=intersectFloor(e);if(kinds[kind]&&p){addObject(kind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}});
-canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;const obj=findObject(e);if(obj){select(obj);dragging=obj;const p=intersectFloor(e);if(p)dragOffset.copy(obj.position).sub(p);controls.enabled=false;canvas.setPointerCapture(e.pointerId);return;}const p=intersectFloor(e);if(p&&placeKind){addObject(placeKind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}else if(p){select(null);}});
+canvas.addEventListener('drop',e=>{e.preventDefault();if(simViz.active)return;const kind=e.dataTransfer.getData('text/factory-kind');const p=intersectFloor(e);if(kinds[kind]&&p){addObject(kind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}});
+canvas.addEventListener('pointerdown',e=>{if(e.button!==0||simViz.active)return;const obj=findObject(e);if(obj){select(obj);dragging=obj;const p=intersectFloor(e);if(p)dragOffset.copy(obj.position).sub(p);controls.enabled=false;canvas.setPointerCapture(e.pointerId);return;}const p=intersectFloor(e);if(p&&placeKind){addObject(placeKind,p.x,p.z);createFlowDots();placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}else if(p){select(null);}});
 canvas.addEventListener('pointermove',e=>{if(!dragging)return;const p=intersectFloor(e);if(p){positionObject(dragging,p.x+dragOffset.x,p.z+dragOffset.z);$('objX').value=dragging.position.x.toFixed(2);$('objZ').value=dragging.position.z.toFixed(2);createFlowDots();}});
 canvas.addEventListener('pointerup',e=>{dragging=null;controls.enabled=true;try{canvas.releasePointerCapture(e.pointerId);}catch{}});
 window.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='r'&&selected){selected.rotation.y+=Math.PI/2;renderSelection();createFlowDots();}if((e.key==='Delete'||e.key==='Backspace')&&selected&&!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)){deleteSelected();createFlowDots();}if(e.key==='Escape'){placeKind=null;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.remove('active'));$('coords').textContent='Floor: 24 × 18 m';}});
@@ -459,11 +459,397 @@ $('exportModel').onclick=exportSimulationModel;
 $('saveLayout').onclick=()=>{const blob=new Blob([JSON.stringify(exportLayout(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='factory-layout.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);};
 $('loadLayout').onclick=()=>$('loadFile').click();
 $('loadFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const outer=JSON.parse(await file.text());const data=outer.visualLayout&&Array.isArray(outer.visualLayout.objects)?outer.visualLayout:outer;if(!Array.isArray(data.objects))throw new Error('JSON must contain an objects array or a visualLayout.objects array');if(outer.arrivalRate!==undefined)$('modelArrivalRate').value=outer.arrivalRate;if(outer.arrivalDist)$('modelArrivalDist').value=outer.arrivalDist;if(outer.arrivalVariabilityPct!==undefined)$('modelArrivalVariability').value=outer.arrivalVariabilityPct;if(outer.shiftMinutes!==undefined)$('modelShift').value=outer.shiftMinutes;if(outer.transferMinutes!==undefined)$('modelTransfer').value=outer.transferMinutes;if(outer.reps!==undefined)$('modelReps').value=outer.reps;if(outer.useFailures!==undefined)$('modelUseFailures').checked=!!outer.useFailures;if(outer.resources){$('modelOperators').value=outer.resources.operators??2;$('modelTools').value=outer.resources.tools??2;$('modelTechnicians').value=outer.resources.technicians??1;}clearObjects();for(const o of data.objects){if(kinds[o.kind])addObject(o.kind,o.x,o.z,o);}createFlowDots();$('coords').textContent='Imported '+objects.length+' objects';$('exportStatus').textContent='Layout imported. Review station settings before exporting a simulator model.';}catch(err){alert('Could not import layout: '+err.message);}e.target.value='';};
+
 function resize(){const r=viewport.getBoundingClientRect();if(r.width<1||r.height<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-new ResizeObserver(resize).observe(viewport);resize();
-addObject('machine',-7,-3,{name:'Molding machine 1'});addObject('conveyor',-3,-3,{name:'Transfer conveyor'});addObject('machine',1,-3,{name:'Assembly station'});addObject('inspection',5,-3,{name:'Inspection'});addObject('rack',8,3,{name:'Finished goods rack'});addObject('operator',-5,1,{name:'Operator 1'});addObject('table',0,2,{name:'Worktable'});createFlowDots();select(null);
-function animate(t){requestAnimationFrame(animate);const dt=Math.min(.05,(t-lastTime)/1000||0);lastTime=t;controls.update();if(flowRunning&&flowVisible){flowPhase=(flowPhase+dt*.09*flowSpeed)%1;for(const d of flowDots){const u=(d.userData.offset+flowPhase)%1;d.position.copy(d.userData.curve.getPointAt(u));}}renderer.render(scene,camera);}
-animate(0);
+new ResizeObserver(resize).observe(viewport);
+const simViz={
+ active:false,playing:false,time:0,result:null,events:[],cursor:0,good:0,scrap:0,
+ parts:new Map(),stationObjects:[],stationStates:[],stationVisuals:[],
+ actors:{operators:[],technicians:[],tools:[]},resourceBusy:{operators:[],technicians:[],tools:[]},
+ productGroup:new THREE.Group(),actorGroup:new THREE.Group(),lastUiSecond:-1
+};
+scene.add(simViz.productGroup,simViz.actorGroup);
+function simMessage(s){$('simReadout').textContent=s;}
+function formatMin(v){const x=Math.max(0,Number(v)||0);return x>=60?(Math.floor(x/60)+' h '+(x%60).toFixed(0)+' m'):x.toFixed(1)+' min';}
+function simNumbers(){
+ $('simSpeedText').textContent=Number($('simSpeed').value||2).toFixed(2).replace(/\.00$/,'')+'×';
+ if(!simViz.active){$('simReadout').textContent='Ready · arrange the line, then run';return;}
+ const H=M.shiftMinutes,percent=H>0?100*simViz.time/H:100;
+ $('simReadout').textContent=formatMin(simViz.time)+' / '+formatMin(H)+' · '+percent.toFixed(1)+'%';
+ $('kpiGood').textContent=String(simViz.good);
+ $('kpiScrap').textContent=String(simViz.scrap);
+ $('kpiWip').textContent=String(simViz.parts.size);
+ $('kpiThroughput').textContent=(simViz.time>1e-9?simViz.good/simViz.time:0).toFixed(3);
+ $('liveDetail').textContent=simViz.stationStates.map((st,i)=>simViz.stationObjects[i].userData.label+': '+st.mode+(st.queueCount?' · queue '+st.queueCount:'')).join('  |  ');
+ $('simScrub').value=String(Math.round(1000*simViz.time/Math.max(.01,H)));
+}
+function setSimUiState(){
+ $('playPause').disabled=!simViz.active;
+ $('resetSim').disabled=!simViz.active;
+ $('editLayout').disabled=!simViz.active;
+ $('simScrub').disabled=!simViz.active;
+ $('playPause').textContent=simViz.playing?'⏸ Pause':'▶ Resume';
+ $('runSim').textContent=simViz.active?'↻ Run again':'▶ Run production';
+ document.querySelector('.layout').classList.toggle('simulating',simViz.active);
+}
+function buildSimulationModel(){
+ const stations=objects.filter(isProcessStation).slice().sort((a,b)=>safeInt(a.userData.processOrder,1)-safeInt(b.userData.processOrder,1)||String(a.userData.id).localeCompare(String(b.userData.id)));
+ if(!stations.length)throw new Error('Add at least one Machine or Inspection station first.');
+ const orders=stations.map(o=>safeInt(o.userData.processOrder,1));
+ if(new Set(orders).size!==orders.length)throw new Error('Each process station must have a unique process sequence number.');
+ const dist=$('modelArrivalDist').value;
+ const variability=Math.max(0,Math.min(dist==='Normal'?40:90,Number($('modelArrivalVariability').value)||0));
+ const resources={operators:Math.max(0,Math.min(1000,Math.round(Number($('modelOperators').value)||0))),tools:Math.max(0,Math.min(1000,Math.round(Number($('modelTools').value)||0))),technicians:Math.max(0,Math.min(1000,Math.round(Number($('modelTechnicians').value)||0)))};
+ const machines=stations.map((o,i)=>{
+   const s=normalizeStationSim(o.userData.sim,o.userData.kind),params={};
+   stationDistributions[s.dist].forEach(f=>{const raw=Number(s.p[f[0]]);params[f[0]]=Number.isFinite(raw)?Math.max(.000001,raw):f[2];});
+   if(s.dist==='Normal')params.sd=Math.max(.000001,params.sd);
+   if(s.dist==='Triangular'){params.min=Math.max(.000001,params.min);params.max=Math.max(params.min+.000001,params.max);params.mode=Math.max(params.min,Math.min(params.max,params.mode));}
+   return {id:'M'+(i+1),name:String(o.userData.label||('Station '+(i+1))).slice(0,100),dist:s.dist,p:params,mttf:s.mttf,mttr:s.mttr,buffer:s.buffer,scrap:s.scrap,needOperators:s.needOperators,needTools:s.needTools,needTechnicians:s.needTechnicians};
+ });
+ return {timeUnitsVersion:2,arrivalRate:Math.max(.000001,Number($('modelArrivalRate').value)||.125),arrivalDist:dist,arrivalVariabilityPct:variability,shiftMinutes:Math.max(.01,Number($('modelShift').value)||480),transferMinutes:Math.max(0,Number($('modelTransfer').value)||0),reps:Math.max(1,Math.min(5000,Math.round(Number($('modelReps').value)||100))),seed:Math.floor(Date.now()%2147483646)+1,useFailures:$('modelUseFailures').checked,resources,machines,visualLayout:exportLayout()};
+}
+function clearGroup(group){while(group.children.length){const o=group.children[group.children.length-1];group.remove(o);o.traverse?.(m=>{if(m.geometry)m.geometry.dispose();if(m.material){if(Array.isArray(m.material))m.material.forEach(x=>x.dispose());else m.material.dispose();}});}}
+function stationCenter(i){const o=simViz.stationObjects[i];return o?new THREE.Vector3(o.position.x,0,o.position.z):new THREE.Vector3(0,0,0);}
+function lineDirection(i){
+ const a=stationCenter(i),b=i+1<simViz.stationObjects.length?stationCenter(i+1):i>0?stationCenter(i).clone().add(stationCenter(i).clone().sub(stationCenter(i-1))):a.clone().add(new THREE.Vector3(1,0,0));
+ const d=new THREE.Vector3(b.x-a.x,0,b.z-a.z);
+ if(d.lengthSq()<1e-6)d.set(1,0,0);
+ return d.normalize();
+}
+function stationSide(i){const d=lineDirection(i);return new THREE.Vector3(-d.z,0,d.x);}
+function sourcePoint(){if(!simViz.stationObjects.length)return new THREE.Vector3(-10,.22,0);return stationCenter(0).sub(lineDirection(0).multiplyScalar(3.2));}
+function outputPoint(){const nStations=simViz.stationObjects.length;if(!nStations)return new THREE.Vector3(10,.22,0);return stationCenter(nStations-1).add(lineDirection(nStations-1).multiplyScalar(3.2));}
+function endpointPoint(value){return typeof value==='number'?stationCenter(value):value==='output'?outputPoint():sourcePoint();}
+function makeStatusBadge(parent){
+ const c=document.createElement('canvas');c.width=512;c.height=112;const ctx=c.getContext('2d');
+ const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;
+ const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:false}));
+ sprite.scale.set(1.8,.39,1);parent.add(sprite);
+ return {sprite,canvas:c,ctx,texture,text:'READY'};
+}
+function updateBadge(badge,text,mode){
+ if(!badge)return;const ctx=badge.ctx,c=badge.canvas;
+ const colors={processing:'#176b45',repair:'#a72b36',blocked:'#a86714',queued:'#3d638a',resourceWait:'#6b4aa0',ready:'#344955'};
+ ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle=colors[mode]||'#344955';
+ ctx.beginPath();ctx.roundRect(3,3,c.width-6,c.height-6,24);ctx.fill();
+ ctx.fillStyle='#ffffff';ctx.font='bold 43px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,58);
+ badge.texture.needsUpdate=true;badge.text=text;
+}
+function initStationVisuals(){
+ clearStationVisuals();
+ simViz.stationObjects.forEach((o,i)=>{
+  const h=o.userData.h,w=o.userData.w,d=o.userData.d;
+  const lamp=makeMesh(new THREE.SphereGeometry(.11,12,10),material(0x5a8c77,.3),w*.42,h+.08,0,o);
+  lamp.material.emissive=new THREE.Color(0x102016);lamp.material.emissiveIntensity=.65;
+  let tool=null,beam=null;
+  if(o.userData.kind==='machine'){
+   tool=makeMesh(new THREE.BoxGeometry(Math.max(.26,w*.3),.13,Math.max(.22,d*.3)),material(0x26a879,.4),0,h+.1,0,o);
+   tool.userData.baseY=h+.1;
+  }else{
+   beam=makeMesh(new THREE.BoxGeometry(Math.max(.5,w*.55),.035,.07),new THREE.MeshStandardMaterial({color:0x3fa8db,emissive:0x12384d,transparent:true,opacity:.8}),0,h+.27,0,o);
+  }
+  const badge=makeStatusBadge(o);badge.sprite.position.set(0,h+1.22,0);updateBadge(badge,'READY','ready');
+  simViz.stationVisuals.push({object:o,index:i,lamp,tool,beam,badge});
+ });
+}
+function clearStationVisuals(){
+ for(const v of simViz.stationVisuals){
+  v.object.remove(v.lamp);if(v.tool)v.object.remove(v.tool);if(v.beam)v.object.remove(v.beam);v.object.remove(v.badge.sprite);
+  [v.lamp,v.tool,v.beam].filter(Boolean).forEach(m=>{m.geometry.dispose();m.material.dispose();});
+  if(v.badge.sprite.material.map)v.badge.sprite.material.map.dispose();v.badge.sprite.material.dispose();
+ }
+ simViz.stationVisuals=[];
+}
+function createProduct(id){
+ const g=new THREE.Group();g.userData.simProduct=true;g.userData.partId=id;
+ const body=makeMesh(new THREE.BoxGeometry(.42,.26,.34),material(0xe5a53b,.48),0,.22,0,g);
+ makeMesh(new THREE.BoxGeometry(.22,.07,.2),material(0xf3d47b,.5),0,.385,0,g);
+ const dot=makeMesh(new THREE.BoxGeometry(.08,.025,.08),material(0x405d68,.6),.12,.43,-.08,g);
+ g.userData.productBody=body;g.userData.productTop=g.children[1];g.userData.productDot=dot;
+ simViz.productGroup.add(g);return g;
+}
+function setProductLook(part,state){
+ part.state=state;
+ const colors={input:0xd9a441,moving:0xd9a441,queue:0xd9a441,waiting:0xd9a441,processing:0x39a96b,blocked:0xe5a33e,repair:0xb8424a,rejected:0xe64a4a,done:0x32a4b2};
+ const c=colors[state]||0xd9a441;
+ part.object.userData.productBody.material.color.setHex(c);
+ part.object.userData.productTop.material.color.setHex(state==='rejected'?0xffcccc:state==='done'?0xc9f6ff:0xf3d47b);
+}
+function makeActor(resource,index,home){
+ const g=new THREE.Group(),person=resource!=='tools',shirt=resource==='technicians'?0xe09b38:resource==='operators'?0x287da0:0x687782;
+ let refs={resource,index,home:home.clone(),target:home.clone(),busy:false,station:-1,limbs:[]};
+ if(person){
+  makeMesh(new THREE.CylinderGeometry(.16,.2,.58,12),material(shirt),0,.91,0,g);
+  makeMesh(new THREE.SphereGeometry(.17,14,12),material(0xd9b28c),0,1.32,0,g);
+  const leftArm=makeMesh(new THREE.CylinderGeometry(.055,.065,.53,8),material(shirt),-.23,.93,0,g);leftArm.rotation.z=-.22;
+  const rightArm=makeMesh(new THREE.CylinderGeometry(.055,.065,.53,8),material(shirt),.23,.93,0,g);rightArm.rotation.z=.22;
+  const leftLeg=makeMesh(new THREE.CylinderGeometry(.065,.075,.5,8),material(0x344653),-.105,.28,0,g);
+  const rightLeg=makeMesh(new THREE.CylinderGeometry(.065,.075,.5,8),material(0x344653),.105,.28,0,g);
+  refs.limbs=[leftArm,rightArm,leftLeg,rightLeg];refs.arms=[leftArm,rightArm];refs.legs=[leftLeg,rightLeg];
+ }else{
+  makeMesh(new THREE.BoxGeometry(.55,.18,.36),material(0x475d68),0,.37,0,g);
+  makeMesh(new THREE.BoxGeometry(.38,.27,.28),material(0xb7c7d1),0,.58,0,g);
+  for(const x of [-.2,.2]){const wheel=makeMesh(new THREE.CylinderGeometry(.07,.07,.06,10),material(0x24333a),x,.17,.21,g);wheel.rotation.x=Math.PI/2;const wheel2=makeMesh(new THREE.CylinderGeometry(.07,.07,.06,10),material(0x24333a),x,.17,-.21,g);wheel2.rotation.x=Math.PI/2;}
+ }
+ g.userData.actor=refs;g.position.copy(home);simViz.actorGroup.add(g);return g;
+}
+function stationActorTarget(i,offset){
+ const o=simViz.stationObjects[i];if(!o)return sourcePoint();
+ const p=stationCenter(i),side=stationSide(i);p.add(side.multiplyScalar((o.userData.d||1)/2+.78+(offset||0)*.38));p.y=0;return p;
+}
+function initialiseActors(){
+ clearGroup(simViz.actorGroup);simViz.actors={operators:[],technicians:[],tools:[]};
+ simViz.resourceBusy={operators:[],technicians:[],tools:[]};
+ const placed=objects.filter(o=>o.userData.kind==='operator');
+ const caps={operators:M.resources.operators,technicians:M.resources.technicians,tools:M.resources.tools};
+ const src=sourcePoint();
+ ['operators','technicians','tools'].forEach(resource=>{
+  const cap=Math.min(40,caps[resource]||0);
+  for(let i=0;i<cap;i++){
+   let home;
+   if(resource==='operators'&&placed[i])home=new THREE.Vector3(placed[i].position.x,0,placed[i].position.z);
+   else if(resource==='tools'){
+    const racks=objects.filter(o=>o.userData.kind==='rack');
+    home=racks[i]?new THREE.Vector3(racks[i].position.x,0,racks[i].position.z):src.clone().add(new THREE.Vector3(0,0,2.5+i*.7));
+   }else if(resource==='technicians')home=src.clone().add(new THREE.Vector3(1+i*.75,0,4));
+   else home=src.clone().add(new THREE.Vector3(-.4+i*.8,0,2.3));
+   simViz.actors[resource].push(makeActor(resource,i,home));
+   simViz.resourceBusy[resource].push(false);
+  }
+ });
+ placed.forEach(o=>o.visible=false);
+}
+function restorePlacedOperators(){objects.filter(o=>o.userData.kind==='operator').forEach(o=>o.visible=true);}
+function resetActorStates(instant){
+ for(const resource of ['operators','technicians','tools'])simViz.actors[resource].forEach(a=>{
+  const d=a.userData.actor;d.busy=false;d.station=-1;d.target.copy(d.home);
+  if(instant)a.position.copy(d.home);
+ });
+ simViz.resourceBusy={operators:simViz.actors.operators.map(()=>false),technicians:simViz.actors.technicians.map(()=>false),tools:simViz.actors.tools.map(()=>false)};
+}
+function applyActorResourceEvent(e){
+ const actor=simViz.actors[e.resource]?.[e.unit];if(!actor)return;
+ const data=actor.userData.actor;data.busy=!!e.busy;
+ if(!e.busy){data.station=-1;data.target.copy(data.home);return;}
+ if(e.resource==='technicians'){
+  const repairIndex=simViz.stationStates.findIndex(st=>st.mode==='repair');
+  if(repairIndex>=0){data.station=repairIndex;data.target.copy(stationActorTarget(repairIndex,e.unit));}
+ }else if(e.resource==='tools'){
+  data.station=-1;
+ }
+}
+function assignBusyActors(resource,station,count){
+ if(!count)return;
+ const actors=simViz.actors[resource]||[];let assigned=0;
+ actors.forEach(a=>{const d=a.userData.actor;if(d.busy&&d.station<0&&assigned<count){d.station=station;d.target.copy(stationActorTarget(station,assigned));assigned++;}});
+}
+function updateStationState(e){
+ if(!Number.isInteger(e.station)||!simViz.stationStates[e.station])return;
+ simViz.stationStates[e.station]={mode:e.mode||'ready',queueCount:e.queueCount||0,activeId:e.activeId??null,down:!!e.down};
+}
+function removeProduct(id){
+ const part=simViz.parts.get(id);if(!part)return;
+ simViz.productGroup.remove(part.object);part.object.traverse(m=>{if(m.geometry)m.geometry.dispose();if(m.material){if(Array.isArray(m.material))m.material.forEach(x=>x.dispose());else m.material.dispose();}});
+ simViz.parts.delete(id);
+}
+function applyLiveEvent(e){
+ if(e.type==='resourceState'){const pool=simViz.resourceBusy[e.resource];if(pool&&e.unit<pool.length)pool[e.unit]=!!e.busy;applyActorResourceEvent(e);return;}
+ if(e.type==='stationState'){updateStationState(e);return;}
+ let p=simViz.parts.get(e.id);
+ if(e.type==='arrival'){
+  if(!p){p={id:e.id,state:'input',station:-1,object:createProduct(e.id),from:'source',to:'source',start:e.time,end:e.time};simViz.parts.set(e.id,p);}
+  setProductLook(p,'input');
+ }else if(e.type==='moveStart'){
+  if(!p){p={id:e.id,state:'moving',station:-1,object:createProduct(e.id)};simViz.parts.set(e.id,p);}
+  p.state='moving';p.from=e.from;p.to=e.to;p.start=e.time;p.end=e.endTime;p.station=typeof e.to==='number'?e.to:(typeof e.from==='number'?e.from:-1);setProductLook(p,'moving');
+ }else if(e.type==='moveEnd'){
+  if(p){p.state='waiting';p.station=e.station;setProductLook(p,'waiting');}
+ }else if(e.type==='enterStation'){
+  if(p){p.state='waiting';p.station=e.station;setProductLook(p,'waiting');}
+ }else if(e.type==='queue'){
+  if(p){p.state='queue';p.station=e.station;setProductLook(p,'queue');}
+ }else if(e.type==='queueExit'){
+  if(p){p.state='waiting';p.station=e.station;setProductLook(p,'waiting');}
+ }else if(e.type==='serviceStart'){
+  if(p){p.state='processing';p.station=e.station;setProductLook(p,'processing');}
+  const m=M.machines[e.station];if(m){assignBusyActors('operators',e.station,m.needOperators);assignBusyActors('tools',e.station,m.needTools);assignBusyActors('technicians',e.station,m.needTechnicians);}
+ }else if(e.type==='failure'){
+  if(p){p.state='repair';p.station=e.station;setProductLook(p,'repair');}
+ }else if(e.type==='repairDone'){
+  if(p&&p.state==='repair'){p.state='waiting';p.station=e.station;setProductLook(p,'waiting');}
+ }else if(e.type==='blocked'){
+  if(p){p.state='blocked';p.station=e.station;setProductLook(p,'blocked');}
+ }else if(e.type==='unblocked'){
+  if(p){p.state='waiting';p.station=e.station;setProductLook(p,'waiting');}
+ }else if(e.type==='reject'){
+  if(p){p.state='rejected';p.station=e.station;setProductLook(p,'rejected');}
+  simViz.scrap++;
+ }else if(e.type==='finish'){
+  if(p){p.state='done';p.station=M.machines.length;setProductLook(p,'done');}
+  simViz.good++;
+ }else if(e.type==='removePart'){removeProduct(e.id);}
+}
+function resetReplay(time,instant){
+ clearGroup(simViz.productGroup);simViz.parts.clear();simViz.good=0;simViz.scrap=0;simViz.cursor=0;
+ simViz.stationStates=M.machines.map(()=>({mode:'ready',queueCount:0,activeId:null,down:false}));
+ resetActorStates(true);
+ simViz.time=0;
+ while(simViz.cursor<simViz.events.length&&simViz.events[simViz.cursor].time<=time+1e-9){
+  applyLiveEvent(simViz.events[simViz.cursor++]);
+ }
+ simViz.time=time;
+ if(instant)simViz.actors.operators.concat(simViz.actors.technicians,simViz.actors.tools).forEach(a=>{const d=a.userData.actor;a.position.copy(d.target);});
+ updateStationDisplay();updateProductPositions();simNumbers();
+}
+function getQueueRank(part,peers){return peers.filter(p=>p.id<part.id).length;}
+function updateProductPositions(){
+ const grouped=new Map();
+ for(const p of simViz.parts.values()){
+  if(p.state==='moving'){
+   const from=endpointPoint(p.from),to=endpointPoint(p.to),span=Math.max(1e-6,p.end-p.start),u=THREE.MathUtils.clamp((simViz.time-p.start)/span,0,1);
+   p.object.position.set(THREE.MathUtils.lerp(from.x,to.x,u),.2+Math.sin(Math.PI*u)*.34,THREE.MathUtils.lerp(from.z,to.z,u));
+  }else if(p.state==='input'){
+   const peers=Array.from(simViz.parts.values()).filter(x=>x.state==='input'&&x.id<=p.id),src=sourcePoint();
+   p.object.position.set(src.x-(peers.length-1)*.52,.2,src.z+.25);
+  }else if(p.state==='done'){
+   const out=outputPoint(),rank=Array.from(simViz.parts.values()).filter(x=>x.state==='done'&&x.id<=p.id).length-1;
+   p.object.position.set(out.x,.2,out.z+rank*.48);
+  }else if(Number.isInteger(p.station)&&p.station>=0&&p.station<simViz.stationObjects.length){
+   const i=p.station,o=simViz.stationObjects[i],center=stationCenter(i),side=stationSide(i);
+   if(p.state==='processing'){center.add(side.multiplyScalar((o.userData.d||1)*.24));center.y=(o.userData.h||1)*.65+.2;}
+   else if(p.state==='blocked'){center.add(lineDirection(i).multiplyScalar((o.userData.w||1)*.42));center.y=.24;}
+   else{
+    if(!grouped.has(i))grouped.set(i,[]);
+    grouped.get(i).push(p);continue;
+   }
+   p.object.position.copy(center);
+  }else{p.object.position.copy(sourcePoint());}
+  p.object.rotation.y=p.state==='moving'?0:(p.station>=0?THREE.MathUtils.radToDeg(simViz.stationObjects[p.station]?.rotation?.y||0):0);
+ }
+ grouped.forEach((list,i)=>{
+  list.sort((a,b)=>a.id-b.id);const center=stationCenter(i),side=stationSide(i),o=simViz.stationObjects[i];
+  list.forEach((p,j)=>{
+   const q=getQueueRank(p,list);const row=Math.floor(q/3),col=q%3;
+   const pos=center.clone().add(side.multiplyScalar((o.userData.d||1)*.5+.42+row*.42)).add(lineDirection(i).multiplyScalar((col-1)*.42));
+   pos.y=.2;p.object.position.copy(pos);p.object.rotation.y=o.rotation.y;
+  });
+ });
+}
+function updateStationDisplay(){
+ simViz.stationVisuals.forEach((v,i)=>{
+  const st=simViz.stationStates[i]||{mode:'ready',queueCount:0};
+  const text=st.mode==='queued'?'QUEUE '+st.queueCount:String(st.mode||'ready').toUpperCase().replace('RESOURCEWAIT','WAIT RESOURCE');
+  updateBadge(v.badge,text,st.mode);
+  const colors={processing:0x31c879,repair:0xf0525d,blocked:0xf1aa42,queued:0x6da9df,resourceWait:0xb18be8,ready:0x5a8c77};
+  v.lamp.material.color.setHex(colors[st.mode]||colors.ready);
+  v.lamp.material.emissive.setHex(st.mode==='processing'?0x123f27:st.mode==='repair'?0x451014:0x102016);
+  if(v.tool)v.tool.visible=st.mode==='processing';
+  if(v.beam)v.beam.visible=st.mode==='processing';
+ });
+}
+function updateActors(dt){
+ const arr=simViz.actors.operators.concat(simViz.actors.technicians,simViz.actors.tools);
+ arr.forEach((a,i)=>{
+  const d=a.userData.actor,delta=d.target.clone().sub(a.position),dist=delta.length();
+  if(dist>.035){const move=Math.min(dist,Math.max(.0,dt)*2.1);a.position.add(delta.normalize().multiplyScalar(move));if(Math.abs(d.target.x-a.position.x)+Math.abs(d.target.z-a.position.z)>.05)a.rotation.y=Math.atan2(d.target.x-a.position.x,d.target.z-a.position.z);}
+  const phase=simViz.time*4+i;
+  if(d.arms){const swing=dist>.04?Math.sin(phase)*.26:0;d.arms[0].rotation.z=-.22+swing;d.arms[1].rotation.z=.22-swing;d.legs[0].rotation.x=dist>.04?Math.sin(phase)*.3:0;d.legs[1].rotation.x=dist>.04?-Math.sin(phase)*.3:0;}
+ });
+}
+function updateMachineActions(dt){
+ simViz.stationVisuals.forEach((v,i)=>{
+  const mode=simViz.stationStates[i]?.mode||'ready';
+  if(v.tool){const base=v.tool.userData.baseY;v.tool.position.y=base+(mode==='processing'?.12*Math.sin(simViz.time*8):0);}
+  if(v.beam){v.beam.position.x=Math.sin(simViz.time*5)*v.object.userData.w*.18;}
+  if(mode==='processing'&&v.object.userData.kind==='conveyor'){}
+ });
+ if(simViz.active&&simViz.playing){
+  objects.filter(o=>o.userData.kind==='conveyor').forEach(o=>o.traverse(m=>{if(m.isMesh&&m.geometry?.type==='CylinderGeometry')m.rotation.x+=dt*4;}));
+ }
+}
+function refreshPlayback(time,instant){
+ simViz.time=time;
+ // For timeline scrubbing, rebuild the exact event state rather than interpolating through unplayed events.
+ resetReplay(time,instant);
+}
+function runProduction(){
+ try{
+  simViz.playing=false;
+  M=buildSimulationModel();
+  simViz.stationObjects=objects.filter(isProcessStation).slice().sort((a,b)=>safeInt(a.userData.processOrder,1)-safeInt(b.userData.processOrder,1)||String(a.userData.id).localeCompare(String(b.userData.id)));
+  simViz.result=sim(M.seed,true);simViz.events=simViz.result.events;
+  simViz.active=true;simViz.playing=true;simViz.lastUiSecond=-1;
+  $('simScrub').value='0';
+  clearFlowDots();flowVisible=false;$('flowToggle').classList.remove('active');$('flowToggle').textContent='Demo flow off';
+  initialiseActors();initStationVisuals();resetReplay(0,true);
+  simMessage('Simulation ready · replaying the discrete-event trace');
+  setSimUiState();simNumbers();
+ }catch(err){
+  simViz.playing=false;simViz.active=false;simViz.result=null;
+  restorePlacedOperators();clearStationVisuals();clearGroup(simViz.productGroup);clearGroup(simViz.actorGroup);
+  setSimUiState();simMessage('Simulation error: '+(err?.message||String(err)));
+  $('liveDetail').textContent='Correct the model settings and run again.';
+  console.error(err);
+ }
+}
+$('runSim').onclick=runProduction;
+$('playPause').onclick=()=>{
+ if(!simViz.active)return;
+ if(!simViz.playing&&simViz.time>=M.shiftMinutes-1e-8)resetReplay(0,true);
+ simViz.playing=!simViz.playing;simViz.lastUiSecond=-1;setSimUiState();
+};
+$('resetSim').onclick=()=>{if(!simViz.active)return;simViz.playing=false;resetReplay(0,true);setSimUiState();};
+$('editLayout').onclick=()=>{
+ simViz.playing=false;simViz.active=false;
+ clearGroup(simViz.productGroup);clearGroup(simViz.actorGroup);clearStationVisuals();
+ simViz.parts.clear();simViz.events=[];simViz.result=null;simViz.stationObjects=[];simViz.stationStates=[];
+ restorePlacedOperators();setSimUiState();simNumbers();
+ $('liveDetail').textContent='Run a production simulation to see live quantities and station states.';
+};
+$('simSpeed').oninput=simNumbers;
+$('simScrub').addEventListener('input',()=>{
+ if(!simViz.active)return;
+ simViz.playing=false;const target=(Number($('simScrub').value)/1000)*M.shiftMinutes;
+ refreshPlayback(target,true);setSimUiState();
+});
+$('flowToggle').onclick=()=>{
+ if(simViz.active)return;
+ flowVisible=!flowVisible;flowDots.forEach(d=>d.visible=flowVisible);
+ flowRunning=flowVisible;$('flowToggle').textContent=flowVisible?'Demo flow on':'Demo flow off';
+ $('flowToggle').classList.toggle('active',flowVisible);
+ $('toggleFlow').textContent=flowRunning?'Pause material flow':'Resume material flow';
+};
+$('toggleFlow').onclick=()=>{
+ flowRunning=!flowRunning;flowVisible=flowRunning;flowDots.forEach(d=>d.visible=flowVisible);
+ $('toggleFlow').textContent=flowRunning?'Pause material flow':'Resume material flow';
+ $('flowToggle').textContent=flowVisible?'Demo flow on':'Demo flow off';$('flowToggle').classList.toggle('active',flowVisible);
+};
+addObject('machine',-7,-3,{name:'Molding machine 1'});
+addObject('conveyor',-3,-3,{name:'Transfer conveyor'});
+addObject('machine',1,-3,{name:'Assembly station'});
+addObject('inspection',5,-3,{name:'Inspection'});
+addObject('rack',8,3,{name:'Finished goods rack'});
+addObject('operator',-5,1,{name:'Operator 1'});
+addObject('table',0,2,{name:'Worktable'});
+createFlowDots();flowDots.forEach(d=>d.visible=flowVisible);select(null);
+function animate(t){
+ requestAnimationFrame(animate);
+ const dt=Math.min(.05,(t-lastTime)/1000||0);lastTime=t;controls.update();
+ if(!simViz.active&&flowRunning&&flowVisible){
+  flowPhase=(flowPhase+dt*.09*flowSpeed)%1;
+  for(const d of flowDots){const u=(d.userData.offset+flowPhase)%1;d.position.copy(d.userData.curve.getPointAt(u));}
+ }
+ if(simViz.active&&simViz.playing){
+  simViz.time=Math.min(M.shiftMinutes,simViz.time+dt*Math.max(.01,Number($('simSpeed').value)||2));
+  while(simViz.cursor<simViz.events.length&&simViz.events[simViz.cursor].time<=simViz.time+1e-9)applyLiveEvent(simViz.events[simViz.cursor++]);
+  if(simViz.time>=M.shiftMinutes-1e-8){simViz.time=M.shiftMinutes;simViz.playing=false;setSimUiState();}
+  updateProductPositions();updateStationDisplay();simNumbers();
+ }else if(simViz.active){updateProductPositions();}
+ updateActors(dt);updateMachineActions(dt);
+ renderer.render(scene,camera);
+}
+setSimUiState();simNumbers();resize();animate(0);
 </script>
 </body>
 </html>
