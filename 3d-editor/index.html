@@ -567,8 +567,15 @@ $('objZ').addEventListener('change',applyCoordinateInputs);
 $('objX').addEventListener('keydown',e=>{if(e.key==='Enter'){applyCoordinateInputs();$('objX').blur();}});
 $('objZ').addEventListener('keydown',e=>{if(e.key==='Enter'){applyCoordinateInputs();$('objZ').blur();}});
 $('moveMode').onclick=()=>{
- if(simViz.active){$('coords').textContent='Click Edit layout to stop playback before moving objects.';return;}
- moveModeEnabled=!moveModeEnabled;syncMoveMode();
+ if(simViz.active){
+  $('editLayout').click();
+  moveModeEnabled=true;
+  syncMoveMode();
+  $('coords').textContent='Edit mode enabled · drag an object to move it.';
+  return;
+ }
+ moveModeEnabled=!moveModeEnabled;
+ syncMoveMode();
 };
 window.addEventListener('keydown',e=>{
  if(simViz.active)return;
