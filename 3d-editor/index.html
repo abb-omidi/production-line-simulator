@@ -810,6 +810,8 @@ $('editLayout').onclick=()=>{
  simViz.parts.clear();simViz.events=[];simViz.result=null;simViz.stationObjects=[];simViz.stationStates=[];
  restorePlacedOperators();setSimUiState();simNumbers();
  $('liveDetail').textContent='Run a production simulation to see live quantities and station states.';
+ flowVisible=false;flowRunning=false;createFlowDots();flowDots.forEach(d=>d.visible=false);
+ $('flowToggle').textContent='Demo flow off';$('flowToggle').classList.remove('active');
 };
 $('simSpeed').oninput=simNumbers;
 $('simScrub').addEventListener('input',()=>{
