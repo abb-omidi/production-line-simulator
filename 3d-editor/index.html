@@ -8,8 +8,8 @@
 :root{color-scheme:dark;--bg:#101820;--panel:#182632;--line:#304451;--text:#eaf2f7;--muted:#9fb1bd;--accent:#54c7a3}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
 header{height:auto;min-height:64px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);background:#111d26}
-h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{margin:6px 0;color:var(--muted)}button,select,input{font:inherit;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px}button{cursor:pointer}button:hover{border-color:var(--accent)}button.active{background:#1d5b50;border-color:var(--accent)}.primary{background:#166b59;border-color:#2ba98a}.layout{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;height:calc(100vh - 65px);min-height:520px}.sidebar{padding:14px;border-right:1px solid var(--line);background:var(--panel);overflow:auto}.right{border-right:0;border-left:1px solid var(--line)}.group{padding:0 0 15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.object-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.linkbtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px;font:inherit}.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sim-grid .field{min-width:0}.sim-grid input,.sim-grid select{width:100%;min-width:0}.station-note{font-size:11px;color:var(--muted);margin:5px 0 8px}.object-btn{min-height:64px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px}.object-btn span:first-child{font-size:20px}.small{font-size:12px;color:var(--muted)}.viewport{position:relative;min-width:0;min-height:0;background:#d9e0e4}#scene{width:100%;height:100%;display:block;touch-action:none}.overlay{position:absolute;left:12px;top:12px;padding:9px 11px;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;max-width:min(520px,calc(100% - 24px));font-size:12px;color:#d7e4eb;pointer-events:none}.toolbar{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.toolbar button{box-shadow:0 2px 10px #0003}.bottom{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;padding:9px 11px}.bottom label{display:flex;align-items:center;gap:6px;font-size:12px}.bottom input{width:70px;padding:5px}.field{display:grid;gap:4px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}.field input{width:100%}.status{font-size:12px;color:var(--accent);min-height:18px}.selected-title{font-weight:650;overflow-wrap:anywhere}.empty{border:1px dashed #45606d;border-radius:9px;padding:12px;color:var(--muted);font-size:12px}.object-row{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer}.object-row.selected{border-color:var(--accent);background:#1c3c3d}.object-row .name{flex:1;min-width:0;overflow-wrap:anywhere}.flow-key{display:inline-flex;align-items:center;gap:5px;margin-right:8px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#f5aa42}.muted-btn{background:transparent}.danger{color:#ffb4aa;border-color:#8d4b4b}.note{font-size:11px;color:var(--muted);margin-top:8px}
-@media(max-width:900px){.layout{grid-template-columns:190px minmax(0,1fr);height:auto;min-height:calc(100vh - 65px)}.viewport{height:70vh;min-height:460px}.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.sidebar{padding:10px}.object-list{grid-template-columns:1fr 1fr}}
+h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{margin:6px 0;color:var(--muted)}button,select,input{font:inherit;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px}button{cursor:pointer}button:hover{border-color:var(--accent)}button.active{background:#1d5b50;border-color:var(--accent)}.primary{background:#166b59;border-color:#2ba98a}.layout{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;height:calc(100vh - 65px);min-height:520px}.sidebar{padding:14px;border-right:1px solid var(--line);background:var(--panel);overflow:auto}.right{border-right:0;border-left:1px solid var(--line)}.group{padding:0 0 15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.object-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.linkbtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px;font:inherit}.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sim-grid .field{min-width:0}.sim-grid input,.sim-grid select{width:100%;min-width:0}.station-note{font-size:11px;color:var(--muted);margin:5px 0 8px}.object-btn{min-height:64px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px}.object-btn span:first-child{font-size:20px}.small{font-size:12px;color:var(--muted)}.viewport{position:relative;min-width:0;min-height:0;background:#d9e0e4}#scene{width:100%;height:100%;display:block;touch-action:none}.simbar{position:absolute;left:12px;right:12px;bottom:64px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#12202be8;border:1px solid #3a5361;border-radius:10px;padding:8px 10px;box-shadow:0 3px 12px #0002}.simbar button{padding:7px 10px;min-height:34px}.simbar label{display:flex;align-items:center;gap:5px;font-size:11px;color:#d7e4eb}.simbar input[type=range]{width:75px;padding:0;min-height:20px}.simbar #simScrub{width:clamp(80px,14vw,180px)}#simReadout{font-size:11px;color:#cfe7e0;flex:1;min-width:140px}.sim-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.sim-kpi div{padding:8px;border:1px solid #304451;border-radius:7px;background:#13222c}.sim-kpi b{display:block;font-size:16px;color:#eaf2f7}.sim-kpi span{font-size:10px;color:var(--muted)}.overlay{position:absolute;left:12px;top:12px;padding:9px 11px;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;max-width:min(520px,calc(100% - 24px));font-size:12px;color:#d7e4eb;pointer-events:none}.toolbar{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.toolbar button{box-shadow:0 2px 10px #0003}.bottom{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;padding:9px 11px}.bottom label{display:flex;align-items:center;gap:6px;font-size:12px}.bottom input{width:70px;padding:5px}.field{display:grid;gap:4px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}.field input{width:100%}.status{font-size:12px;color:var(--accent);min-height:18px}.selected-title{font-weight:650;overflow-wrap:anywhere}.empty{border:1px dashed #45606d;border-radius:9px;padding:12px;color:var(--muted);font-size:12px}.object-row{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer}.object-row.selected{border-color:var(--accent);background:#1c3c3d}.object-row .name{flex:1;min-width:0;overflow-wrap:anywhere}.flow-key{display:inline-flex;align-items:center;gap:5px;margin-right:8px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#f5aa42}.muted-btn{background:transparent}.danger{color:#ffb4aa;border-color:#8d4b4b}.note{font-size:11px;color:var(--muted);margin-top:8px}
+@media(max-width:900px){.layout{grid-template-columns:190px minmax(0,1fr);height:auto;min-height:calc(100vh - 65px)}.viewport{height:70vh;min-height:560px}.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.sidebar{padding:10px}.object-list{grid-template-columns:1fr 1fr}.simbar{bottom:72px;gap:5px;padding:6px}.simbar input[type=range]{width:58px}.simbar #simScrub{width:78px}#simReadout{min-width:110px}}
 @media(max-width:560px){header{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr;height:auto}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.object-list{grid-template-columns:repeat(3,1fr)}.object-btn{min-height:55px;padding:5px}.viewport{height:60vh;min-height:400px}.right{grid-column:auto}.toolbar{top:auto;bottom:64px}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
@@ -33,9 +33,10 @@ h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{mar
 </aside>
 <main class="viewport" id="viewport">
  <canvas id="scene"></canvas>
- <div class="overlay"><strong>Layout controls</strong><br>Click an object to select · drag to move · <b>R</b> rotates 90° · Delete removes · drag with right mouse to orbit · wheel to zoom.</div>
- <div class="toolbar"><button id="topView">Top view</button><button id="isoView">Isometric</button><button id="gridToggle" class="active">Grid on</button><button id="flowToggle" class="active">Flow on</button></div>
- <div class="bottom"><label><input id="snap" type="checkbox" checked> Snap to grid</label><label>Grid size <input id="gridSize" type="number" min="0.25" max="5" step="0.25" value="1"></label><span class="small" id="coords">Floor: 24 × 18 m</span></div>
+ <div class="overlay"><strong>Live 3D production line</strong><br>Run the model to watch individual products move, queue, process, finish or scrap. Operators and repair technicians walk to stations as resources are used.</div>
+ <div class="toolbar"><button id="topView">Top view</button><button id="isoView">Isometric</button><button id="gridToggle" class="active">Grid on</button><button id="flowToggle" class="active">Demo flow on</button></div>
+ <div class="simbar"><button id="runSim" class="primary">▶ Run production</button><button id="playPause" disabled>Pause</button><button id="resetSim" disabled>↺ Restart</button><label>Speed <input id="simSpeed" type="range" min="0.25" max="8" step="0.25" value="2"><span id="simSpeedText">2×</span></label><label>Shift <input id="simScrub" type="range" min="0" max="1000" step="1" value="0" disabled></label><span id="simReadout">Ready · configure stations, then run</span></div>
+ <div class="bottom><label><input id="snap" type="checkbox" checked> Snap to grid</label><label>Grid size <input id="gridSize" type="number" min="0.25" max="5" step="0.25" value="1"></label><span class="small" id="coords">Floor: 24 × 18 m</span></div>
 </main>
 <aside class="sidebar right">
  <section class="group"><h2>Selected object</h2><div id="selectionEmpty" class="empty">Select an object on the floor or in the object list to edit it.</div>
@@ -52,12 +53,294 @@ h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{mar
  <button id="applyObject" class="primary" style="width:100%">Apply changes</button><button id="rotateObject" style="width:100%;margin-top:7px">Rotate 90° (R)</button><button id="duplicateObject" style="width:100%;margin-top:7px">Duplicate</button><button id="deleteObject" class="danger" style="width:100%;margin-top:7px">Delete object</button>
  </div></section>
  <section class="group"><h2>Scene summary</h2><div id="summary" class="small">0 objects · 0 machines · 0 conveyors</div></section>
- <section><h2>How the bridge works</h2><p class="small">Export a simulation model here, then open the existing simulator and use <b>Load file</b>. The JSON includes station settings and the 3D layout metadata. The event engine remains the original simulator; animation in this editor is still illustrative.</p></section>
+ <section class="group"><h2>Live production results</h2><div class="sim-kpi"><div><b id="kpiGood">—</b><span>Good units</span></div><div><b id="kpiScrap">—</b><span>Scrapped</span></div><div><b id="kpiWip">—</b><span>Products in system</span></div><div><b id="kpiThroughput">—</b><span>Good units / min</span></div></div><p class="small" id="liveDetail">Run a production simulation to see live quantities and station states.</p></section>
+ <section><h2>Playback meaning</h2><p class="small">The 3D playback uses the same discrete-event calculations as the original simulator. Operators, tools and machine actions are animated from station/resource events; the underlying process times, queues, failures and scrap follow the original simulation logic.</p></section>
 </aside>
 </div>
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+// Core discrete-event engine is shared with the original simulator.
+let M=null,rand=Math.random;
+const n=(x,d=0)=>Number.isFinite(Number(x))?Number(x):d;
+function seed(s){let a=(s>>>0)||1;return()=>{a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
+function U(){return Math.max(1e-12,rand())}
+function norm(mu,sd){let u=U(),v=U();return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function gamma(k,t){if(k<1)return gamma(k+1,t)*Math.pow(U(),1/k);let d=k-1/3,c=1/Math.sqrt(9*d);for(;;){let x=norm(0,1),v=1+c*x;if(v<=0)continue;v*=v*v;let u=U();if(u<1-.0331*x*x*x*x||Math.log(u)<.5*x*x+d*(1-v+Math.log(v)))return d*v*t}}
+function sampleInterarrival(){
+ const meanGap=1/Math.max(1e-9,M.arrivalRate),d=M.arrivalDist||"Exponential";
+ if(d==="Normal"){
+  const sd=meanGap*Math.max(0,Math.min(.4,n(M.arrivalVariabilityPct,25)/100));
+  if(sd<=1e-12)return meanGap;
+  let gap,tries=0;
+  do{gap=norm(meanGap,sd);tries++}while(gap<=0&&tries<1000);
+  return gap>0?gap:meanGap;
+ }
+ if(d==="Uniform"){
+  const spread=Math.max(0,Math.min(.9,n(M.arrivalVariabilityPct,25)/100));
+  return meanGap*(1-spread+2*spread*U());
+ }
+ return -meanGap*Math.log(U());
+}
+function sample(m){let p=m.p,x;if(m.dist==="Normal"){do{x=norm(p.mean,p.sd)}while(x<=0)}else if(m.dist==="Gamma")x=gamma(p.shape,p.scale);else if(m.dist==="Poisson"){let L=Math.exp(-p.lambda),q=1,k=0;do{k++;q*=U()}while(q>L);x=k-1}else if(m.dist==="Exponential")x=-p.mean*Math.log(U());else if(m.dist==="Weibull")x=p.scale*Math.pow(-Math.log(U()),1/p.shape);else{let u=U(),f=(p.mode-p.min)/(p.max-p.min);x=u<f?p.min+Math.sqrt(u*(p.max-p.min)*(p.mode-p.min)):p.max-Math.sqrt((1-u)*(p.max-p.min)*(p.max-p.mode))}return Math.max(.001,x)}
+function lg(z){let c=[.9999999999998099,676.5203681218851,-1259.1392167224028,771.3234287776531,-176.6150291621406,12.507343278686905,-.13857109526572012,9.984369578019572e-6,1.5056327351493116e-7];if(z<.5)return Math.log(Math.PI)-Math.log(Math.sin(Math.PI*z))-lg(1-z);z--;let x=c[0];for(let i=1;i<c.length;i++)x+=c[i]/(z+i);let t=z+7.5;return .5*Math.log(2*Math.PI)+(z+.5)*Math.log(t)-t+Math.log(x)}
+function mean(m){let p=m.p;if(m.dist==="Normal"||m.dist==="Exponential")return p.mean;if(m.dist==="Poisson")return p.lambda;if(m.dist==="Gamma")return p.shape*p.scale;if(m.dist==="Weibull")return p.scale*Math.exp(lg(1+1/p.shape));return(p.min+p.mode+p.max)/3}
+function sim(s,includeTrace=true){
+ const H=M.shiftMinutes,eps=1e-9,travel=Math.max(0,n(M.transferMinutes,1.15));
+ rand=(s===undefined||s===null||s===0)?Math.random:seed(s);
+ const overlap=(a,b)=>Math.max(0,Math.min(b,H)-Math.max(a,0));
+ const trace=[];let traceSeq=0,arrivalLimitReached=false,arrivalCount=0,partId=1,good=0,rejected=0,cycleTotal=0,now=0;
+ const machineCount=M.machines.length,inputQueue=[],parts=new Map();
+ const resourceKeys=["operators","tools","technicians"];
+ const resourceCaps={operators:Math.max(0,Math.round(n(M.resources?.operators,2))),tools:Math.max(0,Math.round(n(M.resources?.tools,2))),technicians:Math.max(0,Math.round(n(M.resources?.technicians,1)))};
+ const resourceUse={operators:0,tools:0,technicians:0},resourceTime={operators:0,tools:0,technicians:0},resourceLastTime={operators:0,tools:0,technicians:0};
+ const resourceUnits=Object.fromEntries(resourceKeys.map(k=>[k,Array.from({length:resourceCaps[k]},(_,i)=>({id:i,busy:false,busySince:null,busyUnitMinutes:0}))]));
+ const resourceCursor={operators:0,tools:0,technicians:0};
+ for(const m of M.machines){const demand={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};for(const k of resourceKeys)if(demand[k]>resourceCaps[k])throw new Error(m.id+" requires "+demand[k]+" "+k+", but only "+resourceCaps[k]+" are available.");}
+ const states=M.machines.map(m=>({active:null,queue:[],processing:false,blocked:false,blockStart:null,blockedTime:0,
+  reservedServer:false,reservedBuffer:0,repairUntil:0,repairPending:false,downSince:null,repairTechHeld:false,
+  resourcesHeld:false,heldResources:null,waitingResources:false,resourceWaitSince:null,resourceWait:0,repairTechUnit:null,
+  upRemaining:m.mttf,sliceStart:0,busy:0,down:0,jobs:0,good:0,scrap:0}));
+ const heap=[];let heapSeq=0;
+ const priority={repairDone:0,serviceComplete:1,failure:1,stationEnter:2,outputArrive:2,arrival:3,removePart:4};
+ const less=(a,b)=>{
+  if(Math.abs(a.time-b.time)>eps)return a.time<b.time;
+  const pa=priority[a.type]??5,pb=priority[b.type]??5;
+  return pa!==pb?pa<pb:a.seq<b.seq;
+ };
+ const push=e=>{
+  e.seq=heapSeq++;let i=heap.length;heap.push(e);
+  while(i>0){const p=(i-1)>>1;if(!less(heap[i],heap[p]))break;[heap[i],heap[p]]=[heap[p],heap[i]];i=p;}
+ };
+ const pop=()=>{
+  const root=heap[0],last=heap.pop();
+  if(heap.length){heap[0]=last;let i=0;for(;;){let l=i*2+1,r=l+1,b=i;if(l<heap.length&&less(heap[l],heap[b]))b=l;if(r<heap.length&&less(heap[r],heap[b]))b=r;if(b===i)break;[heap[i],heap[b]]=[heap[b],heap[i]];i=b;}}
+  return root;
+ };
+ const changeResource=(key,delta,t)=>{resourceTime[key]+=overlap(resourceLastTime[key],t)*resourceUse[key];resourceLastTime[key]=t;resourceUse[key]+=delta;if(resourceUse[key]<-eps||resourceUse[key]>resourceCaps[key]+eps)throw new Error("Internal resource accounting error for "+key+".");};
+ const acquireUnitIds=(key,count,t)=>{if(count<=0)return [];const pool=resourceUnits[key];if(pool.reduce((a,u)=>a+(u.busy?0:1),0)<count)return null;const ids=[];for(let step=0;step<pool.length&&ids.length<count;step++){const id=(resourceCursor[key]+step)%pool.length;if(!pool[id].busy)ids.push(id);}if(ids.length<count)return null;for(const id of ids){const unit=pool[id];unit.busy=true;unit.busySince=t;changeResource(key,1,t);emit(t,"resourceState",{resource:key,unit:id,busy:true});}resourceCursor[key]=(ids[ids.length-1]+1)%pool.length;return ids;};
+ const releaseUnitIds=(key,ids,t)=>{for(const id of ids||[]){const unit=resourceUnits[key][id];if(!unit||!unit.busy)continue;unit.busyUnitMinutes+=overlap(unit.busySince,t);unit.busy=false;unit.busySince=null;changeResource(key,-1,t);emit(t,"resourceState",{resource:key,unit:id,busy:false});}};
+ const acquireResources=(i,t)=>{const st=states[i],m=M.machines[i],req={operators:Math.max(0,Math.round(n(m.needOperators,1))),tools:Math.max(0,Math.round(n(m.needTools,0))),technicians:Math.max(0,Math.round(n(m.needTechnicians,0)))};if(resourceKeys.some(k=>resourceUnits[k].filter(u=>!u.busy).length<req[k]))return false;const held={};for(const k of resourceKeys){held[k]=acquireUnitIds(k,req[k],t);if(held[k]===null)throw new Error("Resource allocation changed unexpectedly for "+k+".");}st.resourcesHeld=true;st.heldResources=held;if(st.resourceWaitSince!==null){st.resourceWait+=overlap(st.resourceWaitSince,t);st.resourceWaitSince=null;}st.waitingResources=false;return true;};
+ const releaseResources=(i,t)=>{const st=states[i];if(!st.resourcesHeld)return;for(const k of resourceKeys)releaseUnitIds(k,st.heldResources?.[k],t);st.resourcesHeld=false;st.heldResources=null;};
+ const emit=(time,type,data={})=>{if(includeTrace)trace.push(Object.assign({time,seq:traceSeq++,type},data));};
+ const stationMode=(st,t)=>{
+  if(st.blocked)return "blocked";
+  if(st.processing)return "processing";
+  if(st.repairPending||st.repairUntil>t+eps)return "repair";
+  if(st.waitingResources)return "resourceWait";
+  if(st.queue.length)return "queued";
+  return "ready";
+ };
+ const stationState=(i,t)=>{
+  const st=states[i];
+  emit(t,"stationState",{station:i,mode:stationMode(st,t),queueCount:st.queue.length,activeId:st.active?st.active.id:null,down:st.repairPending||st.repairUntil>t+eps});
+ };
+ const reserveSlot=(i,t)=>{
+  const st=states[i],serverFree=st.active===null&&!st.processing&&!st.blocked&&!st.repairPending&&st.repairUntil<=t+eps&&st.queue.length===0&&!st.reservedServer;
+  if(serverFree){st.reservedServer=true;return "server";}
+  if(st.queue.length+st.reservedBuffer<M.machines[i].buffer){st.reservedBuffer++;return "buffer";}
+  return null;
+ };
+ const beginRepair=(i,t,partForVisual=null)=>{
+  const st=states[i],m=M.machines[i];
+  if(!M.useFailures||m.mttr<=0||st.repairPending||st.repairUntil>t+eps)return false;
+  st.repairPending=true;st.downSince=t;st.upRemaining=0;
+  const activeVisual=partForVisual!==null?partForVisual:(st.active&&st.active.serviceRemaining>eps&&!st.blocked?st.active.id:null);
+  emit(t,"failure",{station:i,id:activeVisual});
+  stationState(i,t);
+  return true;
+ };
+ const tryStartRepair=(i,t)=>{
+  const st=states[i],m=M.machines[i];if(!st.repairPending)return false;
+  const ids=acquireUnitIds("technicians",1,t);if(!ids)return false;
+  st.repairTechUnit=ids[0];st.repairTechHeld=true;st.repairPending=false;st.repairUntil=t+m.mttr;
+  push({time:st.repairUntil,type:"repairDone",station:i});stationState(i,t);return true;
+ };
+ const launchMove=(part,from,to,slot,t)=>{
+  const end=t+travel;
+  part.state="moving";part.location=to;
+  emit(t,"moveStart",{id:part.id,from,to,slot,endTime:end,station:typeof to==="number"?to:part.station});
+  push({time:end,type:"stationEnter",id:part.id,station:to,slot});
+ };
+ const launchOutput=(part,from,t)=>{
+  const end=t+travel;part.state="moving";part.location="output";
+  emit(t,"moveStart",{id:part.id,from,to:"output",slot:"output",endTime:end,station:from});
+  push({time:end,type:"outputArrive",id:part.id});
+ };
+ const tryStartStation=(i,t)=>{
+  const st=states[i],m=M.machines[i];let changed=false;
+  if(st.active===null&&!st.blocked&&!st.processing&&!st.repairPending&&st.repairUntil<=t+eps&&st.queue.length){
+   st.active=st.queue.shift();st.active.station=i;st.active.state="waiting";
+   emit(t,"queueExit",{id:st.active.id,station:i});changed=true;
+  }
+  if(st.active!==null&&!st.blocked&&!st.processing&&!st.repairPending&&st.repairUntil<=t+eps){
+   const p=st.active;
+   if(p.serviceRemaining===null||p.serviceRemaining===undefined)p.serviceRemaining=Math.max(.001,sample(m));
+   if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps){
+    beginRepair(i,t,p.serviceRemaining>eps?p.id:null);return true;
+   }
+   if(!acquireResources(i,t)){
+    const transitioned=!st.waitingResources;st.waitingResources=true;if(st.resourceWaitSince===null)st.resourceWaitSince=t;
+    if(transitioned){stationState(i,t);return true;}return changed;
+   }
+   const duration=p.serviceRemaining;
+   const failure=M.useFailures&&m.mttr>0&&st.upRemaining<duration-eps;
+   const slice=failure?st.upRemaining:duration;
+   if(slice<=eps){beginRepair(i,t,p.id);return true;}
+   st.processing=true;st.sliceStart=t;
+   p.state="processing";emit(t,"serviceStart",{id:p.id,station:i,remaining:duration,segment:slice});
+   push({time:t+slice,type:failure?"failure":"serviceComplete",station:i,id:p.id});
+   stationState(i,t);changed=true;
+  }else if(changed)stationState(i,t);
+  return changed;
+ };
+ const launchFromBlocked=(i,t)=>{
+  const st=states[i];if(!st.blocked||!st.active)return false;
+  const slot=reserveSlot(i+1,t);if(!slot)return false;
+  const p=st.active;
+  if(st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,t);
+  st.blockStart=null;st.blocked=false;st.active=null;
+  emit(t,"unblocked",{id:p.id,station:i});
+  launchMove(p,i,i+1,slot,t);
+  stationState(i,t);
+  return true;
+ };
+ const drain=(t)=>{
+  let changed=true,guard=0;
+  while(changed&&guard++<machineCount*4+20){
+   changed=false;
+   for(let i=0;i<machineCount;i++)if(tryStartRepair(i,t))changed=true;
+   for(let i=0;i<machineCount;i++)if(tryStartStation(i,t))changed=true;
+   for(let i=machineCount-2;i>=0;i--)if(launchFromBlocked(i,t))changed=true;
+   while(inputQueue.length){
+    const slot=reserveSlot(0,t);if(!slot)break;
+    const p=inputQueue.shift();launchMove(p,"source",0,slot,t);changed=true;
+   }
+  }
+ };
+ const finishService=(i,t)=>{
+  const st=states[i],m=M.machines[i],p=st.active;
+  if(!p||!st.processing)return;
+  const worked=Math.max(0,t-st.sliceStart);
+  st.busy+=overlap(st.sliceStart,t);st.processing=false;releaseResources(i,t);
+  p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
+  if(M.useFailures&&m.mttr>0)st.upRemaining=Math.max(0,st.upRemaining-worked);
+  const inShift=t<=H+eps;
+  if(inShift)st.jobs++;
+  const passes=rand()>=m.scrap/100;
+  emit(t,"serviceComplete",{id:p.id,station:i,passes});
+  if(!passes){
+   if(inShift){st.scrap++;rejected++;}
+   emit(t,"reject",{id:p.id,station:i});
+   p.state="rejected";st.active=null;
+   push({time:t+Math.max(travel,.4),type:"removePart",id:p.id});
+   if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps)beginRepair(i,t,null);
+   stationState(i,t);drain(t);return;
+  }
+  if(inShift)st.good++;
+  if(i===machineCount-1){
+   st.active=null;
+   launchOutput(p,i,t);
+   if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps)beginRepair(i,t,null);
+   stationState(i,t);drain(t);return;
+  }
+  const slot=reserveSlot(i+1,t);
+  if(!slot){
+   st.blocked=true;st.blockStart=t;p.state="blocked";
+   emit(t,"blocked",{id:p.id,station:i});
+  }else{
+   st.active=null;
+   launchMove(p,i,i+1,slot,t);
+  }
+  if(M.useFailures&&m.mttr>0&&st.upRemaining<=eps)beginRepair(i,t,null);
+  stationState(i,t);drain(t);
+ };
+
+ let nextArrival=sampleInterarrival();
+ if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
+ let processedEvents=0;
+ // A shift ends at H: do not execute arrivals, processing completions, or repairs after the horizon.
+ while(heap.length&&heap[0].time<=H+eps&&processedEvents<5000000){
+  const e=pop();processedEvents++;now=e.time;
+  if(e.type==="arrival"){
+   arrivalCount++;
+   const p={id:partId++,arrivalTime:e.time,serviceRemaining:null,station:-1,state:"input"};
+   parts.set(p.id,p);inputQueue.push(p);
+   emit(e.time,"arrival",{id:p.id});
+   if(arrivalCount<1000000){
+    nextArrival=e.time+sampleInterarrival();
+    if(nextArrival<=H)push({time:nextArrival,type:"arrival"});
+   }else{
+    const nextGap=sampleInterarrival();
+    if(e.time+nextGap<=H)arrivalLimitReached=true;
+   }
+   drain(e.time);
+  }else if(e.type==="stationEnter"){
+   const p=parts.get(e.id);if(!p)continue;
+   emit(e.time,"moveEnd",{id:p.id,station:e.station});
+   const st=states[e.station];
+   // Processing time belongs to a station visit. Clear the completed time before the part enters its next station.
+   p.serviceRemaining=null;
+   if(e.slot==="server"){
+    st.reservedServer=false;st.active=p;p.station=e.station;p.state="waiting";
+    emit(e.time,"enterStation",{id:p.id,station:e.station});
+   }else{
+    st.reservedBuffer=Math.max(0,st.reservedBuffer-1);
+    st.queue.push(p);p.station=e.station;p.state="queue";
+    emit(e.time,"queue",{id:p.id,station:e.station});
+   }
+   stationState(e.station,e.time);drain(e.time);
+  }else if(e.type==="failure"){
+   const i=e.station,st=states[i],p=st.active;
+   if(!st.processing||!p||p.id!==e.id)continue;
+   const worked=Math.max(0,e.time-st.sliceStart);
+   st.busy+=overlap(st.sliceStart,e.time);
+   p.serviceRemaining=Math.max(0,p.serviceRemaining-worked);
+   st.upRemaining=Math.max(0,st.upRemaining-worked);
+   st.processing=false;releaseResources(i,e.time);p.state="repair";
+   beginRepair(i,e.time,p.serviceRemaining>eps?p.id:null);
+   stationState(i,e.time);drain(e.time);
+  }else if(e.type==="serviceComplete"){
+   finishService(e.station,e.time);
+  }else if(e.type==="repairDone"){
+   const st=states[e.station],m=M.machines[e.station];
+   if(st.repairUntil>e.time+eps)continue;
+   st.repairUntil=0;st.upRemaining=m.mttf;if(st.repairTechHeld&&st.repairTechUnit!==null){releaseUnitIds("technicians",[st.repairTechUnit],e.time);st.repairTechHeld=false;st.repairTechUnit=null;}if(st.downSince!==null){st.down+=overlap(st.downSince,e.time);st.downSince=null;}if(st.active)st.active.state="waiting";
+   emit(e.time,"repairDone",{station:e.station,id:st.active&&st.active.serviceRemaining>eps?st.active.id:null});
+   stationState(e.station,e.time);drain(e.time);
+  }else if(e.type==="outputArrive"){
+   const p=parts.get(e.id);if(!p)continue;
+   p.state="done";emit(e.time,"finish",{id:p.id,station:machineCount});
+   if(e.time<=H+eps){good++;cycleTotal+=e.time-p.arrivalTime;}
+   push({time:e.time+Math.max(travel,1),type:"removePart",id:p.id});
+  }else if(e.type==="removePart"){
+   emit(e.time,"removePart",{id:e.id});
+   parts.delete(e.id);
+  }
+ }
+ if(processedEvents>=5000000&&heap.length&&heap[0].time<=H+eps)arrivalLimitReached=true;
+ for(let i=0;i<machineCount;i++){
+  const st=states[i];
+  if(st.processing)st.busy+=overlap(st.sliceStart,H);
+  if(st.blocked&&st.blockStart!==null)st.blockedTime+=overlap(st.blockStart,H);
+  if(st.downSince!==null)st.down+=overlap(st.downSince,H);
+  if(st.resourceWaitSince!==null)st.resourceWait+=overlap(st.resourceWaitSince,H);
+ }
+ for(const k of resourceKeys){resourceTime[k]+=overlap(resourceLastTime[k],H)*resourceUse[k];resourceLastTime[k]=H;for(const unit of resourceUnits[k])if(unit.busy&&unit.busySince!==null)unit.busyUnitMinutes+=overlap(unit.busySince,H);}
+ if(includeTrace)trace.sort((a,b)=>a.time-b.time||a.seq-b.seq);
+ const rows=states.map((st,i)=>{
+  const m=M.machines[i],availability=Math.max(0,Math.min(1,1-st.down/H));
+  const utilization=Math.max(0,Math.min(1,st.busy/H));
+  const blocked=Math.max(0,Math.min(1,st.blockedTime/H));
+  const quality=st.jobs?st.good/st.jobs:1;
+  return {id:m.id,name:m.name,dist:m.dist,mean:mean(m),av:availability,u:utilization,b:blocked,q:quality,good:st.good,scrap:st.scrap,resourceWait:st.resourceWait};
+ });
+ const b=rows.reduce((a,r,i)=>r.u>(rows[a]?.u??-1)?i:a,0);
+ const endState={inputQueue:inputQueue.length,inTransit:Array.from(parts.values()).filter(p=>p.state==="moving").length,processing:states.filter(st=>st.processing).length,active:states.filter(st=>st.active!==null).length,buffered:states.reduce((a,st)=>a+st.queue.length,0),blocked:states.filter(st=>st.blocked).length,repairsWaitingForTechnician:states.filter(st=>st.repairPending).length,stationsWaitingForResources:states.filter(st=>st.waitingResources).length,partsAtEnd:parts.size};
+ const resourceStats=resourceKeys.map(k=>({key:k,name:k.charAt(0).toUpperCase()+k.slice(1),capacity:resourceCaps[k],used:resourceUse[k],busyUnitMinutes:resourceTime[k],utilization:resourceCaps[k]>0?Math.max(0,Math.min(1,resourceTime[k]/(resourceCaps[k]*H))):0}));
+ const resourceUnitStats=resourceKeys.flatMap(k=>resourceUnits[k].map((unit,i)=>{const busyUnitMinutes=unit.busyUnitMinutes,idleUnitMinutes=Math.max(0,H-busyUnitMinutes);return {key:k,index:i+1,label:(k==="operators"?"Operator":k==="tools"?"Tool":"Technician")+" "+(i+1),name:k.charAt(0).toUpperCase()+k.slice(1),capacity:resourceCaps[k],busyUnitMinutes,idleUnitMinutes,utilization:Math.max(0,Math.min(1,busyUnitMinutes/H))};}));
+ return {throughput:good/H,cycle:good?cycleTotal/good:0,good,rejected,rows,b,arrivalLimitReached,arrivalCount,processedEvents,stationJobs:states.map(st=>st.jobs),stationGood:states.map(st=>st.good),stationScrap:states.map(st=>st.scrap),endState,resourceStats,resourceUnitStats,events:includeTrace?trace:[]};
+}
 const $=id=>document.getElementById(id);
 const canvas=$('scene'),viewport=$('viewport');
 const scene=new THREE.Scene();scene.background=new THREE.Color('#dce3e6');
