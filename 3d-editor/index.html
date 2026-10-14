@@ -11,6 +11,41 @@ header{height:auto;min-height:64px;padding:14px 20px;display:flex;align-items:ce
 h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{margin:6px 0;color:var(--muted)}button,select,input{font:inherit;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px}button{cursor:pointer}button:hover{border-color:var(--accent)}button.active{background:#1d5b50;border-color:var(--accent)}.primary{background:#166b59;border-color:#2ba98a}.layout{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;height:calc(100vh - 65px);min-height:520px}.sidebar{padding:14px;border-right:1px solid var(--line);background:var(--panel);overflow:auto}.right{border-right:0;border-left:1px solid var(--line)}.group{padding:0 0 15px;margin-bottom:15px;border-bottom:1px solid var(--line)}.object-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.linkbtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text);background:#203440;border:1px solid #3b5361;border-radius:8px;padding:8px 10px;font:inherit}.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sim-grid .field{min-width:0}.sim-grid input,.sim-grid select{width:100%;min-width:0}.station-note{font-size:11px;color:var(--muted);margin:5px 0 8px}.object-btn{min-height:64px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px}.object-btn span:first-child{font-size:20px}.small{font-size:12px;color:var(--muted)}.viewport{position:relative;min-width:0;min-height:0;background:#d9e0e4}#scene{width:100%;height:100%;display:block;touch-action:none}.simbar{position:absolute;left:12px;right:12px;bottom:64px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#12202be8;border:1px solid #3a5361;border-radius:10px;padding:8px 10px;box-shadow:0 3px 12px #0002}.simbar button{padding:7px 10px;min-height:34px}.simbar label{display:flex;align-items:center;gap:5px;font-size:11px;color:#d7e4eb}.simbar input[type=range]{width:75px;padding:0;min-height:20px}.simbar #simScrub{width:clamp(80px,14vw,180px)}#simReadout{font-size:11px;color:#cfe7e0;flex:1;min-width:140px}.sim-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.sim-kpi div{padding:8px;border:1px solid #304451;border-radius:7px;background:#13222c}.sim-kpi b{display:block;font-size:16px;color:#eaf2f7}.sim-kpi span{font-size:10px;color:var(--muted)}.overlay{position:absolute;left:12px;top:12px;padding:9px 11px;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;max-width:min(520px,calc(100% - 24px));font-size:12px;color:#d7e4eb;pointer-events:none}.toolbar{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.toolbar button{box-shadow:0 2px 10px #0003}.bottom{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#12202bd9;border:1px solid #3a5361;border-radius:9px;padding:9px 11px}.bottom label{display:flex;align-items:center;gap:6px;font-size:12px}.bottom input{width:70px;padding:5px}.field{display:grid;gap:4px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}.field input{width:100%}.status{font-size:12px;color:var(--accent);min-height:18px}.selected-title{font-weight:650;overflow-wrap:anywhere}.empty{border:1px dashed #45606d;border-radius:9px;padding:12px;color:var(--muted);font-size:12px}.object-row{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer}.object-row.selected{border-color:var(--accent);background:#1c3c3d}.object-row .name{flex:1;min-width:0;overflow-wrap:anywhere}.flow-key{display:inline-flex;align-items:center;gap:5px;margin-right:8px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#f5aa42}.muted-btn{background:transparent}.danger{color:#ffb4aa;border-color:#8d4b4b}.note{font-size:11px;color:var(--muted);margin-top:8px}
 @media(max-width:900px){.layout{grid-template-columns:190px minmax(0,1fr);height:auto;min-height:calc(100vh - 65px)}.viewport{height:70vh;min-height:560px}.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.sidebar{padding:10px}.object-list{grid-template-columns:1fr 1fr}.simbar{bottom:72px;gap:5px;padding:6px}.simbar input[type=range]{width:58px}.simbar #simScrub{width:78px}#simReadout{min-width:110px}}
 @media(max-width:560px){header{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr;height:auto}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.object-list{grid-template-columns:repeat(3,1fr)}.object-btn{min-height:55px;padding:5px}.viewport{height:60vh;min-height:400px}.right{grid-column:auto}.toolbar{top:auto;bottom:64px}}
+
+#liveAnalytics{background:#f3f6fa;color:#17212b;border-top:1px solid #d5dfe8;padding:22px 20px 34px}
+.analytics-inner{max-width:1480px;margin:0 auto}
+.analytics-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.analytics-head h2{margin:0 0 6px;font-size:19px;color:#18364a}
+.analytics-head p{margin:0;font-size:12px;color:#64798a;max-width:760px}
+.analytics-clock{padding:9px 12px;background:#fff;border:1px solid #dbe4ec;border-radius:10px;font-size:12px;color:#617687;white-space:nowrap}
+.analytics-clock strong{color:#0757a0;font-size:14px;margin-left:5px;font-variant-numeric:tabular-nums}
+.analytics-group{margin-top:18px}
+.analytics-group h3{font-size:14px;margin:0 0 9px;color:#20384a}
+.analytics-note{font-size:11px;color:#687b8c;line-height:1.5;margin-top:12px}
+.util-item-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.util-item-card{min-width:0;border:1px solid #dbe4ec;border-radius:12px;padding:12px;background:linear-gradient(180deg,#fff,#f8fafc);box-shadow:0 2px 7px #1b35500b}
+.util-item-title{font-size:13px;font-weight:750;line-height:1.35;color:#243b4a;overflow-wrap:anywhere}
+.util-item-type{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#7a8c9a;margin-top:3px}
+.util-donut-row{display:flex;align-items:center;gap:12px;margin-top:13px}
+.util-donut{width:88px;height:88px;flex:0 0 88px;border-radius:50%;position:relative;display:grid;place-items:center;background:conic-gradient(#087fc1 var(--busy-pct,0%),#dfe3e8 0)}
+.util-donut:before{content:"";position:absolute;inset:9px;background:#fff;border:1px solid #edf0f3;border-radius:50%}
+.util-donut-label{position:relative;z-index:1;text-align:center}
+.util-donut-label strong{display:block;font-size:17px;line-height:1.1;color:#173d55;font-variant-numeric:tabular-nums}
+.util-donut-label span{display:block;font-size:10px;color:#708291;margin-top:3px}
+.util-breakdown{min-width:0;flex:1;display:grid;gap:8px}
+.util-metric-line{display:flex;justify-content:space-between;align-items:center;gap:7px;font-size:11px;color:#586e7d}
+.util-metric-line strong{font-size:12px;color:#243b4a;font-variant-numeric:tabular-nums;white-space:nowrap}
+.util-swatch{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:5px}
+.util-swatch.busy{background:#087fc1}
+.util-swatch.idle{background:#dfe3e8;border:1px solid #cbd2d8}
+.util-item-bar{height:8px;width:100%;display:flex;overflow:hidden;border-radius:99px;margin-top:2px;background:#dfe3e8}
+.util-item-bar .busy{height:100%;background:#087fc1;transition:width .2s linear}
+.util-item-bar .idle{height:100%;background:#dfe3e8;transition:width .2s linear}
+.util-item-foot{font-size:10px;color:#778997;line-height:1.45;margin-top:10px;padding-top:8px;border-top:1px solid #edf1f4;overflow-wrap:anywhere}
+.util-empty-card{border:1px dashed #cbd6df;border-radius:12px;padding:15px;color:#728595;font-size:12px;background:#fafcfd}
+@media(max-width:1050px){.util-item-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){#liveAnalytics{padding:17px 12px 24px}.util-item-grid{grid-template-columns:1fr}.util-item-card{padding:11px}.util-donut{width:78px;height:78px;flex-basis:78px}.analytics-head h2{font-size:17px}}
+
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
 </head>
@@ -57,6 +92,26 @@ h1{font-size:18px;margin:0}h2{font-size:14px;margin:0 0 10px;color:#d8e5ec}p{mar
  <section><h2>Playback meaning</h2><p class="small">The 3D playback uses the same discrete-event calculations as the original simulator. Operators, tools and machine actions are animated from station/resource events; the underlying process times, queues, failures and scrap follow the original simulation logic.</p></section>
 </aside>
 </div>
+
+<section id="liveAnalytics" aria-labelledby="liveAnalyticsTitle">
+ <div class="analytics-inner">
+  <div class="analytics-head">
+   <div><h2 id="liveAnalyticsTitle">Live utilization plots</h2><p>Dynamic machine and individual-resource utilization, updated against the same simulated clock as the 3D production line. Scrubbing or restarting also recalculates these plots.</p></div>
+   <div class="analytics-clock">Elapsed simulated time <strong id="liveUtilClock">0.0 min</strong></div>
+  </div>
+  <div class="analytics-group">
+   <h3>Machine utilization — live</h3>
+   <div id="liveMachineUtilChart" class="util-item-grid"><div class="util-empty-card">Run production to see each station’s cumulative utilization.</div></div>
+   <p class="analytics-note">Machine busy time counts processing only. The not-processing time includes waiting for work or resources, blockage, and downtime.</p>
+  </div>
+  <div class="analytics-group">
+   <h3>Individual resource utilization — live</h3>
+   <div id="liveResourceUtilChart" class="util-item-grid"><div class="util-empty-card">Operator, tool, and technician utilization will appear here when the model runs.</div></div>
+   <p class="analytics-note">Each resource’s occupied time is measured from the simulation events. Zero-capacity pools are shown as N/A, matching the original simulator.</p>
+  </div>
+ </div>
+</section>
+
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -466,6 +521,7 @@ const simViz={
  active:false,playing:false,time:0,result:null,events:[],cursor:0,good:0,scrap:0,
  parts:new Map(),stationObjects:[],stationStates:[],stationVisuals:[],
  actors:{operators:[],technicians:[],tools:[]},resourceBusy:{operators:[],technicians:[],tools:[]},
+ utilLastTime:0,machineBusyMinutes:[],resourceBusyMinutes:{operators:[],technicians:[],tools:[]},
  productGroup:new THREE.Group(),actorGroup:new THREE.Group(),lastUiSecond:-1
 };
 scene.add(simViz.productGroup,simViz.actorGroup);
@@ -625,6 +681,7 @@ function initialiseActors(){
    simViz.resourceBusy[resource].push(false);
   }
  });
+ simViz.resourceBusy={operators:Array.from({length:Math.max(0,Math.round(caps.operators||0))},()=>false),technicians:Array.from({length:Math.max(0,Math.round(caps.technicians||0))},()=>false),tools:Array.from({length:Math.max(0,Math.round(caps.tools||0))},()=>false)};
  placed.forEach(o=>o.visible=false);
 }
 function restorePlacedOperators(){objects.filter(o=>o.userData.kind==='operator').forEach(o=>o.visible=true);}
@@ -633,7 +690,7 @@ function resetActorStates(instant){
   const d=a.userData.actor;d.busy=false;d.station=-1;d.target.copy(d.home);
   if(instant)a.position.copy(d.home);
  });
- simViz.resourceBusy={operators:simViz.actors.operators.map(()=>false),technicians:simViz.actors.technicians.map(()=>false),tools:simViz.actors.tools.map(()=>false)};
+ simViz.resourceBusy={operators:Array.from({length:Math.max(0,Math.round(M?.resources?.operators||0))},()=>false),technicians:Array.from({length:Math.max(0,Math.round(M?.resources?.technicians||0))},()=>false),tools:Array.from({length:Math.max(0,Math.round(M?.resources?.tools||0))},()=>false)};
 }
 function applyActorResourceEvent(e){
  const actor=simViz.actors[e.resource]?.[e.unit];if(!actor)return;
@@ -656,7 +713,77 @@ function removeProduct(id){
  simViz.productGroup.remove(part.object);part.object.traverse(m=>{if(m.geometry)m.geometry.dispose();if(m.material){if(Array.isArray(m.material))m.material.forEach(x=>x.dispose());else m.material.dispose();}});
  simViz.parts.delete(id);
 }
+
+function liveUtilCard(title,type,kind,key,index){
+ return '<article class="util-item-card" data-live-kind="'+kind+'" data-live-key="'+(key||'')+'" data-live-index="'+index+'">'+
+  '<div class="util-item-title">'+escapeHtml(title)+'</div><div class="util-item-type">'+escapeHtml(type)+'</div>'+
+  '<div class="util-donut-row"><div class="util-donut" data-live-donut style="--busy-pct:0%"><div class="util-donut-label"><strong data-live-pct>0.0%</strong><span>busy</span></div></div>'+
+  '<div class="util-breakdown"><div class="util-metric-line"><span><i class="util-swatch busy"></i>Busy</span><strong data-live-busy-pct>0.0%</strong></div>'+
+  '<div class="util-metric-line"><span><i class="util-swatch idle"></i>Idle</span><strong data-live-idle-pct>100.0%</strong></div>'+
+  '<div class="util-item-bar"><div class="busy" data-live-bar-busy style="width:0%"></div><div class="idle" data-live-bar-idle style="width:100%"></div></div></div></div>'+
+  '<div class="util-item-foot" data-live-foot>0.0 busy min · 0.0 idle min · 0.0 elapsed min</div></article>';
+}
+function liveNoCapacityCard(title){
+ return '<article class="util-item-card"><div class="util-item-title">'+escapeHtml(title)+'</div><div class="util-item-type">Shared resource</div>'+
+  '<div class="util-donut-row"><div class="util-donut" style="--busy-pct:0%"><div class="util-donut-label"><strong>N/A</strong><span>no capacity</span></div></div>'+
+  '<div class="util-breakdown"><div class="util-metric-line"><span>Busy</span><strong>N/A</strong></div><div class="util-metric-line"><span>Idle</span><strong>N/A</strong></div>'+
+  '<div class="util-item-bar"><div class="idle" style="width:100%"></div></div></div></div>'+
+  '<div class="util-item-foot">No individual units are available.</div></article>';
+}
+function render3DUtilizationCards(){
+ const machineHost=$('liveMachineUtilChart'),resourceHost=$('liveResourceUtilChart');
+ if(!simViz.active||!M){
+  machineHost.innerHTML='<div class="util-empty-card">Run production to see each station’s cumulative utilization.</div>';
+  resourceHost.innerHTML='<div class="util-empty-card">Operator, tool, and technician utilization will appear here when the model runs.</div>';
+  $('liveUtilClock').textContent='0.0 min';
+  return;
+ }
+ machineHost.innerHTML=M.machines.map((m,i)=>liveUtilCard(m.id+' — '+m.name,'Machine','machine','',i)).join('')||
+  '<div class="util-empty-card">No process stations in this model.</div>';
+ const types=[{key:'operators',label:'Operator'},{key:'tools',label:'Tool'},{key:'technicians',label:'Technician'}],cards=[];
+ for(const type of types){
+  const units=simViz.resourceBusy[type.key]||[];
+  if(!units.length)cards.push(liveNoCapacityCard(type.label+' pool'));
+  else units.forEach((unit,i)=>cards.push(liveUtilCard(type.label+' '+(i+1),type.label,'resource',type.key,i)));
+ }
+ resourceHost.innerHTML=cards.join('');
+ update3DUtilizationPlots();
+}
+function reset3DUtilizationAccounting(){
+ simViz.utilLastTime=0;
+ simViz.machineBusyMinutes=(M?.machines||[]).map(()=>0);
+ simViz.resourceBusyMinutes=Object.fromEntries(['operators','tools','technicians'].map(key=>[
+  key,(simViz.resourceBusy[key]||[]).map(()=>0)
+ ]));
+}
+function account3DUtilization(until){
+ if(!M||!simViz.machineBusyMinutes||!simViz.resourceBusyMinutes)return;
+ const previous=simViz.utilLastTime||0,target=Math.max(previous,Math.min(M.shiftMinutes,Math.max(0,n(until,0)))),dt=target-previous;
+ if(dt<=0)return;
+ (simViz.stationStates||[]).forEach((st,i)=>{if(st?.mode==='processing'&&i<simViz.machineBusyMinutes.length)simViz.machineBusyMinutes[i]+=dt;});
+ for(const key of ['operators','tools','technicians']){
+  const busy=simViz.resourceBusy[key]||[],mins=simViz.resourceBusyMinutes[key]||[];
+  for(let i=0;i<busy.length;i++)if(busy[i])mins[i]=(mins[i]||0)+dt;
+ }
+ simViz.utilLastTime=target;
+}
+function update3DUtilizationPlots(){
+ const elapsed=Math.max(0,Math.min(M?.shiftMinutes||0,simViz.time||0));
+ $('liveUtilClock').textContent=elapsed.toFixed(1)+' min';
+ document.querySelectorAll('#liveMachineUtilChart [data-live-kind], #liveResourceUtilChart [data-live-kind]').forEach(card=>{
+  const kind=card.dataset.liveKind,key=card.dataset.liveKey,index=Number(card.dataset.liveIndex);
+  const mins=kind==='machine'?(simViz.machineBusyMinutes[index]||0):(simViz.resourceBusyMinutes[key]?.[index]||0);
+  const busyMinutes=Math.max(0,Math.min(elapsed,mins)),idleMinutes=Math.max(0,elapsed-busyMinutes);
+  const busyPct=elapsed>1e-9?Math.max(0,Math.min(100,busyMinutes/elapsed*100)):0,idlePct=elapsed>1e-9?100-busyPct:0;
+  const pct=card.querySelector('[data-live-pct]'),busy=card.querySelector('[data-live-busy-pct]'),idle=card.querySelector('[data-live-idle-pct]'),donut=card.querySelector('[data-live-donut]'),busyBar=card.querySelector('[data-live-bar-busy]'),idleBar=card.querySelector('[data-live-bar-idle]'),foot=card.querySelector('[data-live-foot]');
+  if(pct)pct.textContent=busyPct.toFixed(1)+'%';if(busy)busy.textContent=busyPct.toFixed(1)+'%';if(idle)idle.textContent=idlePct.toFixed(1)+'%';
+  if(donut)donut.style.setProperty('--busy-pct',busyPct+'%');if(busyBar)busyBar.style.width=busyPct+'%';if(idleBar)idleBar.style.width=idlePct+'%';
+  if(foot)foot.textContent=busyMinutes.toFixed(1)+' busy min · '+idleMinutes.toFixed(1)+(kind==='machine'?' not-processing min':' idle min')+' · '+elapsed.toFixed(1)+' elapsed min';
+ });
+}
+
 function applyLiveEvent(e){
+ account3DUtilization(e.time);
  if(e.type==='resourceState'){const pool=simViz.resourceBusy[e.resource];if(pool&&e.unit<pool.length)pool[e.unit]=!!e.busy;applyActorResourceEvent(e);return;}
  if(e.type==='stationState'){updateStationState(e);return;}
  let p=simViz.parts.get(e.id);
@@ -696,14 +823,14 @@ function applyLiveEvent(e){
 function resetReplay(time,instant){
  clearGroup(simViz.productGroup);simViz.parts.clear();simViz.good=0;simViz.scrap=0;simViz.cursor=0;
  simViz.stationStates=M.machines.map(()=>({mode:'ready',queueCount:0,activeId:null,down:false}));
- resetActorStates(true);
+ resetActorStates(true);reset3DUtilizationAccounting();
  simViz.time=0;
  while(simViz.cursor<simViz.events.length&&simViz.events[simViz.cursor].time<=time+1e-9){
   applyLiveEvent(simViz.events[simViz.cursor++]);
  }
- simViz.time=time;
+ account3DUtilization(time);simViz.time=time;
  if(instant)simViz.actors.operators.concat(simViz.actors.technicians,simViz.actors.tools).forEach(a=>{const d=a.userData.actor;a.position.copy(d.target);});
- updateStationDisplay();updateProductPositions();simNumbers();
+ updateStationDisplay();updateProductPositions();simNumbers();update3DUtilizationPlots();
 }
 function getQueueRank(part,peers){return peers.filter(p=>p.id<part.id).length;}
 function updateProductPositions(){
@@ -786,7 +913,7 @@ function runProduction(){
   simViz.active=true;simViz.playing=true;simViz.lastUiSecond=-1;
   $('simScrub').value='0';
   clearFlowDots();flowVisible=false;$('flowToggle').classList.remove('active');$('flowToggle').textContent='Demo flow off';
-  initialiseActors();initStationVisuals();resetReplay(0,true);
+  initialiseActors();initStationVisuals();render3DUtilizationCards();resetReplay(0,true);
   simMessage('Simulation ready · replaying the discrete-event trace');
   setSimUiState();simNumbers();
  }catch(err){
@@ -807,8 +934,8 @@ $('resetSim').onclick=()=>{if(!simViz.active)return;simViz.playing=false;resetRe
 $('editLayout').onclick=()=>{
  simViz.playing=false;simViz.active=false;
  clearGroup(simViz.productGroup);clearGroup(simViz.actorGroup);clearStationVisuals();
- simViz.parts.clear();simViz.events=[];simViz.result=null;simViz.stationObjects=[];simViz.stationStates=[];
- restorePlacedOperators();setSimUiState();simNumbers();
+ simViz.parts.clear();simViz.events=[];simViz.result=null;simViz.stationObjects=[];simViz.stationStates=[];simViz.machineBusyMinutes=[];simViz.resourceBusyMinutes={operators:[],technicians:[],tools:[]};simViz.resourceBusy={operators:[],technicians:[],tools:[]};
+ restorePlacedOperators();setSimUiState();simNumbers();render3DUtilizationCards();
  $('liveDetail').textContent='Run a production simulation to see live quantities and station states.';
  flowVisible=false;flowRunning=false;createFlowDots();flowDots.forEach(d=>d.visible=false);
  $('flowToggle').textContent='Demo flow off';$('flowToggle').classList.remove('active');
@@ -849,9 +976,10 @@ function animate(t){
  if(simViz.active&&simViz.playing){
   simViz.time=Math.min(M.shiftMinutes,simViz.time+dt*Math.max(.01,Number($('simSpeed').value)||2));
   while(simViz.cursor<simViz.events.length&&simViz.events[simViz.cursor].time<=simViz.time+1e-9)applyLiveEvent(simViz.events[simViz.cursor++]);
+  account3DUtilization(simViz.time);
   if(simViz.time>=M.shiftMinutes-1e-8){simViz.time=M.shiftMinutes;simViz.playing=false;setSimUiState();}
   updateProductPositions();updateStationDisplay();
-  const uiTick=Math.floor(simViz.time*5);if(uiTick!==simViz.lastUiSecond||simViz.time>=M.shiftMinutes-1e-8){simViz.lastUiSecond=uiTick;simNumbers();}
+  const uiTick=Math.floor(simViz.time*5);if(uiTick!==simViz.lastUiSecond||simViz.time>=M.shiftMinutes-1e-8){simViz.lastUiSecond=uiTick;simNumbers();update3DUtilizationPlots();}
  }else if(simViz.active){updateProductPositions();}
  updateActors(dt);updateMachineActions(dt);
  renderer.render(scene,camera);
